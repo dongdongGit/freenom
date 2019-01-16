@@ -1,2 +1,0 @@
-# freenom
-freenom auto renew
