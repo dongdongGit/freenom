@@ -9,11 +9,12 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import App from './App.vue';
 import VueRouter from 'vue-router';
 import Vuelidate from 'vuelidate';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import locale from 'element-ui/lib/locale/lang/zh-CN'
+import locale from 'element-ui/lib/locale/lang/zh-CN';
 
 Vue.use(Vuelidate);
 Vue.use(VueRouter);
@@ -35,6 +36,10 @@ const routes = [
     {
         path: '/example',
         component: Vue.component('example', require('./components/ExampleComponent.vue').default)
+    },
+    {
+        path: '/index',
+        component: Vue.component('index', require('./components/IndexComponent.vue').default)
     }
 ];
 
@@ -49,5 +54,8 @@ const router = new VueRouter({
 })
 
 const app = new Vue({
-    router
+    router,
+    el:'#app',
+    // render: h => h(App)
 }).$mount('#app');
+// });

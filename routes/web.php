@@ -18,6 +18,10 @@ Route::get('/', function () {
 // Auth::routes();
 Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('/login', 'Auth\LoginController@login');
-Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/logout', 'Auth\LoginController@logout')->name('logout')->middleware('web');
+
+Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function () {
+    Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('/freenom', 'FreenomController');
+});
