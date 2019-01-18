@@ -23,4 +23,5 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout')->middlewar
 
 Route::group(['prefix' => 'admin', 'middleware' => ['web'], 'namespace' => 'Admin'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
+    Route::resource('/freenom', 'FreenomController');
 });

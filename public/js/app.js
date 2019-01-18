@@ -100827,10 +100827,10 @@ Vue.use(element_ui__WEBPACK_IMPORTED_MODULE_3___default.a, {
 
 var routes = [{
   path: '/example',
-  component: Vue.component('example', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue"))
+  component: Vue.component('example', __webpack_require__(/*! ./components/ExampleComponent.vue */ "./resources/js/components/ExampleComponent.vue").default)
 }, {
-  path: '/home',
-  component: Vue.component('index', __webpack_require__(/*! ./components/IndexComponent.vue */ "./resources/js/components/IndexComponent.vue"))
+  path: '/index',
+  component: Vue.component('index', __webpack_require__(/*! ./components/IndexComponent.vue */ "./resources/js/components/IndexComponent.vue").default)
 }];
 /**
  * Next, we will create a fresh Vue application instance and attach it to

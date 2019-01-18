@@ -35,11 +35,11 @@ Vue.use(ElementUI, { locale });
 const routes = [
     {
         path: '/example',
-        component: Vue.component('example', require('./components/ExampleComponent.vue'))
+        component: Vue.component('example', require('./components/ExampleComponent.vue').default)
     },
     {
-        path: '/home',
-        component: Vue.component('index', require('./components/IndexComponent.vue'))
+        path: '/index',
+        component: Vue.component('index', require('./components/IndexComponent.vue').default)
     }
 ];
 
