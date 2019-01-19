@@ -17,8 +17,6 @@ class FreenomController extends Controller
     {
         $freenomService = new FreenomService();
         $result = $freenomService->list();
-
-        dd($result);
     }
 
     /**

@@ -13,7 +13,7 @@ class FreenomService
     private $params = [];
     private $config = [];
     private $gateway = [
-        'login' => 'https://my.freenom.com/clientarea.php',
+        'login' => 'https://my.freenom.com/dologin.php',
         'renew' => 'https://my.freenom.com/domains.php?a=renewals',
         'list'  => 'https://my.freenom.com/clientarea.php?action=domains'
     ];
@@ -66,8 +66,15 @@ class FreenomService
             ]
         );
 
-        $responseCookie = array_first(array_get($response->getHeaders(), 'Set-Cookie', []));
-        $auth = array_last(explode('=', array_first(explode(';', $responseCookie))));
+        $responseCookie = array_get($response->getHeaders(), 'Set-Cookie', []);
+
+        foreach ($responseCookie as $key => &$value) {
+            if (!preg_match('/^WHMCSZH5eHTGhfvzP=[\S\s]+$/', $value)) {
+                unset($responseCookie[$key]);
+            }
+        }
+
+        $auth = array_last(explode('=', array_first(explode(';', array_last($responseCookie)))));
         Cache::put('freenom_auth', $auth, 10);
         $this->freenomAuth = $auth;
 
@@ -93,9 +100,9 @@ class FreenomService
             ]
         );
 
+        // TODO:
+        return $response->getBody();
         $stream = stream_for($response->getBody());
-
-        dd($stream);
     }
 
     public function getStreamData()
