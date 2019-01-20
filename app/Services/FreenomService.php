@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use Cache;
+use DOMDocument;
 use GuzzleHttp\Client;
-use function GuzzleHttp\Psr7\stream_for;
 
 class FreenomService
 {
@@ -100,13 +100,28 @@ class FreenomService
             ]
         );
 
-        // TODO:
-        return $response->getBody();
-        $stream = stream_for($response->getBody());
+        $domians = $this->getDomainData($response->getBody());
+        dd($domians);
     }
 
-    public function getStreamData()
+    public function getDomainData(String $body = '')
     {
+        if (empty($body)) {
+            abort(404, '没有找到domain');
+        }
+        $doc = new DOMDocument;
+        @$doc->loadHTML(mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8'));
+        $table = $doc->getElementsByTagName('table');
+
+        foreach ($table as $key => $value) {
+            dd($value);
+        }
+        dd(1);
+
+        $pattern = '/<table class="table table-striped table-bordered">(<tr>([\s\S]+)<\/tr>)*<\/table>/';
+
+        preg_match_all($pattern, $body, $matches);
+        dd($matches);
     }
 
     public function getFreenomAuth()
@@ -117,7 +132,7 @@ class FreenomService
     public function getClient()
     {
         return $this->client = new Client([
-            'timeout' => 5.0
+            'timeout' => 10.0
         ]);
     }
 }
