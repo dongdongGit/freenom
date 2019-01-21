@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use Cache;
-use DOMDocument;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 
 class FreenomService
@@ -96,12 +96,15 @@ class FreenomService
                         'Referer' => 'https://my.freenom.com/clientarea.php?action=domains'
                     ]
                 ),
-                'allow_redirects' => false,
+                'allow_redirects' => true,
             ]
         );
 
-        $domians = $this->getDomainData($response->getBody());
-        dd($domians);
+        return $this->getDomainData($response->getBody());
+    }
+
+    public function sync()
+    {
     }
 
     public function getDomainData(String $body = '')
@@ -109,19 +112,24 @@ class FreenomService
         if (empty($body)) {
             abort(404, '没有找到domain');
         }
-        $doc = new DOMDocument;
-        @$doc->loadHTML(mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8'));
-        $table = $doc->getElementsByTagName('table');
 
-        foreach ($table as $key => $value) {
-            dd($value);
-        }
-        dd(1);
-
-        $pattern = '/<table class="table table-striped table-bordered">(<tr>([\s\S]+)<\/tr>)*<\/table>/';
-
+        $pattern = '/<td class="second"><a href="http:\/\/([\S]+)\/" [^>]+>[a-zA-Z\.\n\t \d_]+<i[^>]+><\/i><\/a>[\s]*<\/td>[\s]*<td class="third">([\d\/]+)<\/td>\s*<td class="fourth">([\d\/]+)<\/td>/m';
         preg_match_all($pattern, $body, $matches);
-        dd($matches);
+
+        if (empty(array_first($matches))) {
+            abort(404, '没有找到domain');
+        }
+
+        $domains = [];
+        for ($i = 0; $i < count($matches[0]); $i++) {
+            $domains[$i] = [
+                'domain'        => $matches[1][$i],
+                'register_time' => $this->formatDate($matches[2][$i]),
+                'expires_time'  => $this->formatDate($matches[3][$i])
+            ];
+        }
+
+        return $domains;
     }
 
     public function getFreenomAuth()
@@ -132,7 +140,14 @@ class FreenomService
     public function getClient()
     {
         return $this->client = new Client([
-            'timeout' => 10.0
+            'timeout' => 5.0
         ]);
+    }
+
+    public function formatDate(String $date, String $format = 'Y-m-d')
+    {
+        $date = explode('/', $date);
+
+        return Carbon::create($date[2], $date[0], $date[1])->format($format);
     }
 }
