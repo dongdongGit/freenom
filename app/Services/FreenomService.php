@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use Cache;
+use DOMDocument;
 use GuzzleHttp\Client;
-use function GuzzleHttp\Psr7\stream_for;
 
 class FreenomService
 {
@@ -13,7 +13,7 @@ class FreenomService
     private $params = [];
     private $config = [];
     private $gateway = [
-        'login' => 'https://my.freenom.com/clientarea.php',
+        'login' => 'https://my.freenom.com/dologin.php',
         'renew' => 'https://my.freenom.com/domains.php?a=renewals',
         'list'  => 'https://my.freenom.com/clientarea.php?action=domains'
     ];
@@ -66,8 +66,15 @@ class FreenomService
             ]
         );
 
-        $responseCookie = array_first(array_get($response->getHeaders(), 'Set-Cookie', []));
-        $auth = array_last(explode('=', array_first(explode(';', $responseCookie))));
+        $responseCookie = array_get($response->getHeaders(), 'Set-Cookie', []);
+
+        foreach ($responseCookie as $key => &$value) {
+            if (!preg_match('/^WHMCSZH5eHTGhfvzP=[\S\s]+$/', $value)) {
+                unset($responseCookie[$key]);
+            }
+        }
+
+        $auth = array_last(explode('=', array_first(explode(';', array_last($responseCookie)))));
         Cache::put('freenom_auth', $auth, 10);
         $this->freenomAuth = $auth;
 
@@ -93,13 +100,28 @@ class FreenomService
             ]
         );
 
-        $stream = stream_for($response->getBody());
-
-        dd($stream);
+        $domians = $this->getDomainData($response->getBody());
+        dd($domians);
     }
 
-    public function getStreamData()
+    public function getDomainData(String $body = '')
     {
+        if (empty($body)) {
+            abort(404, '没有找到domain');
+        }
+        $doc = new DOMDocument;
+        @$doc->loadHTML(mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8'));
+        $table = $doc->getElementsByTagName('table');
+
+        foreach ($table as $key => $value) {
+            dd($value);
+        }
+        dd(1);
+
+        $pattern = '/<table class="table table-striped table-bordered">(<tr>([\s\S]+)<\/tr>)*<\/table>/';
+
+        preg_match_all($pattern, $body, $matches);
+        dd($matches);
     }
 
     public function getFreenomAuth()
@@ -110,7 +132,7 @@ class FreenomService
     public function getClient()
     {
         return $this->client = new Client([
-            'timeout' => 5.0
+            'timeout' => 10.0
         ]);
     }
 }

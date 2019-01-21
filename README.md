@@ -2,11 +2,12 @@
 freenom auto renew
 
 ## todo
- - migrate
+ - database
  - job
  - ui
  - controller
  - router
  - redis
  - model
+ - lang
 
