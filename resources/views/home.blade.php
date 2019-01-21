@@ -81,18 +81,20 @@
         </div>
     </div>
     <div class="page-container">
-        <transition name="slide-fade" mode="out-in">
-            <router-view></router-view>
-        </transition>
-    </div>
-    <footer class="content-footer">
-        <div class="footer">
-            <div class="copyright">
-                <span>Copyright © 2018 <b class="text-dark">UIdeck</b>. All Right Reserved More Templates</span>
-            </div>
+        <div class="main-content">
+            <transition name="slide-fade" mode="out-in">
+                <router-view></router-view>
+            </transition>
         </div>
-    </footer>
-
+        
+        <footer class="content-footer">
+            <div class="footer">
+                <div class="copyright">
+                    <span>Copyright © 2018 <b class="text-dark">UIdeck</b>. All Right Reserved More Templates</span>
+                </div>
+            </div>
+        </footer>
+    </div>
 </div>
    
 @endsection

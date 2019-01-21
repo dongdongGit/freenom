@@ -15,10 +15,8 @@ class FreenomController extends Controller
      */
     public function index()
     {
-        $freenomService = new FreenomService();
-        $result = $freenomService->list();
-
-        return $result;
+        // $freenomService = new FreenomService();
+        // $domains = $freenomService->list();
     }
 
     /**
@@ -85,5 +83,13 @@ class FreenomController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function sync()
+    {
+        $freenomService = new FreenomService();
+        $freenomService->sync();
+
+        return $this->success();
     }
 }
