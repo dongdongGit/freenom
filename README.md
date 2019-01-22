@@ -10,4 +10,5 @@ freenom auto renew
  - redis
  - model
  - lang
+ - token auth
 
