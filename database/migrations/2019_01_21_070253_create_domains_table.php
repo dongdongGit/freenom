@@ -22,7 +22,7 @@ class CreateDomainsTable extends Migration
             $table->date('register_time')->index()->comment('注册时间');
             $table->date('expires_time')->index()->comment('过期时间');
             $table->tinyInteger('enabled_auto_renew')->comment('是否自动续费');
-            $table->timestamp();
+            $table->timestamps();
         });
     }
 
