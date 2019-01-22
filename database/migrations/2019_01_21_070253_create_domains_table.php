@@ -13,8 +13,8 @@ class CreateDomainsTable extends Migration
      */
     public function up()
     {
-        Schema::table('domains', function (Blueprint $table) {
-            $table->primary('id');
+        Schema::create('domains', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('user_id')->unsigned()->index()->default(0)->comment('用户id');
             $table->string('domain')->unique()->comment('域名');
             $table->enum('status', ['active', 'expired'])->default('active')->comment('状态, active-活动,expired-过期');
