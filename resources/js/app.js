@@ -31,15 +31,19 @@ Vue.use(ElementUI, { locale });
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 // 移动到router.json
-
+const index = Vue.component('index', require('./components/IndexComponent.vue').default);
 const routes = [
     {
         path: '/example',
         component: Vue.component('example', require('./components/ExampleComponent.vue').default)
     },
     {
+        path: '/',
+        component: Vue.component('example', require('./components/ExampleComponent.vue').default)
+    },
+    {
         path: '/index',
-        component: Vue.component('index', require('./components/IndexComponent.vue').default)
+        component: index
     }
 ];
 
