@@ -15,8 +15,9 @@ class FreenomController extends Controller
      */
     public function index()
     {
-        // $freenomService = new FreenomService();
-        // $domains = $freenomService->list();
+        $domains = $this->user()->domains()->apiPaginate();
+
+        return $this->success($domains);
     }
 
     /**
