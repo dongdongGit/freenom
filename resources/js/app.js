@@ -32,6 +32,7 @@ Vue.use(ElementUI, { locale });
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 // 移动到router.json
 const index = Vue.component('index', require('./components/IndexComponent.vue').default);
+const loading = Vue.component('loading', require('./components/Loading.vue').default);
 const routes = [
     {
         path: '/example',
