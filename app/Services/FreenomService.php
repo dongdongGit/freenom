@@ -30,8 +30,8 @@ class FreenomService
 
     private $baseKey = [
         'domain',
-        'register_time',
-        'expires_time',
+        'register_date',
+        'expires_date',
         'status',
         'type'
     ];
