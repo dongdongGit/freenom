@@ -191,6 +191,6 @@ class FreenomService
     {
         $date = explode('/', $date);
 
-        return Carbon::create($date[2], $date[0], $date[1])->format($format);
+        return Carbon::create($date[2], $date[1], $date[0])->format($format);
     }
 }
