@@ -21,8 +21,8 @@ class CreateDomainsTable extends Migration
             $table->enum('type', ['free', 'paid'])->default('free')->comment('类型, free-免费,paid-收费');
             $table->date('register_time')->index()->comment('注册时间');
             $table->date('expires_time')->index()->comment('过期时间');
-            $table->tinyInteger('enabled_auto_renew')->comment('是否自动续费');
-            $table->string('renew')->comment('到期自动续费时长');
+            $table->boolean('enabled_auto_renew')->default(1)->index()->comment('是否自动续费');
+            $table->string('renew')->default(12)->comment('到期自动续费时长');
             $table->timestamps();
         });
     }
