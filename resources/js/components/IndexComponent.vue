@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <loading></loading>
+        <loading v-if="loading"></loading>
         <div class="breadcrumb-wrapper row">
             <div class="col-12 col-lg-3 col-md-6">
                 <h4 class="page-title">列表
