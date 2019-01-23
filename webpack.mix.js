@@ -15,7 +15,8 @@ mix.browserSync({
    proxy: 'http://test.freenom.local',
    files: [
        'resources/js/*.js',
-       'resources/components/',
+       'resources/js/*.vue',
+       'resources/js/components/*',
        'resources/sass/.css'
    ]
 });
