@@ -62,7 +62,7 @@ const baseUri = 'http://test.freenom.local/';
 
 const app = new Vue({
     router,
-    el:'#app',
-    // render: h => h(App)
+    // el:'#app',
+    render: h => h(App)
 }).$mount('#app');
 // });
