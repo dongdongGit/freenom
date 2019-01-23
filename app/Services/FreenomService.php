@@ -141,7 +141,7 @@ class FreenomService
         // TODO:log
         $data = $this->list();
         $this->user()->domains()->delete();
-        $this->user()->damains()->createMany($data);
+        $this->user()->domains()->createMany($data);
     }
 
     public function getDomainData(String $body = '')
