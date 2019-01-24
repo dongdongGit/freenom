@@ -10,6 +10,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import App from './App.vue';
+import global from './components/tool/Global.vue';
 import VueRouter from 'vue-router';
 import Vuelidate from 'vuelidate';
 import ElementUI from 'element-ui';
@@ -19,6 +20,7 @@ import locale from 'element-ui/lib/locale/lang/zh-CN';
 Vue.use(Vuelidate);
 Vue.use(VueRouter);
 Vue.use(ElementUI, { locale });
+Vue.prototype.GLOBAL = global;
 
 /**
  * The following block of code may be used to automatically register your
