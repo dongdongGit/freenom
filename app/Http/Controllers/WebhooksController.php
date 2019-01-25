@@ -17,7 +17,7 @@ class WebhooksController extends Controller
             return $this->error('验签失败');
         }
 
-        $process = new Process('cd ' . $root_path . '; ./deploy.sh');
+        $process = new Process('cd ' . base_path() . '; ./deploy.sh');
         $process->run(function ($type, $buffer) {
             Log::info($buffer);
         });
