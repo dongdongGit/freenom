@@ -12,3 +12,4 @@ freenom auto renew
  - lang
  - token auth
 
+test git hook
