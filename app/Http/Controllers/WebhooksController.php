@@ -15,5 +15,7 @@ class WebhooksController extends Controller
             Log::info('[error]验签失败');
             return $this->error();
         }
+
+        return 1;
     }
 }
