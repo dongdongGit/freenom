@@ -8,6 +8,6 @@ class WebhooksController extends Controller
 {
     public function webhooks(Request $request)
     {
-        return 1;
+        dd($request->all());
     }
 }
