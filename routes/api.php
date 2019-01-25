@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
+// github webhoobs
+Route::post('/webhooks', 'WebhooksController@webhooks');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
