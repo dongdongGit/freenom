@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "852afba9d4476de9f03c39889177d82c",
+    "content-hash": "98e4c458a7e51dea47df518a3c003ff0",
     "packages": [
         {
             "name": "clue/stream-filter",
@@ -317,6 +317,62 @@
                 "validator"
             ],
             "time": "2018-12-04T22:38:24+00:00"
+        },
+        {
+            "name": "elemenx/laravel-api-pagination",
+            "version": "0.1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elemenx/laravel-api-pagination.git",
+                "reference": "78c07065adb9df8e68a6631aef91e7a5f6973a42"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elemenx/laravel-api-pagination/zipball/78c07065adb9df8e68a6631aef91e7a5f6973a42",
+                "reference": "78c07065adb9df8e68a6631aef91e7a5f6973a42",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://dl.laravel-china.org/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ElemenX\\ApiPagination\\PaginationServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ElemenX\\ApiPagination\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "BranchZero Sun",
+                    "email": "branchzero@gmail.com"
+                }
+            ],
+            "description": "API Pagination For Laravel & Lumen",
+            "keywords": [
+                "api",
+                "elemenx",
+                "laravel",
+                "lumen",
+                "pagination"
+            ],
+            "time": "2018-03-12T08:08:20+00:00"
         },
         {
             "name": "erusev/parsedown",

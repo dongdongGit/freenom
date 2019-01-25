@@ -3,24 +3,37 @@
 namespace App\Services;
 
 use Cache;
+use DOMXPath;
+use DOMDocument;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use App\Traits\ProvidesConvenienceMethods;
 
 class FreenomService
 {
+    use ProvidesConvenienceMethods;
+
     private $freenomAuth = null;
     private $client = null;
     private $params = [];
     private $config = [];
     private $gateway = [
-        'login' => 'https://my.freenom.com/dologin.php',
-        'renew' => 'https://my.freenom.com/domains.php?a=renewals',
-        'list'  => 'https://my.freenom.com/clientarea.php?action=domains'
+        'login'  => 'https://my.freenom.com/dologin.php',
+        'renew'  => 'https://my.freenom.com/domains.php?a=renewals',
+        'domain' => 'https://my.freenom.com/clientarea.php?action=domains',
     ];
     private $baseHeaders = [
         'Content-Type' => 'application/x-www-form-urlencoded',
         'User-Agent'   => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
         'Accept'       => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    ];
+
+    private $baseKey = [
+        'domain',
+        'register_date',
+        'expires_date',
+        'status',
+        'type'
     ];
 
     public function __construct()
@@ -85,26 +98,50 @@ class FreenomService
     {
         $this->login();
 
+        $parse = [
+            'headers' => array_merge(
+                $this->baseHeaders,
+                [
+                    'Cookie'  => 'WHMCSZH5eHTGhfvzP=' . $this->getFreenomAuth(),
+                    'Referer' => 'https://my.freenom.com/clientarea.php?action=domains'
+                ]
+            ),
+            'allow_redirects' => true,
+        ];
+
         $response = $this->client->request(
             'GET',
-            $this->gateway['list'],
-            [
-                'headers' => array_merge(
-                    $this->baseHeaders,
-                    [
-                        'Cookie'  => 'WHMCSZH5eHTGhfvzP=' . $this->getFreenomAuth(),
-                        'Referer' => 'https://my.freenom.com/clientarea.php?action=domains'
-                    ]
-                ),
-                'allow_redirects' => true,
-            ]
+            $this->gateway['domain'],
+            $parse
         );
+
+        $body = $response->getBody();
+
+        if (preg_match('/Next Page/', $body)) {
+            preg_match('/<input[A-Za-z "=]+value=\"([\dA-Fa-f]+)\"[^>]+>/', $body, $matchesInput);
+            $token = array_last($matchesInput);
+
+            $response = $this->client->request(
+                'POST',
+                $this->gateway['domain'],
+                array_merge($parse, [
+                    'form_params' => [
+                        'itemlimit' => 'all',
+                        'token'     => $token
+                    ]
+                ])
+            );
+        }
 
         return $this->getDomainData($response->getBody());
     }
 
     public function sync()
     {
+        // TODO:log
+        $data = $this->list();
+        $this->user()->domains()->delete();
+        $this->user()->domains()->createMany($data);
     }
 
     public function getDomainData(String $body = '')
@@ -113,20 +150,26 @@ class FreenomService
             abort(404, '没有找到domain');
         }
 
-        $pattern = '/<td class="second"><a href="http:\/\/([\S]+)\/" [^>]+>[a-zA-Z\.\n\t \d_]+<i[^>]+><\/i><\/a>[\s]*<\/td>[\s]*<td class="third">([\d\/]+)<\/td>\s*<td class="fourth">([\d\/]+)<\/td>/m';
-        preg_match_all($pattern, $body, $matches);
-
-        if (empty(array_first($matches))) {
-            abort(404, '没有找到domain');
-        }
-
         $domains = [];
-        for ($i = 0; $i < count($matches[0]); $i++) {
-            $domains[$i] = [
-                'domain'        => $matches[1][$i],
-                'register_time' => $this->formatDate($matches[2][$i]),
-                'expires_time'  => $this->formatDate($matches[3][$i])
-            ];
+        $doc = new DOMDocument();
+        $page = mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8');
+        @$doc->loadHTML($page);
+        $xpath = new DOMXPath($doc);
+        $dom = $xpath->query('//*/table[contains(@class, "table-striped")]/tbody/tr');
+
+        foreach ($dom as $key => $item) {
+            $domains[$key] = [];
+
+            foreach ($item->childNodes as $index => $childItem) {
+                if ($childItem->nodeType == 1 && $index <= 9) {
+                    $keyName = array_get($this->baseKey, strval(($index - 1) / 2));
+                    $domains[$key][$keyName] = strtolower(trim($childItem->nodeValue));
+
+                    if (preg_match('/\d{2}\/\d{2}\/\d{4}/', $childItem->nodeValue)) {
+                        $domains[$key][$keyName] = $this->formatDate($domains[$key][$keyName]);
+                    }
+                }
+            }
         }
 
         return $domains;
@@ -148,6 +191,6 @@ class FreenomService
     {
         $date = explode('/', $date);
 
-        return Carbon::create($date[2], $date[0], $date[1])->format($format);
+        return Carbon::create($date[2], $date[1], $date[0])->format($format);
     }
 }

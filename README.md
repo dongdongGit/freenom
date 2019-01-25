@@ -10,4 +10,6 @@ freenom auto renew
  - redis
  - model
  - lang
+ - token auth
 
+test git hook

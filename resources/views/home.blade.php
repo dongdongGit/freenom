@@ -82,7 +82,7 @@
     </div>
     <div class="page-container">
         <div class="main-content">
-            <transition name="slide-fade" mode="out-in">
+            <transition name="fade" mode="out-in">
                 <router-view></router-view>
             </transition>
         </div>

@@ -19,11 +19,11 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/fonts/line-icons.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('assets/plugins/morris/morris.css') }}">
+    {{--  <link rel="stylesheet" href="{{ asset('assets/plugins/morris/morris.css') }}">  --}}
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
+    {{--  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">  --}}
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css') }}">
+    {{--  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css') }}">  --}}
 </head>
 <body>
     <div class="app header-default side-nav-dark" id="app">
@@ -36,7 +36,7 @@
     {{--  <script src="{{ asset('assets/js/jquery-min.js') }}"></script>  --}}
     {{--  <script src="{{ asset('assets/js/popper.min.js') }}"></script>  --}}
     {{--  <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>  --}}
-    <script src="{{ asset('assets/js/jquery.app.js') }}"></script>
+    {{--  <script src="{{ asset('assets/js/jquery.app.js') }}"></script>  --}}
     {{--  <script src="{{ asset('assets/js/main.js') }}"></script>  --}}
 
     {{--  <script src="{{ asset('assets/plugins/morris/morris.min.js') }}"></script>  --}}
