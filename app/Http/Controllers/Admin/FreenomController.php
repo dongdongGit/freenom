@@ -68,7 +68,10 @@ class FreenomController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $domain = $this->user()->domains()->find($id);
+        $domain->delete();
+
+        return $this->success();
     }
 
     public function sync()
