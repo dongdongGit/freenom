@@ -41,7 +41,7 @@ class FreenomController extends Controller
     {
         $domain = $this->user()->domains()->find($id);
 
-        return $domain;
+        return $this->success($domain);
     }
 
     /**
