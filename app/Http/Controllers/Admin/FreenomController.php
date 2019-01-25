@@ -53,7 +53,11 @@ class FreenomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $this->validate($request->all(), [
+            'enabled_auto_renew' => 'boolean'
+        ]);
+
+        return $this->success();
     }
 
     /**
