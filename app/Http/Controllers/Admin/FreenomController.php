@@ -53,7 +53,11 @@ class FreenomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $this->validate($request->all(), [
+            'enabled_auto_renew' => 'boolean'
+        ]);
+
+        return $this->success();
     }
 
     /**
@@ -64,7 +68,10 @@ class FreenomController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $domain = $this->user()->domains()->find($id);
+        $domain->delete();
+
+        return $this->success();
     }
 
     public function sync()
