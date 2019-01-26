@@ -18,7 +18,7 @@ class WebhooksController extends Controller
         }
 
         Log::info(base_path());
-        $process = new Process('cd ' . base_path() . '; ./deploy.sh');
+        $process = new Process('cd ' . base_path() . '; chmod +x deploy.sh && ./deploy.sh');
         $process->run(function ($type, $buffer) {
             Log::info($buffer);
         });

@@ -1,4 +1,6 @@
 #!/bin/sh
 
 # update source code
-git pull origin master
+git checkout .
+git fetch origin master
+git merge origin/master
