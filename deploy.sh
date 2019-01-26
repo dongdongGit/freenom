@@ -2,4 +2,5 @@
 
 # update source code
 git checkout .
-git pull origin master
+git fetch origin master
+git merge origin/master
