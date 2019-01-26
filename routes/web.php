@@ -23,6 +23,6 @@ Route::post('/logout', 'Auth\LoginController@logout')->name('logout')->middlewar
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:web'], 'namespace' => 'Admin'], function () {
     Route::get('/home', 'HomeController@index')->name('home');
-    Route::get('/freenom/sync', 'FreenomController@sync');
+    Route::post('/freenom/action', 'FreenomController@action');
     Route::resource('/freenom', 'FreenomController');
 });

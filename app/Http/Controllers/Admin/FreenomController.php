@@ -74,8 +74,16 @@ class FreenomController extends Controller
         return $this->success();
     }
 
-    public function sync()
+    public function action(Request $request)
     {
+        $data = $this->validate(app('request'), [
+            'action'              => 'required|in:sync,renew',
+            'domains'             => 'required_if:action,renew|array',
+            'domains.*.domain'    => 'required_if:action,renew|string',
+            'domains.*.domain_id' => 'required_if:action,renew|integer',
+        ]);
+
+        // TODO: job
         $freenomService = new FreenomService();
         $freenomService->sync();
 

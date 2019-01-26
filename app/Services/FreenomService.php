@@ -156,6 +156,7 @@ class FreenomService
         @$doc->loadHTML($page);
         $xpath = new DOMXPath($doc);
         $dom = $xpath->query('//*/table[contains(@class, "table-striped")]/tbody/tr');
+        $domainIds = $xpath->query('//*/table[contains(@class, "table-striped")]/tbody/tr/*/a[contains(@class, "pullRight")]');
 
         foreach ($dom as $key => $item) {
             $domains[$key] = [];
