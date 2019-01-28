@@ -14,10 +14,10 @@
         </div>
         <ul class="nav-left">
           <li>
-            <a class="sidenav-fold-toggler" v-on:click="open()">
+            <a class="sidenav-fold-toggler" v-on:click="toggle()">
               <i class="lni-menu"></i>
             </a>
-            <a class="sidenav-expand-toggler" v-on:click="close()">
+            <a class="sidenav-expand-toggler" v-on:click="open()">
               <i class="lni-menu"></i>
             </a>
           </li>
@@ -103,21 +103,18 @@ export default {
     };
   },
   created() {
-    // this.getPath()
+    this.init()
   },
   methods: {
-    // getPath () {
-    //   this.path = window.Vue.baseUri;
-    // }
-    open() {
-      console.log('test');
-      this.isCollapse = true;
+    init () {
+      console.log('init');
+    },
+    toggle() {
+      this.isCollapse = !this.isCollapse;
       console.log(this.isCollapse);
     },
-    close() {
-      this.isCollapse = false;
-      console.log(this.isCollapse);
-
+    open() {
+      console.log('open');
     }
   }
 };
@@ -175,6 +172,11 @@ export default {
         -moz-transition: all 0.2s ease-in-out;
         -o-transition: all 0.2s ease-in-out;
         -ms-transition: all 0.2s ease-in-out;
+        i.lni-menu {
+          &::before {
+            content: "\e9b9";
+          }
+        }
         i {
           font-size: 18px;
           vertical-align: middle;
@@ -211,7 +213,7 @@ export default {
   }
 }
 
-.nav-folded {
+.nav-folder {
   .el-header {
     .nav-logo {
       width: 70px;
@@ -221,6 +223,13 @@ export default {
           width: 70px;
           display: none;
         }
+      }
+    }
+  }
+  .nav-left {
+    li > a > i.lni-menu {
+      &::before {
+        content: "\e914";
       }
     }
   }
@@ -287,7 +296,7 @@ export default {
 }
 
 @media only screen and (min-width: 992px) {
-  .nav-folded {
+  .nav-folder {
     .right-menu {
       padding-left: 65px;
     }
