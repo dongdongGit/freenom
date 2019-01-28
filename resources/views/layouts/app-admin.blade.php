@@ -21,7 +21,7 @@
 
     {{--  <link rel="stylesheet" href="{{ asset('assets/plugins/morris/morris.css') }}">  --}}
 
-    {{--  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">  --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
 
     {{--  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css') }}">  --}}
 </head>
