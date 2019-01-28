@@ -156,10 +156,14 @@ class FreenomService
         @$doc->loadHTML($page);
         $xpath = new DOMXPath($doc);
         $dom = $xpath->query('//*/table[contains(@class, "table-striped")]/tbody/tr');
-        $domainIds = $xpath->query('//*/table[contains(@class, "table-striped")]/tbody/tr/*/a[contains(@class, "pullRight")]');
+        $domainIds = $xpath->query('//*/table[contains(@class, "table-striped")]/tbody/tr//a[contains(@class, "pullRight")]');
 
         foreach ($dom as $key => $item) {
-            $domains[$key] = [];
+            preg_match('/id=(\d+)/', $domainIds[$key]->attributes->getNamedItem('href')->nodeValue, $matchDomainId);
+
+            $domains[$key] = [
+                'domain_id' => array_last($matchDomainId)
+            ];
 
             foreach ($item->childNodes as $index => $childItem) {
                 if ($childItem->nodeType == 1 && $index <= 9) {
