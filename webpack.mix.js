@@ -16,7 +16,9 @@ mix.browserSync({
    files: [
        'resources/js/*.js',
        'resources/js/*.vue',
-       'resources/js/components/*',
+       'resources/js/components/**/*.vue',
+       'resources/js/environments/*.vue',
+       'resources/js/router/*.js',
        'resources/sass/.css'
    ]
 });
