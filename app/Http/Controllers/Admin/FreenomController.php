@@ -76,7 +76,7 @@ class FreenomController extends Controller
 
     public function action(Request $request)
     {
-        $data = $this->validate(app('request'), [
+        $data = $request([
             'action'              => 'required|in:sync,renew',
             'domains'             => 'required_if:action,renew|array',
             'domains.*.domain'    => 'required_if:action,renew|string',

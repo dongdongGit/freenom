@@ -28,13 +28,14 @@
             </el-button>
           </div>
           <div class="card-body">
-            <el-table :data="tableData" style="width: 100%">
-              <el-table-column fixed prop="date" label="日期" ></el-table-column>
-              <el-table-column prop="name" label="姓名"></el-table-column>
-              <el-table-column prop="province" label="省份"></el-table-column>
-              <el-table-column prop="city" label="市区"></el-table-column>
-              <el-table-column prop="address" label="地址"></el-table-column>
-              <el-table-column prop="zip" label="邮编"></el-table-column>
+            <el-table :data="domains" style="width: 100%">
+              <el-table-column fixed prop="domain" label="域名" ></el-table-column>
+              <el-table-column prop="status" label="状态"></el-table-column>
+              <el-table-column prop="type" label="类型"></el-table-column>
+              <el-table-column prop="register_date" label="注册时间"></el-table-column>
+              <el-table-column prop="expires_date" label="过期时间"></el-table-column>
+              <el-table-column prop="enabled_auto_renew" label="自动续费"></el-table-column>
+              <el-table-column prop="renew" label="自动续费时长"></el-table-column>
               <el-table-column label="操作" width="146">
                 <template slot-scope="scope">
                   <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -51,7 +52,7 @@
               <div class="col-sm-12 col-md-7">
                 <el-pagination
                   layout="prev, pager, next"
-                  :total="50"
+                  :total="meta.total"
                   background
                   class="pagination-flex-end"
                 ></el-pagination>
@@ -68,64 +69,51 @@
 export default {
   data() {
     return {
-      tableData: [
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333
-        },
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          province: "上海",
-          city: "普陀区",
-          address: "上海市普陀区金沙江路 1518 弄",
-          zip: 200333
-        }
-      ],
+      domains: [],
+      meta: {},
       loading: false
     };
   },
-  created () {
+  created() {
     this.init();
   },
+  watch: {
+    '$route': 'init'
+  },
   methods: {
-    init () {
+    init() {
       var self = this
       this.loading = true;
       return axios.get(this.GLOBAL.baseUri + 'admin/freenom')
         .then(function (response) {
           self.loading = false;
+          if (response.code === 200) {
+            self.domains = response.data;
+            self.meta = response.meta
+          }
         })
         .catch(function (error) {
-          console.log('test');
+          self.$message({
+            showClose: true,
+            message: '加载失败',
+            type: 'error'
+          });
         });
     },
-    handleClick(row) {
-      30;
-      console.log(row);
-    },
     sync() {
-      console.log('sync');
+      var self = this
+      this.loading = true;
+      return axios.post(this.GLOBAL.baseUri + 'admin/freenom/sync')
+        .then(function (response) {
+          self.loading = false;
+        })
+        .catch(function (error) {
+          self.$message({
+            showClose: true,
+            message: '同步失败',
+            type: 'error'
+          });
+        });
     }
   },
 };
