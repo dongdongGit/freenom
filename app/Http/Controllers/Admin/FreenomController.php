@@ -53,7 +53,7 @@ class FreenomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $this->validate($request->all(), [
+        $data = $request->validate([
             'enabled_auto_renew' => 'boolean'
         ]);
 
@@ -76,7 +76,7 @@ class FreenomController extends Controller
 
     public function action(Request $request)
     {
-        $data = $request([
+        $data = $request->validate([
             'action'              => 'required|in:sync,renew',
             'domains'             => 'required_if:action,renew|array',
             'domains.*.domain'    => 'required_if:action,renew|string',
