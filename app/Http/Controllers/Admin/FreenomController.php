@@ -54,8 +54,12 @@ class FreenomController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->validate([
+<<<<<<< HEAD
             'enabled_auto_renew' => 'boolean',
             'renew'              => 'integer|between:1,12',
+=======
+            'enabled_auto_renew' => 'boolean'
+>>>>>>> dd35ba13799c6aa0cbf0140e975985c9d489556f
         ]);
 
         $domain = $this->user()->domains()->find($id);
