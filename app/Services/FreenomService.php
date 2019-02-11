@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Log;
 use Cache;
 use DOMXPath;
 use DOMDocument;
@@ -19,8 +20,8 @@ class FreenomService
     private $config = [];
     private $gateway = [
         'login'  => 'https://my.freenom.com/dologin.php',
-        'renew'  => 'https://my.freenom.com/domains.php?a=renewals',
-        'domain' => 'https://my.freenom.com/clientarea.php?action=domains',
+        'list'   => 'https://my.freenom.com/clientarea.php?action=domains',
+        'domain' => 'https://my.freenom.com/domains.php'
     ];
     private $baseHeaders = [
         'Content-Type' => 'application/x-www-form-urlencoded',
@@ -111,19 +112,17 @@ class FreenomService
 
         $response = $this->client->request(
             'GET',
-            $this->gateway['domain'],
+            $this->gateway['list'],
             $parse
         );
 
         $body = $response->getBody();
 
         if (preg_match('/Next Page/', $body)) {
-            preg_match('/<input[A-Za-z "=]+value=\"([\dA-Fa-f]+)\"[^>]+>/', $body, $matchesInput);
-            $token = array_last($matchesInput);
-
+            $token = $this->getToken($body);
             $response = $this->client->request(
                 'POST',
-                $this->gateway['domain'],
+                $this->gateway['list'],
                 array_merge($parse, [
                     'form_params' => [
                         'itemlimit' => 'all',
@@ -134,6 +133,50 @@ class FreenomService
         }
 
         return $this->getDomainData($response->getBody());
+    }
+
+    public function renew($domains)
+    {
+        if (!is_array($domains) || empty($domains)) {
+            abort('501', 'domains 数据为空');
+        }
+
+        $this->login();
+
+        $parse = [
+            'headers' => array_merge(
+                $this->baseHeaders,
+                [
+                    'Cookie'  => 'WHMCSZH5eHTGhfvzP=' . $this->getFreenomAuth(),
+                ]
+            ),
+            'allow_redirects' => true,
+        ];
+
+        foreach ($domains as $domain) {
+            $response = $this->client->request(
+                'get',
+                $this->gateway['domain'] . '?a=renewdomain&domain=' . $domain['domain_id'],
+                $parse
+            );
+
+            $token = $this->getToken($response->getBody());
+
+            $response = $this->client->request(
+                'post',
+                $this->gateway['domain'] . '?submitrenewals=true',
+                array_merge($parse, [
+                    'form_params' => [
+                        'paymentmethod' => 'credit',
+                        'renewalid'     => $domain['domain_id'],
+                        'renewalperiod' => [
+                            $domain['domain_id'] => $domain['renew'] . 'M',
+                        ],
+                        'token' => $token
+                    ]
+                ])
+            );
+        }
     }
 
     public function sync()
@@ -177,6 +220,12 @@ class FreenomService
             }
         }
 
+        Log::info([
+            'code'    => 200,
+            'message' => 'sync success',
+            'data'    => $domains
+        ]);
+
         return $domains;
     }
 
@@ -188,7 +237,7 @@ class FreenomService
     public function getClient()
     {
         return $this->client = new Client([
-            'timeout' => 5.0
+            'timeout' => 10.0
         ]);
     }
 
@@ -197,5 +246,12 @@ class FreenomService
         $date = explode('/', $date);
 
         return Carbon::create($date[2], $date[1], $date[0])->format($format);
+    }
+
+    public function getToken($body)
+    {
+        preg_match('/<input[A-Za-z "=]+value=\"([\dA-Fa-f]+)\"[^>]+>/', $body, $matchesInput);
+
+        return array_last($matchesInput);
     }
 }
