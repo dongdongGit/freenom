@@ -5,7 +5,6 @@ freenom auto renew
  - job
  - ui
  - controller
- - router
  - redis
  - lang
  - token auth
