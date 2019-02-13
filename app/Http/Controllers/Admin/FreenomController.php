@@ -87,8 +87,6 @@ class FreenomController extends Controller
             'domains.*.renew'     => 'required_if:action,renew|integer|between:1,12',
         ]);
 
-        // dd($data);
-
         // TODO: job
         $freenomService = new FreenomService();
 

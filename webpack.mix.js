@@ -10,18 +10,25 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-mix.browserSync({
-   notify: false,
-   proxy: 'http://test.freenom.local',
-   files: [
-       'resources/js/*.js',
-       'resources/js/*.vue',
-       'resources/js/components/**/*.vue',
-       'resources/js/environments/*.vue',
-       'resources/js/router/*.js',
-       'resources/sass/.css'
-   ]
-});
 
 mix.js('resources/js/app.js', 'public/js')
    .sass('resources/sass/app.scss', 'public/css');
+
+// if (!mix.inProduction()) {
+//    mix.browserSync({
+//       notify: false,
+//       proxy: 'http://test.freenom.local',
+//       files: [
+//             'resources/js/*.js',
+//             'resources/js/*.vue',
+//             'resources/js/components/**/*.vue',
+//             'resources/js/environments/*.vue',
+//             'resources/js/router/*.js',
+//             'resources/sass/.css'
+//       ]
+//    });
+// }
+
+if (mix.inProduction()) {
+   mix.version();
+}
