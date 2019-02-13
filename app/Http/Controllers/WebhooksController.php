@@ -21,5 +21,7 @@ class WebhooksController extends Controller
         $process->run(function ($type, $buffer) {
             Log::info($buffer);
         });
+
+        return $this->success();
     }
 }
