@@ -28,6 +28,8 @@
               :data="domains"
               style="width: 100%"
               @selection-change="handleSelectionChange"
+              @select="handleSelect"
+              @select-all="handleSetectAll"
             >
               <el-table-column type="selection" width="55"></el-table-column>
               <el-table-column fixed prop="domain" label="域名" ></el-table-column>
@@ -52,7 +54,9 @@
                   <el-switch
                     v-model="scope.row.enabled_auto_renew"
                     active-color="#13ce66"
-                    inactive-color="#ff4949">
+                    inactive-color="#ff4949"
+                    @change="handleSwitchChange(scope.$index, scope.row)"
+                  >
                   </el-switch>
                 </template>
               </el-table-column>
@@ -130,7 +134,6 @@ export default {
           if (data.code === 200) {
             self.domains = data.data;
             self.meta = data.meta;
-            console.log(self.meta);
           }
         })
         .catch(function (error) {
@@ -212,15 +215,44 @@ export default {
           });
         });
     },
+    handleSwitchChange(index, row) {
+      var self = this
+      this.loading = true;
+      return axios.put(this.GLOBAL.baseUri + 'admin/freenom/' + row.id, {
+          enabled_auto_renew: row.enabled_auto_renew
+        })
+        .then(function (response) {
+          self.loading = false;
+          let data = response.data;
+          if (data.code === 200) {
+            self.$message({
+              message: '操作成功',
+              type: 'success',
+            });
+            Vue.set(self.domains, index, data.data)
+          }
+        })
+        .catch(function (error) {
+          self.$message({
+            showClose: true,
+            message: '操作失败',
+            type: 'error'
+          });
+        });
+    },
+    handleSelect(selection, row) {
+      var self = this;
+      self.expired(row);
+    },
+    handleSetectAll(selection) {
+      var self = this;
+      selection.forEach(row => {
+        self.expired(row)
+      });
+      console.log(selection);
+    },
     handleSelectionChange(val) {
       var self = this;
-      val.forEach(row => {
-        var today = new Date();
-        
-        if (today.setDate(today.getDate() * 1 + 15) < new Date(row.expires_date).getTime()) {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        }
-      });
 
       if (val.length > 0) {
         this.allow = false;
@@ -259,6 +291,14 @@ export default {
             type: 'error'
           });
         });
+    },
+    expired(row) {
+      let today = new Date();
+      let now = today.setDate(today.getDate() * 1 + 15);
+      let expired_at = new Date(row.expires_date).getTime();
+      if (now < expired_at) {
+        this.$refs.multipleTable.toggleRowSelection(row, false);
+      }
     }
   }
 };

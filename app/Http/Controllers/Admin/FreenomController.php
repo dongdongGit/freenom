@@ -15,7 +15,7 @@ class FreenomController extends Controller
      */
     public function index()
     {
-        $domains = $this->user()->domains()->apiPaginate();
+        $domains = $this->user()->domains()->apiPaginate(10);
 
         return $this->success($domains);
     }
@@ -28,7 +28,7 @@ class FreenomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // TODO:
     }
 
     /**
