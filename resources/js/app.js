@@ -33,7 +33,7 @@ Vue.prototype.GLOBAL = global;
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 // 移动到router.json
-const index = Vue.component('index', require('./components/IndexComponent.vue').default);
+const index = Vue.component('index', require('./components/freenom/IndexComponent.vue').default);
 const loading = Vue.component('loading', require('./components/Loading.vue').default);
 const routes = [
     {
