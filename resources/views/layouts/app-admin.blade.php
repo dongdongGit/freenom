@@ -2,28 +2,17 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+    <link href="{{ asset('favicon.ico') }}" rel="shortcut icon" type="image/x-icon">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    
-
-    <!-- Fonts -->
-    {{--  <link rel="dns-prefetch" href="//fonts.gstatic.com">  --}}
-    {{--  <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">  --}}
-
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/fonts/line-icons.css') }}">
-
-    {{--  <link rel="stylesheet" href="{{ asset('assets/plugins/morris/morris.css') }}">  --}}
-
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
-
-    {{--  <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css') }}">  --}}
 </head>
 <body>
     <div class="app header-default side-nav-dark" id="app">

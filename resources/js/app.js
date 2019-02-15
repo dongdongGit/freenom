@@ -15,13 +15,25 @@ import routes from './router/admin.js';
 import VueRouter from 'vue-router';
 import Vuelidate from 'vuelidate';
 import ElementUI from 'element-ui';
+import VueMoment from 'vue-moment';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/zh-CN';
 
+Vue.use(VueMoment);
 Vue.use(Vuelidate);
 Vue.use(VueRouter);
 Vue.use(ElementUI, { locale });
 Vue.prototype.GLOBAL = global;
+
+// Vue.filter('dateFormat', function (value) {
+//     return moment(value).format()    
+// })
+
+if(!Array.isArray){
+    Array.isArray = function(arg){
+        return Object.prototype.toString.call(arg)==='[object Array]'
+    }
+}
 
 /**
  * The following block of code may be used to automatically register your

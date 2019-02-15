@@ -33,7 +33,7 @@
         </el-dropdown>
       </el-header>
       <el-container>
-        <el-aside>
+        <el-aside width>
           <el-menu
             background-color="#1a2942"
             text-color="#99abb4"
@@ -43,6 +43,7 @@
             router
           >
             <el-menu-item index="0" route="/">
+              <i class="el-icon-menu"></i>
               <span slot="title">首页</span>
             </el-menu-item>
             <el-menu-item index="1" route="/index">
@@ -79,11 +80,9 @@ export default {
   methods: {
     init () {
       console.log('init');
-
     },
     toggle() {
       this.isCollapse = !this.isCollapse;
-      console.log(this.isCollapse);
     },
     open() {
       console.log('open');
@@ -212,8 +211,6 @@ export default {
 
 .el-aside {
   color: #333;
-  // width: 250px;
-  // background-color: #1a2942;
   z-index: 1000;
   top: 60px;
   bottom: 0;

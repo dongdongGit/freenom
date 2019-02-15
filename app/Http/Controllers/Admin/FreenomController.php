@@ -15,7 +15,7 @@ class FreenomController extends Controller
      */
     public function index()
     {
-        $domains = $this->user()->domains()->apiPaginate();
+        $domains = $this->user()->domains()->apiPaginate(10);
 
         return $this->success($domains);
     }
@@ -28,7 +28,7 @@ class FreenomController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // TODO:
     }
 
     /**
@@ -53,11 +53,15 @@ class FreenomController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $this->validate($request->all(), [
-            'enabled_auto_renew' => 'boolean'
+        $data = $request->validate([
+            'enabled_auto_renew' => 'boolean',
+            'renew'              => 'integer|between:1,12',
         ]);
 
-        return $this->success();
+        $domain = $this->user()->domains()->findOrFail($id);
+        $domain->update($data);
+
+        return $this->success($domain);
     }
 
     /**
@@ -68,7 +72,7 @@ class FreenomController extends Controller
      */
     public function destroy($id)
     {
-        $domain = $this->user()->domains()->find($id);
+        $domain = $this->user()->domains()->findOrFail($id);
         $domain->delete();
 
         return $this->success();
@@ -76,16 +80,21 @@ class FreenomController extends Controller
 
     public function action(Request $request)
     {
-        $data = $this->validate(app('request'), [
+        $data = $request->validate([
             'action'              => 'required|in:sync,renew',
             'domains'             => 'required_if:action,renew|array',
-            'domains.*.domain'    => 'required_if:action,renew|string',
             'domains.*.domain_id' => 'required_if:action,renew|integer',
+            'domains.*.renew'     => 'required_if:action,renew|integer|between:1,12',
         ]);
 
         // TODO: job
         $freenomService = new FreenomService();
-        $freenomService->sync();
+
+        if ($data['action'] === 'sync') {
+            $freenomService->sync();
+        } elseif ($data['action'] === 'renew' && !empty(array_get($data, 'domains', []))) {
+            $freenomService->renew($data['domains']);
+        }
 
         return $this->success();
     }
