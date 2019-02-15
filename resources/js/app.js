@@ -28,6 +28,13 @@ Vue.prototype.GLOBAL = global;
 // Vue.filter('dateFormat', function (value) {
 //     return moment(value).format()    
 // })
+
+if(!Array.isArray){
+    Array.isArray = function(arg){
+        return Object.prototype.toString.call(arg)==='[object Array]'
+    }
+}
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

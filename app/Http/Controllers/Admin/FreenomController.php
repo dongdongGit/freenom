@@ -58,7 +58,7 @@ class FreenomController extends Controller
             'renew'              => 'integer|between:1,12',
         ]);
 
-        $domain = $this->user()->domains()->find($id);
+        $domain = $this->user()->domains()->findOrFail($id);
         $domain->update($data);
 
         return $this->success($domain);
@@ -72,7 +72,7 @@ class FreenomController extends Controller
      */
     public function destroy($id)
     {
-        $domain = $this->user()->domains()->find($id);
+        $domain = $this->user()->domains()->findOrFail($id);
         $domain->delete();
 
         return $this->success();

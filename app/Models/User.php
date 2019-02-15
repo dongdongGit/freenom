@@ -30,6 +30,6 @@ class User extends Authenticatable
 
     public function domains()
     {
-        return $this->hasMany(Domain::class);
+        return $this->hasMany(Domain::class)->latest();
     }
 }

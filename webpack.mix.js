@@ -12,7 +12,8 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+   .sass('resources/sass/app.scss', 'public/css')
+   .version();
 
 if (!mix.inProduction()) {
     mix.browserSync({
@@ -30,6 +31,5 @@ if (!mix.inProduction()) {
 }
 
 if (mix.inProduction()) {
-    mix.version()
-        .disableNotifications();
+    mix.disableNotifications();
 }

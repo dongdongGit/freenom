@@ -5,6 +5,7 @@ namespace App\Models;
 class Domain extends Model
 {
     protected $casts = [
+        'renew'              => 'integer',
         'domain_id'          => 'integer',
         'user_id'            => 'integer',
         'enabled_auto_renew' => 'boolean',
