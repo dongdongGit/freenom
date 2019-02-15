@@ -50,6 +50,7 @@ class AutoRenewDomains extends Command
                 ];
             }
         }
-        dd($renew_domains);
+
+        // TODO: freenom service
     }
 }
