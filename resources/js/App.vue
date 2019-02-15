@@ -24,60 +24,31 @@
         </ul>
         <el-dropdown class="nav-right">
           <i class="el-icon-setting" style="margin-right: 15px"></i>
-          <span>王小虎</span>
+          <span>{{user}}</span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <el-dropdown-item>
+              <a v-on:click="logout()">登出</a>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
       <el-container>
-        <el-aside>
+        <el-aside width>
           <el-menu
-            :default-openeds="['1', '3']"
             background-color="#1a2942"
             text-color="#99abb4"
             active-text-color="#ffd04b"
             :collapse="isCollapse"
             class="left-menu"
+            router
           >
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span slot="title">导航一</span>
-              </template>
-              <el-menu-item-group>
-                <span slot="title">分组一</span>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="分组2">
-                <el-menu-item index="1-3">选项3</el-menu-item>
-              </el-menu-item-group>
-              <el-submenu index="1-4">
-                <span slot="title">选项4</span>
-                <el-menu-item index="1-4-1">选项1</el-menu-item>
-              </el-submenu>
-            </el-submenu>
-            <el-menu-item index="2">
+            <el-menu-item index="0" route="/">
               <i class="el-icon-menu"></i>
-              <span slot="title">导航二</span>
+              <span slot="title">首页</span>
             </el-menu-item>
-            <el-menu-item index="3" disabled>
-              <i class="el-icon-document"></i>
-              <span slot="title">导航三</span>
-            </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item index="1" route="/index">
               <i class="el-icon-setting"></i>
-              <span slot="title">导航四</span>
+              <span slot="title">域名</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -98,6 +69,7 @@ export default {
   name: "app",
   data() {
     return {
+      user: null,
       isCollapse: false,
       path: this.GLOBAL.baseUri
     };
@@ -111,10 +83,12 @@ export default {
     },
     toggle() {
       this.isCollapse = !this.isCollapse;
-      console.log(this.isCollapse);
     },
     open() {
       console.log('open');
+    },
+    logout() {
+      console.log('logout');
     }
   }
 };
@@ -237,8 +211,6 @@ export default {
 
 .el-aside {
   color: #333;
-  // width: 250px;
-  // background-color: #1a2942;
   z-index: 1000;
   top: 60px;
   bottom: 0;

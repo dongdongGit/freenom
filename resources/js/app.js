@@ -10,17 +10,30 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import App from './App.vue';
-import global from './components/tool/Global.vue';
+import global from './config/global.js';
+import routes from './router/admin.js';
 import VueRouter from 'vue-router';
 import Vuelidate from 'vuelidate';
 import ElementUI from 'element-ui';
+import VueMoment from 'vue-moment';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/zh-CN';
 
+Vue.use(VueMoment);
 Vue.use(Vuelidate);
 Vue.use(VueRouter);
 Vue.use(ElementUI, { locale });
 Vue.prototype.GLOBAL = global;
+
+// Vue.filter('dateFormat', function (value) {
+//     return moment(value).format()    
+// })
+
+if(!Array.isArray){
+    Array.isArray = function(arg){
+        return Object.prototype.toString.call(arg)==='[object Array]'
+    }
+}
 
 /**
  * The following block of code may be used to automatically register your
@@ -32,23 +45,7 @@ Vue.prototype.GLOBAL = global;
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-// 移动到router.json
-const index = Vue.component('index', require('./components/freenom/IndexComponent.vue').default);
-const loading = Vue.component('loading', require('./components/Loading.vue').default);
-const routes = [
-    {
-        path: '/example',
-        component: Vue.component('example', require('./components/ExampleComponent.vue').default)
-    },
-    {
-        path: '/',
-        component: Vue.component('example', require('./components/ExampleComponent.vue').default)
-    },
-    {
-        path: '/index',
-        component: index
-    }
-];
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -64,7 +61,6 @@ const baseUri = 'http://test.freenom.local/';
 
 const app = new Vue({
     router,
-    // el:'#app',
     render: h => h(App)
 }).$mount('#app');
-// });
+

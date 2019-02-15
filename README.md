@@ -1,11 +1,10 @@
 ## Freenom 
 freenom auto renew
 
-## todo
+## Todo
  - job
  - ui
- - controller
- - router
- - redis
  - lang
- - token auth
+ - jwt token 
+ - log
+ - index
