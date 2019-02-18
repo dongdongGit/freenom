@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use App\Models\Domain;
+use App\Jobs\FreenomRenew;
 use Illuminate\Console\Command;
 
 class AutoRenewDomains extends Command
@@ -47,6 +48,6 @@ class AutoRenewDomains extends Command
             }
         });
 
-        // TODO: freenom service
+        dispatch(new FreenomRenew($filtered));
     }
 }
