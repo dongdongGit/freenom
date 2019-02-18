@@ -16,7 +16,8 @@
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "php-http/curl-client": "^1.7",
-        "sentry/sentry-laravel": "1.0.0-beta1"
+        "sentry/sentry-laravel": "1.0.0-beta1",
+        "spatie/laravel-activitylog": "^3.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

@@ -1,3 +1,3 @@
 export default {
-  production: false,
+  env: process.env.MIX_APP_ENV,
 }

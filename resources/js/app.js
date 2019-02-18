@@ -57,8 +57,6 @@ const router = new VueRouter({
     routes // （缩写）相当于 routes: routes
 })
 
-const baseUri = 'http://test.freenom.local/';
-
 const app = new Vue({
     router,
     render: h => h(App)

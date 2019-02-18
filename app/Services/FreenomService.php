@@ -9,6 +9,7 @@ use DOMDocument;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use App\Traits\ProvidesConvenienceMethods;
+use Illuminate\Database\Eloquent\Collection;
 
 class FreenomService
 {
@@ -137,8 +138,12 @@ class FreenomService
 
     public function renew($domains)
     {
-        if (!is_array($domains) || empty($domains)) {
-            abort('501', 'domains 数据为空');
+        if (!($domains instanceof Collection)) {
+            abort('502', '数据错误');
+        } else {
+            if ($domains->isEmpty()) {
+                abort('501', 'domains 数据为空');
+            }
         }
 
         $this->login();
@@ -156,7 +161,7 @@ class FreenomService
         foreach ($domains as $domain) {
             $response = $this->client->request(
                 'get',
-                $this->gateway['domain'] . '?a=renewdomain&domain=' . $domain['domain_id'],
+                $this->gateway['domain'] . '?a=renewdomain&domain=' . $domain->domain_id,
                 $parse
             );
 
@@ -168,14 +173,17 @@ class FreenomService
                 array_merge($parse, [
                     'form_params' => [
                         'paymentmethod' => 'credit',
-                        'renewalid'     => $domain['domain_id'],
+                        'renewalid'     => $domain->domain_id,
                         'renewalperiod' => [
-                            $domain['domain_id'] => $domain['renew'] . 'M',
+                            $domain->domain_id => $$domain->renew . 'M',
                         ],
                         'token' => $token
                     ]
                 ])
             );
+
+            $domain->expires_date = Carbon::parse($domain->expires_date)->addMonths($domain->renew);
+            $domain->save();
         }
     }
 
@@ -184,7 +192,8 @@ class FreenomService
         // TODO:log
         $data = $this->list();
         $this->user()->domains()->delete();
-        $this->user()->domains()->createMany($data);
+        $result = $this->user()->domains()->createMany($data);
+        activity('freenom_sync')->causedBy($this->user())->log(':causer.name 同步freenom域名');
     }
 
     public function getDomainData(String $body = '')
