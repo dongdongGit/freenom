@@ -95,5 +95,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '~@/admin/freenom';
+@import '~@/admin/app';
 </style>

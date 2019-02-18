@@ -123,7 +123,7 @@ export default {
         offset: 0,
         total: 0
       },
-      loading: false,
+      loading: true,
       allow: true,
       multipleSelection: [],
       options: []
