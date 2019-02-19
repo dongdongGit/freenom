@@ -48,7 +48,7 @@ class UtilController extends Controller
             }
 
             if (!$npm_update_flag) {
-                $process = new Process('npm i');
+                $process = new Process('npm i && npm run production');
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
                 });

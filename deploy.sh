@@ -2,8 +2,8 @@
 
 LOG_FILE="/home/wwwlogs/freenom_deploy.log"
 
-if [ ! -x "$LOG_FILE"]; then
-  mkdir "$LOG_FILE"
+if [ ! -f "$LOG_FILE"]; then
+  touch "$LOG_FILE"
 fi
 
 date >> "$LOG_FILE"
