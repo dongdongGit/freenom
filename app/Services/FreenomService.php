@@ -219,6 +219,7 @@ class FreenomService
 
             foreach ($item->childNodes as $index => $childItem) {
                 if ($childItem->nodeType == 1 && $index <= 9) {
+                    // TODO: bug
                     $keyName = array_get($this->baseKey, strval(($index - 1) / 2));
                     $domains[$key][$keyName] = strtolower(trim($childItem->nodeValue));
 
