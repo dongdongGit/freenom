@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use App\Models\Domain;
+use App\Jobs\FreenomRenew;
 use Illuminate\Console\Command;
 
 class AutoRenewDomains extends Command
@@ -40,17 +41,13 @@ class AutoRenewDomains extends Command
     public function handle()
     {
         $domains = Domain::where('enabled_auto_renew', 1)->get();
-        $renew_domains = [];
 
-        foreach ($domains as $domain) {
+        $filtered = $domains->filter(function ($domain, $index) {
             if (Carbon::parse($domain->expires_date)->lt(Carbon::now()->addDay(14))) {
-                $renew_domains[] = [
-                    'domain_id' => $domain->domain_id,
-                    'renew'     => $domain->renew,
-                ];
+                return $domain;
             }
-        }
+        });
 
-        // TODO: freenom service
+        dispatch(new FreenomRenew($filtered));
     }
 }

@@ -16,7 +16,7 @@ class CreateDomainsTable extends Migration
         Schema::create('domains', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index()->default(0)->comment('用户id');
-            $table->integer('domain_id')->unsigned()->index()->default(0)->comment('域名id');
+            $table->integer('domain_id')->unsigned()->unique()->comment('域名id');
             $table->string('domain')->comment('域名');
             $table->enum('status', ['active', 'expired'])->default('active')->comment('状态, active-活动,expired-过期');
             $table->enum('type', ['free', 'paid'])->default('free')->comment('类型, free-免费,paid-收费');
@@ -25,7 +25,6 @@ class CreateDomainsTable extends Migration
             $table->boolean('enabled_auto_renew')->default(1)->index()->comment('是否自动续费');
             $table->string('renew')->default(12)->comment('到期自动续费时长');
             $table->timestamps();
-            $table->unique(['domain_id', 'domain']);
         });
     }
 

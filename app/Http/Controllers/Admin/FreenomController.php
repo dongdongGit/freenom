@@ -84,8 +84,10 @@ class FreenomController extends Controller
             'action'              => 'required|in:sync,renew',
             'domains'             => 'required_if:action,renew|array',
             'domains.*.domain_id' => 'required_if:action,renew|integer',
-            'domains.*.renew'     => 'required_if:action,renew|integer|between:1,12',
+            'domains.*.renew'     => 'required_if:action,renew|integer|between:1,12'
         ]);
+
+        $user = $this->user();
 
         // TODO: job
         $freenomService = new FreenomService();
@@ -93,7 +95,13 @@ class FreenomController extends Controller
         if ($data['action'] === 'sync') {
             $freenomService->sync();
         } elseif ($data['action'] === 'renew' && !empty(array_get($data, 'domains', []))) {
-            $freenomService->renew($data['domains']);
+            $domains = $user->domains()->whereIn('domain_id', collect($data['domains'])->pluck('domain_id'))->get();
+
+            if ($domains->count() != count($data['domains'])) {
+                return $this->abort(403, '权限不足, 无法操作'); // error
+            }
+
+            $freenomService->renew($domains);
         }
 
         return $this->success();
