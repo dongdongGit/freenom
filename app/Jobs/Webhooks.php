@@ -41,7 +41,6 @@ class Webhooks extends Job
     public function handle()
     {
         $process = new Process('cd ' . base_path() . '; chmod +x deploy.sh && ./deploy.sh');
-        $process->setTimeout(300);
         $process->run(function ($type, $buffer) {
             Log::info($buffer);
         });
