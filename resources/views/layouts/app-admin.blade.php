@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/fonts/line-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/main.css') }}">
 </head>
@@ -21,7 +21,7 @@
         </div>
     </div>
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
     {{--  <script src="{{ asset('assets/js/jquery-min.js') }}"></script>  --}}
     {{--  <script src="{{ asset('assets/js/popper.min.js') }}"></script>  --}}
     {{--  <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>  --}}
