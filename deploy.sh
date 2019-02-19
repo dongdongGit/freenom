@@ -10,8 +10,7 @@ date >> "$LOG_FILE"
 echo "Start deployment" >>"$LOG_FILE"
 # update source code
 echo "pulling source code..." >> "$LOG_FILE"
-git reset --hard origin/master
-git clean -f
+git checkout -- .
 git pull origin master
 echo "Finished." >>"$LOG_FILE"
 echo >> $LOG_FILE
