@@ -63,14 +63,14 @@ class Webhooks extends Job
             }
 
             if (!$composer_update_flag) {
-                $process = new Process('cd' . base_path() . ';composer update --no-interaction --no-dev --prefer-dist');
+                $process = new Process('cd ' . base_path() . ';composer update --no-interaction --no-dev --prefer-dist');
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
                 });
             }
 
             if (!$npm_update_flag) {
-                $process = new Process('cd' . base_path() . ';npm i && npm run production');
+                $process = new Process('cd ' . base_path() . ';npm i && npm run production');
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
                 });
