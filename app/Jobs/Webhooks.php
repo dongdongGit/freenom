@@ -40,16 +40,16 @@ class Webhooks extends Job
      */
     public function handle()
     {
-        $process = new Process('cd ' . base_path() . '; chmod +x deploy.sh && ./deploy.sh');
-        $process->run(function ($type, $buffer) {
-            Log::info($buffer);
-        });
-
-        $data = $this->data;
-        $composer_update_flag = true;
-        $npm_update_flag = true;
-
         if (ends_with($data['ref'], 'master')) {
+            $process = new Process('cd ' . base_path() . '; chmod +x deploy.sh && ./deploy.sh');
+            $process->run(function ($type, $buffer) {
+                Log::info($buffer);
+            });
+
+            $data = $this->data;
+            $composer_update_flag = true;
+            $npm_update_flag = true;
+
             foreach ($data['commits'] as $commit) {
                 $search_data = array_merge($commit['added'], $commit['modified']);
 
