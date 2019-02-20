@@ -40,13 +40,14 @@ class Webhooks extends Job
      */
     public function handle()
     {
+        $data = $this->data;
+
         if (ends_with($data['ref'], 'master')) {
             $process = new Process('cd ' . base_path() . '; chmod +x deploy.sh && ./deploy.sh');
             $process->run(function ($type, $buffer) {
                 Log::info($buffer);
             });
 
-            $data = $this->data;
             $composer_update_flag = true;
             $npm_update_flag = true;
 
