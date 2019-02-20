@@ -14,4 +14,3 @@ git checkout -- .
 git pull origin master
 echo "Finished." >>"$LOG_FILE"
 echo >> $LOG_FILE
-npm run production
