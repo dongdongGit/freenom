@@ -2,7 +2,7 @@
 
 LOG_FILE="/home/wwwlogs/freenom_deploy.log"
 
-if [ ! -f "$LOG_FILE"]; then
+if [ ! -f "$LOG_FILE" ]; then
   touch "$LOG_FILE"
 fi
 
