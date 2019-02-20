@@ -221,12 +221,14 @@ class FreenomService
 
             foreach ($item->childNodes as $index => $childItem) {
                 if ($childItem->nodeType == 1 && $index <= 9) {
-                    // TODO: bug
                     $keyName = array_get($this->baseKey, strval(($index - 1) / 2));
-                    $domains[$key][$keyName] = strtolower(trim($childItem->nodeValue));
 
-                    if (preg_match('/\d{2}\/\d{2}\/\d{4}/', $childItem->nodeValue)) {
-                        $domains[$key][$keyName] = $this->formatDate($domains[$key][$keyName]);
+                    if (!empty($keyName)) {
+                        $domains[$key][$keyName] = strtolower(trim($childItem->nodeValue));
+
+                        if (preg_match('/\d{2}\/\d{2}\/\d{4}/', $childItem->nodeValue)) {
+                            $domains[$key][$keyName] = $this->formatDate($domains[$key][$keyName]);
+                        }
                     }
                 }
             }
