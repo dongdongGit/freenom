@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Jobs\FreenomSync;
 use App\Services\FreenomService;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class FreenomController extends Controller
 {
@@ -90,10 +91,11 @@ class FreenomController extends Controller
         $user = $this->user();
 
         // TODO: job
-        $freenomService = new FreenomService();
+        // $freenomService = new FreenomService();
 
         if ($data['action'] === 'sync') {
-            $freenomService->sync();
+            // $freenomService->sync();
+            dispatch(new FreenomSync());
         } elseif ($data['action'] === 'renew' && !empty(array_get($data, 'domains', []))) {
             $domains = $user->domains()->whereIn('domain_id', collect($data['domains'])->pluck('domain_id'))->get();
 
@@ -101,7 +103,9 @@ class FreenomController extends Controller
                 return $this->abort(403, '权限不足, 无法操作'); // error
             }
 
-            $freenomService->renew($domains);
+            dispatch(new FreenomRenew($domains));
+
+            // $freenomService->renew($domains);
         }
 
         return $this->success();

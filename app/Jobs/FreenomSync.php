@@ -4,25 +4,22 @@ namespace App\Jobs;
 
 use App\Services\FreenomService;
 
-class FreenomRenew extends Job
+class FreenomSync extends Job
 {
-    public $domains;
-
     /**
      * The number of times the job may be attempted.
      *
      * @var int
      */
-    public $tries = 3;
+    public $tries = 1;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($domains)
+    public function __construct()
     {
-        $this->domains = $domains;
     }
 
     /**
@@ -33,7 +30,7 @@ class FreenomRenew extends Job
     public function handle()
     {
         $freenomService = new FreenomService();
-        $freenomService->renew($this->domains);
+        $freenomService->sync();
     }
 
     /**
