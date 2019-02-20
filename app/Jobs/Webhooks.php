@@ -50,6 +50,7 @@ class Webhooks extends Job
 
             $composer_update_flag = true;
             $npm_update_flag = true;
+            $npm_run_flag = true;
 
             foreach ($data['commits'] as $commit) {
                 $search_data = array_merge($commit['added'], $commit['modified']);
@@ -60,6 +61,10 @@ class Webhooks extends Job
 
                 if ($npm_update_flag && in_array('package.json', $search_data)) {
                     $npm_update_flag = false;
+                }
+
+                if ($npm_run_flag && preg_grep('/^resources\/.+$/', $search_data)) {
+                    $npm_run_flag = false;
                 }
             }
 
@@ -74,6 +79,12 @@ class Webhooks extends Job
             if (!$npm_update_flag) {
                 $process = new Process('cd ' . base_path() . ';npm i && npm run production');
                 $process->setTimeout(300);
+                $process->run(function ($type, $buffer) {
+                    Log::info($buffer);
+                });
+            } elseif (!$npm_run_flag) {
+                $process = new Process('cd ' . base_path() . ';npm run production');
+                $process->setTimeout(90);
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
                 });
