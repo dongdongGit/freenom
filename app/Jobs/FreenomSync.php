@@ -19,7 +19,7 @@ class FreenomSync extends Job
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct($user)
     {
         $this->user = $uesr;
     }
@@ -32,7 +32,7 @@ class FreenomSync extends Job
     public function handle()
     {
         $freenomService = new FreenomService();
-        $freenomService->sync($user);
+        $freenomService->sync($this->user);
     }
 
     /**
