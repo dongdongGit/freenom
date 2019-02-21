@@ -21,7 +21,7 @@ class FreenomSync extends Job
      */
     public function __construct($user)
     {
-        $this->user = $uesr;
+        $this->user = $user;
     }
 
     /**
