@@ -6,6 +6,7 @@ use App\Services\FreenomService;
 
 class FreenomSync extends Job
 {
+    public $user;
     /**
      * The number of times the job may be attempted.
      *
@@ -18,8 +19,9 @@ class FreenomSync extends Job
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
+        $this->user = $uesr;
     }
 
     /**
@@ -30,7 +32,7 @@ class FreenomSync extends Job
     public function handle()
     {
         $freenomService = new FreenomService();
-        $freenomService->sync();
+        $freenomService->sync($user);
     }
 
     /**

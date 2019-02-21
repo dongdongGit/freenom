@@ -7,14 +7,12 @@ use Cache;
 use DOMXPath;
 use DOMDocument;
 use Carbon\Carbon;
+use App\Models\User;
 use GuzzleHttp\Client;
-use App\Traits\ProvidesConvenienceMethods;
 use Illuminate\Database\Eloquent\Collection;
 
 class FreenomService
 {
-    use ProvidesConvenienceMethods;
-
     private $freenomAuth = null;
     private $client = null;
     private $params = [];
@@ -187,14 +185,13 @@ class FreenomService
         }
     }
 
-    public function sync()
+    public function sync(User $user)
     {
         // TODO:log
         $data = $this->list();
-        Log::info($this->user());
-        $this->user()->domains()->delete();
-        $result = $this->user()->domains()->createMany($data);
-        activity('freenom_sync')->causedBy($this->user())->log(':causer.name 同步freenom域名');
+        $user->domains()->delete();
+        $user->domains()->createMany($data);
+        activity('freenom_sync')->causedBy($user)->log(':causer.name 同步freenom域名');
     }
 
     public function getDomainData(String $body = '')
