@@ -191,6 +191,7 @@ class FreenomService
     {
         // TODO:log
         $data = $this->list();
+        Log::info($this->user());
         $this->user()->domains()->delete();
         $result = $this->user()->domains()->createMany($data);
         activity('freenom_sync')->causedBy($this->user())->log(':causer.name 同步freenom域名');
