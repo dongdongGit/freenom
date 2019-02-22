@@ -247,7 +247,7 @@ class FreenomService
     public function getClient()
     {
         return $this->client = new Client([
-            'timeout' => 10.0
+            'timeout' => $this->config('timeout')
         ]);
     }
 
