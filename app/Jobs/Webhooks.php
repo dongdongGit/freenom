@@ -77,13 +77,13 @@ class Webhooks extends Job
             }
 
             if (!$npm_update_flag) {
-                $process = new Process('cd ' . base_path() . ';npm i && npm run prod');
+                $process = Process::fromShellCommandline('cd ' . base_path() . ';npm i && npm run prod');
                 $process->setTimeout(300);
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
                 });
             } elseif (!$npm_run_flag) {
-                $process = new Process('cd ' . base_path() . ';npm run prod');
+                $process = Process::fromShellCommandline('cd ' . base_path() . ';npm run prod');
                 $process->setTimeout(90);
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
