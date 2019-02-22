@@ -173,7 +173,7 @@ class FreenomService
                         'paymentmethod' => 'credit',
                         'renewalid'     => $domain->domain_id,
                         'renewalperiod' => [
-                            $domain->domain_id => $$domain->renew . 'M',
+                            $domain->domain_id => $domain->renew . 'M',
                         ],
                         'token' => $token
                     ]
