@@ -14,7 +14,7 @@ class Webhooks extends Job
      *
      * @var int
      */
-    public $tries = 0;
+    public $tries = 1;
 
     /**
      * The number of seconds the job can run before timing out.
@@ -77,13 +77,13 @@ class Webhooks extends Job
             }
 
             if (!$npm_update_flag) {
-                $process = new Process('cd ' . base_path() . ';npm i && npm run production');
+                $process = new Process('cd ' . base_path() . ';npm i && npm run prod');
                 $process->setTimeout(300);
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
                 });
             } elseif (!$npm_run_flag) {
-                $process = new Process('cd ' . base_path() . ';npm run production');
+                $process = new Process('cd ' . base_path() . ';npm run prod');
                 $process->setTimeout(90);
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
