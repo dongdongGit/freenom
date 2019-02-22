@@ -27,7 +27,14 @@
           <span>{{user}}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
-              <a v-on:click="logout()">登出</a>
+              <a class="dropdown-item" :href="path + 'logout'"
+                  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  登出
+              </a>
+
+              <form id="logout-form" :action="path + 'logout'" method="POST" style="display: none;">
+                  <input type="hidden" name="_token" :value="csrfToken" autocomplete="off">
+              </form>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -71,7 +78,8 @@ export default {
     return {
       user: null,
       isCollapse: false,
-      path: this.GLOBAL.baseUri
+      path: this.GLOBAL.baseUri,
+      csrfToken: ''
     };
   },
   created() {
@@ -79,7 +87,19 @@ export default {
   },
   methods: {
     init () {
-      console.log('init');
+      var self = this;
+
+      return axios
+        .get(this.path + "admin/token")
+        .then(function(response) {
+          var data = response.data;
+          if (data.code === 200) {
+            self.csrfToken = data.data;
+            console.log(data.data);
+          }
+        })
+        .catch(function(error) {
+        });
     },
     toggle() {
       this.isCollapse = !this.isCollapse;

@@ -22,4 +22,9 @@ class UtilController extends Controller
 
         return $this->success($cached_stats);
     }
+
+    public function generateCsrfToken()
+    {
+        return $this->success(csrf_token());
+    }
 }
