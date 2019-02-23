@@ -12,7 +12,7 @@ class Domain extends Model
 
     protected static $ignoreChangedAttributes = ['updated_at'];
 
-    protected static $logAttributes = ['expires_date', 'renew'];
+    protected static $logAttributes = ['renew'];
 
     protected static $recordEvents = ['updated'];
 
