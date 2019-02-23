@@ -48,6 +48,8 @@ class AutoRenewDomains extends Command
             }
         });
 
-        dispatch(new FreenomRenew($filtered));
+        if ($filtered->isNotEmpty()) {
+            dispatch(new FreenomRenew($filtered));
+        }
     }
 }

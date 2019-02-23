@@ -182,6 +182,7 @@ class FreenomService
 
             $domain->expires_date = Carbon::parse($domain->expires_date)->addMonths($domain->renew);
             $domain->save();
+            activity('freenom_renew')->causedBy($domain->user)->performedOn($domain)->log(':causer.name 续费 :subject.domain');
         }
     }
 
