@@ -168,7 +168,20 @@ export default {
     },
     handleRenew(index, row) {
       var self = this;
+
+      if (
+        new Date(row.expires_date).getTime() >
+        new Date().getTime() + 14 * 3600 * 24
+      ) {
+        return self.$message({
+          showClose: true,
+          message: "为满足续费时间",
+          type: "error"
+        });
+      }
+
       this.loading = true;
+
       return axios
         .post(this.GLOBAL.baseUri + "admin/freenom/action", {
           action: "renew",
@@ -189,9 +202,7 @@ export default {
           const date = new Date(self.domains[index].expires_date);
           self.domains[index].expires_date = self
             .$moment(
-              date.setMonth(
-                date.getMonth() * 1 + 1 + self.domains[index].renew * 1
-              )
+              date.setMonth(date.getMonth() + self.domains[index].renew * 1)
             )
             .format("YYYY-MM-DD");
         })
@@ -357,7 +368,13 @@ export default {
       let offset = this.meta.limit * (page_number - 1);
 
       return axios
-        .get(this.GLOBAL.baseUri + "admin/freenom?limit=" + limit + "&offset=" + offset)
+        .get(
+          this.GLOBAL.baseUri +
+            "admin/freenom?limit=" +
+            limit +
+            "&offset=" +
+            offset
+        )
         .then(function(response) {
           self.loading = false;
           let data = response.data;
