@@ -197,7 +197,6 @@ class FreenomService
 
     public function sync(User $user)
     {
-        // TODO:log
         $data = $this->list();
         $user->domains()->delete();
         $user->domains()->createMany($data);
