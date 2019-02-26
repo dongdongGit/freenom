@@ -8,13 +8,13 @@ class Domain extends Model
 {
     use LogsActivity;
 
-    protected static $logName = 'freenom_renew';
+    protected static $logName = 'freenom_update';
 
     protected static $ignoreChangedAttributes = ['updated_at'];
 
-    protected static $logAttributes = ['renew'];
+    protected static $logAttributes = ['renew', 'expires_date'];
 
-    protected static $recordEvents = ['updated'];
+    protected static $recordEvents = [];
 
     protected static $logOnlyDirty = true;
 
