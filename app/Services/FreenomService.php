@@ -144,6 +144,8 @@ class FreenomService
             }
         }
 
+        $domains = $this->filterRenewDomain($domains);
+
         $this->login();
 
         $parse = [
@@ -218,7 +220,8 @@ class FreenomService
 
             foreach ($item->childNodes as $index => $childItem) {
                 if ($childItem->nodeType == 1 && $index <= 9) {
-                    $keyName = array_get($this->baseKey, $index / 2);
+                    Log::info(floor($index / 2));
+                    $keyName = array_get($this->baseKey, strval(floor($index / 2)));
 
                     if (!empty($keyName)) {
                         $domains[$key][$keyName] = strtolower(trim($childItem->nodeValue));
@@ -264,5 +267,14 @@ class FreenomService
         preg_match('/<input[A-Za-z "=]+value=\"([\dA-Fa-f]+)\"[^>]+>/', $body, $matchesInput);
 
         return array_last($matchesInput);
+    }
+
+    public function filterRenewDomain($domains)
+    {
+        return $domains->filter(function ($domain, $index) {
+            if (Carbon::parse($domain->expires_date)->lt(Carbon::now()->addDay(14))) {
+                return $domain;
+            }
+        });
     }
 }
