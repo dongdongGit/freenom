@@ -40,7 +40,6 @@ class AutoRenewDomains extends Command
      */
     public function handle()
     {
-        \Log::info('test');
         $domains = Domain::where('enabled_auto_renew', 1)->get();
 
         $filtered = $domains->filter(function ($domain, $index) {
