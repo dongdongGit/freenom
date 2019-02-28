@@ -70,12 +70,15 @@ class CrawlPhoto extends Command
         $imgs = [];
 
         foreach ($dom as $key => $item) {
-            if ($key > 4207) {
+            if ($key > 5987) {
                 $href = $item->attributes->getNamedItem('href')->nodeValue;
 
                 if (preg_match('/\d+(\.jpg|\.png|\.jpeg)/', $href)) {
-                    $image_service = new ImageService($url . $href);
-                    $image_service->save();
+                    try {
+                        $image_service = new ImageService($url . $href);
+                        $image_service->save();
+                    } catch (\Exception $e) {
+                    }
                 }
             }
         }
