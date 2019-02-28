@@ -109,6 +109,7 @@ export default {
     },
     logout() {
       console.log('logout');
+      console.log('test');
     }
   }
 };
