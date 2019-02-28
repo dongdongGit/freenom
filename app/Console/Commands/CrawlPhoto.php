@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Storage;
+use App\Services\ImageService;
 
 class CrawlPhoto extends Command
 {
@@ -68,11 +68,12 @@ class CrawlPhoto extends Command
         $imgs = [];
 
         foreach ($dom as $key => $item) {
-            $imgs[] = sprintf($url . '%s', $item->attributes->getNamedItem('href')->nodeValue);
-        }
+            $href = $item->attributes->getNamedItem('href')->nodeValue;
 
-        if (!empty($imgs)) {
-            Storage::put('app/crawl/photo.json', json_encode($imgs));
+            if (preg_match('/\d+(\.jpg|\.png|\.jpeg)/', $href)) {
+                $image_service = new ImageService($url . $href);
+                $image_service->save();
+            }
         }
     }
 }
