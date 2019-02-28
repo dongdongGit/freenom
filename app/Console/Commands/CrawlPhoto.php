@@ -39,6 +39,8 @@ class CrawlPhoto extends Command
      */
     public function handle()
     {
+        set_time_limit(0);
+
         $client = new Client([
             'timeout' => 10.0
         ]);
@@ -68,11 +70,13 @@ class CrawlPhoto extends Command
         $imgs = [];
 
         foreach ($dom as $key => $item) {
-            $href = $item->attributes->getNamedItem('href')->nodeValue;
+            if ($key > 4207) {
+                $href = $item->attributes->getNamedItem('href')->nodeValue;
 
-            if (preg_match('/\d+(\.jpg|\.png|\.jpeg)/', $href)) {
-                $image_service = new ImageService($url . $href);
-                $image_service->save();
+                if (preg_match('/\d+(\.jpg|\.png|\.jpeg)/', $href)) {
+                    $image_service = new ImageService($url . $href);
+                    $image_service->save();
+                }
             }
         }
     }
