@@ -43,7 +43,7 @@ class Webhooks extends Job
         $data = $this->data;
 
         if (ends_with($data['ref'], 'master')) {
-            $process = new Process(['cd ' . base_path() . '; chmod +x deploy.sh && ./deploy.sh']);
+            $process = new Process(['chmod +x deploy.sh && ./deploy.sh']);
             $process->run(function ($type, $buffer) {
                 Log::info($buffer);
             });
