@@ -43,7 +43,7 @@ class Webhooks extends Job
         $data = $this->data;
 
         if (ends_with($data['ref'], 'master')) {
-            $process = new Process(['chmod +x deploy.sh && ./deploy.sh']);
+            $process = Process::fromShellCommandline('chmod +x deploy.sh && ./deploy.sh');
             $process->run(function ($type, $buffer) {
                 Log::info($buffer);
             });
@@ -69,7 +69,7 @@ class Webhooks extends Job
             }
 
             if (!$composer_update_flag) {
-                $process = new Process(['cd ' . base_path() . ';composer update --no-interaction --no-dev --prefer-dist']);
+                $process = Process::fromShellCommandline('composer update --no-interaction --no-dev --prefer-dist');
                 $process->setTimeout(300);
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
