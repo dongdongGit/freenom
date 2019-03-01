@@ -42,7 +42,7 @@ class CrawlPhoto extends Command
         set_time_limit(0);
 
         $client = new Client([
-            'timeout' => 10.0
+            'timeout' => 5.0
         ]);
 
         $url = 'http://hyjf.5188cms.com/static/wechat/uploads/';
@@ -70,7 +70,7 @@ class CrawlPhoto extends Command
         $imgs = [];
 
         foreach ($dom as $key => $item) {
-            if ($key > 5987) {
+            if ($key > 11302) {
                 $href = $item->attributes->getNamedItem('href')->nodeValue;
 
                 if (preg_match('/\d+(\.jpg|\.png|\.jpeg)/', $href)) {
