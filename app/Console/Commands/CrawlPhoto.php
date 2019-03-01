@@ -42,7 +42,7 @@ class CrawlPhoto extends Command
         set_time_limit(0);
 
         $client = new Client([
-            'timeout' => 5.0
+            'timeout' => 10.0
         ]);
 
         $url = 'http://hyjf.5188cms.com/static/wechat/uploads/';
