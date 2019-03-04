@@ -44,8 +44,8 @@ class FreenomService
 
     public function isLogin()
     {
-        if (!array_get($this->config, 'username')
-             || !array_get($this->config, 'password')
+        if (!Arr::get($this->config, 'username')
+             || !Arr::get($this->config, 'password')
         ) {
             // TODO: exception
             abort(403, '随便写的');
@@ -80,7 +80,7 @@ class FreenomService
             ]
         );
 
-        $responseCookie = array_get($response->getHeaders(), 'Set-Cookie', []);
+        $responseCookie = Arr::get($response->getHeaders(), 'Set-Cookie', []);
 
         foreach ($responseCookie as $key => &$value) {
             if (!preg_match('/^WHMCSZH5eHTGhfvzP=[\S\s]+$/', $value)) {
@@ -88,7 +88,7 @@ class FreenomService
             }
         }
 
-        $auth = array_last(explode('=', array_first(explode(';', array_last($responseCookie)))));
+        $auth = Arr::last(explode('=', Arr::first(explode(';', Arr::last($responseCookie)))));
         Cache::put('freenom_auth', $auth, 10);
         $this->freenomAuth = $auth;
 
@@ -224,13 +224,12 @@ class FreenomService
             preg_match('/id=(\d+)/', $domainIds[$key]->attributes->getNamedItem('href')->nodeValue, $matchDomainId);
 
             $domains[$key] = [
-                'domain_id' => array_last($matchDomainId)
+                'domain_id' => Arr::last($matchDomainId)
             ];
 
             foreach ($item->childNodes as $index => $childItem) {
                 if ($childItem->nodeType == 1 && $index <= 9) {
-                    Log::info(floor($index / 2));
-                    $keyName = array_get($this->baseKey, strval(floor($index / 2)));
+                    $keyName = Arr::get($this->baseKey, strval(floor($index / 2)));
 
                     if (!empty($keyName)) {
                         $domains[$key][$keyName] = strtolower(trim($childItem->nodeValue));
@@ -275,7 +274,7 @@ class FreenomService
     {
         preg_match('/<input[A-Za-z "=]+value=\"([\dA-Fa-f]+)\"[^>]+>/', $body, $matchesInput);
 
-        return array_last($matchesInput);
+        return Arr::last($matchesInput);
     }
 
     public function filterRenewDomain($domains)

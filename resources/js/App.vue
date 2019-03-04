@@ -99,7 +99,6 @@ export default {
           var data = response.data;
           if (data.code === 200) {
             self.csrfToken = data.data;
-            console.log(data.data);
           }
         })
         .catch(function(error) {
