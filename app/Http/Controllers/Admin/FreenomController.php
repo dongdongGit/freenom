@@ -6,6 +6,7 @@ use App\Jobs\FreenomSync;
 use App\Jobs\FreenomRenew;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class FreenomController extends Controller
 {
@@ -92,7 +93,7 @@ class FreenomController extends Controller
 
         if ($data['action'] === 'sync') {
             dispatch(new FreenomSync($user));
-        } elseif ($data['action'] === 'renew' && !empty(array_get($data, 'domains', []))) {
+        } elseif ($data['action'] === 'renew' && !empty(Arr::get($data, 'domains', []))) {
             $domains = $user->domains()->whereIn('domain_id', collect($data['domains'])->pluck('domain_id'))->get();
 
             if ($domains->count() != count($data['domains'])) {

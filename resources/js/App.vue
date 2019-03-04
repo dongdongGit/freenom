@@ -57,6 +57,10 @@
               <i class="el-icon-setting"></i>
               <span slot="title">域名</span>
             </el-menu-item>
+            <el-menu-item index="2" route="/image">
+              <i class="el-icon-picture-outline"></i>
+              <span slot="title">图片</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
         <el-container class="right-menu">

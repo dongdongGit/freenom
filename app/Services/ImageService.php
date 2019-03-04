@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class ImageService
@@ -25,12 +26,13 @@ class ImageService
 
     public function save($saveAs = '')
     {
+        // TODO:
         if (is_object($this->file_path)) {
             $path = $this->file_path->store('uploads/' . date('Ym') . '/' . date('d'), 'cosv5');
             $filePath = $this->disk->get($path);
             $img = app('image')->make($filePath);
         } elseif (is_string($this->file_path)) {
-            $path = 'uploads/' . date('Ym') . '/' . date('d') . '/' . time() . str_random(8) . '.jpg' ;
+            $path = 'uploads/' . date('Ym') . '/' . date('d') . '/' . time() . Str::random(8) . '.jpg' ;
             $img = app('image')->make($this->file_path);
 
             Storage::put($path, $img->encode());

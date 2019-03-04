@@ -9,6 +9,7 @@ use DOMDocument;
 use Carbon\Carbon;
 use App\Models\User;
 use GuzzleHttp\Client;
+use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Collection;
 
 class FreenomService
@@ -75,7 +76,7 @@ class FreenomService
                 'headers'         => array_merge($this->baseHeaders, [
                     'Referer' => 'https://my.freenom.com/clientarea.php?incorrect=true'
                 ]),
-                'form_params' => array_only($this->config, ['username', 'password'])
+                'form_params' => Arr::only($this->config, ['username', 'password'])
             ]
         );
 

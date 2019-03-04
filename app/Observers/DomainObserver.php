@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Domain;
+use Illuminate\Support\Arr;
 
 class DomainObserver
 {
@@ -29,7 +30,7 @@ class DomainObserver
         $oldData = $domain->getOriginal();
 
         $only_key = ['expires_date', 'renew'];
-        $only_new_data = array_only($newData, $only_key);
+        $only_new_data = Arr::only($newData, $only_key);
 
         if (!empty($only_new_data)) {
             activity('freenom_update')
@@ -37,7 +38,7 @@ class DomainObserver
                 ->performedOn($domain)
                 ->withProperties([
                     'attributes' => $only_new_data,
-                    'old'        => array_only($oldData, array_keys($only_new_data))
+                    'old'        => Arr::only($oldData, array_keys($only_new_data))
                 ])
                 ->log(':causer.name 修改 :subject.domain');
         }

@@ -25,5 +25,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:web'], 'namespace' => 
     Route::get('home', 'HomeController@index')->name('home');
     Route::get('index', 'UtilController@index');
     Route::post('freenom/action', 'FreenomController@action');
-    Route::resource('freenom', 'FreenomController', ['except' => ['store']]);
+    Route::resource('freenom', 'FreenomController', ['except' => ['store', 'edit', 'show']]);
+    Route::resource('image', 'ImageController', ['except' => ['store', 'edit', 'show']]);
 });

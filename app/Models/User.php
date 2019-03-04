@@ -34,4 +34,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Domain::class)->latest();
     }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class)->latest();
+    }
 }
