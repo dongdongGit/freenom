@@ -61,12 +61,13 @@ class SaveImage extends Command
                         $time = Carbon::now()->format('Y-m-d H:i:s');
 
                         $data[] = [
+                            'user_id'    => 1,
                             'path'       => Arr::first($filepath),
                             'width'      => $img->width(),
                             'height'     => $img->height(),
                             'mime'       => $img->mime(),
                             'created_at' => $time,
-                            'updated_at' => $time,
+                            'updated_at' => $time
                         ];
                     }
                 } elseif (is_dir($folder . '/' . $file)) {
