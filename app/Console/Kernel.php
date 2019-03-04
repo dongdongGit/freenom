@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         'App\Console\Commands\AutoRenewDomains',
         'App\Console\Commands\CrawlPhoto',
+        'App\Console\Commands\SaveImage',
     ];
 
     /**

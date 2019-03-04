@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Log;
+use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
 class Webhooks extends Job
@@ -42,7 +43,7 @@ class Webhooks extends Job
     {
         $data = $this->data;
 
-        if (ends_with($data['ref'], 'master')) {
+        if (Str::endsWith($data['ref'], 'master')) {
             $process = Process::fromShellCommandline('chmod +x deploy.sh && ./deploy.sh');
             $process->run(function ($type, $buffer) {
                 Log::info($buffer);

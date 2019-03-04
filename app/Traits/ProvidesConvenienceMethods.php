@@ -7,6 +7,7 @@ use stdClass;
 use Illuminate\Http\Resources\Json\JsonResource;
 use ElemenX\ApiPagination\Paginator as ElemenXPaginator;
 use Illuminate\Pagination\Paginator as IlluminatePaginator;
+use Illuminate\Support\Arr;
 
 trait ProvidesConvenienceMethods
 {
@@ -31,7 +32,7 @@ trait ProvidesConvenienceMethods
             } elseif ($data instanceof IlluminatePaginator) {
                 $data = $data->toArray();
                 $result['data'] = $data['data'];
-                $result['meta'] = array_only($data, ['current_page', 'per_page', 'to']);
+                $result['meta'] = Arr::only($data, ['current_page', 'per_page', 'to']);
             } else {
                 $data = $data->toArray();
                 $result['data'] = $data;
