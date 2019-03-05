@@ -89,7 +89,7 @@ class FreenomService
         }
 
         $auth = Arr::last(explode('=', Arr::first(explode(';', Arr::last($responseCookie)))));
-        Cache::put('freenom_auth', $auth, 10);
+        Cache::put('freenom_auth', $auth, 600);
         $this->freenomAuth = $auth;
 
         return $this;
