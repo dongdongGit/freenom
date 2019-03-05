@@ -92,7 +92,7 @@
                 </template>
               </el-table-column>
             </el-table>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-sm-12 col-md-5"></div>
               <div class="col-sm-12 col-md-7">
                 <el-pagination
@@ -104,7 +104,13 @@
                   class="pagination-flex-end"
                 ></el-pagination>
               </div>
-            </div>
+            </div> -->
+            <paginate
+              :data="domains"
+              :meta="meta"
+              :url="this.GLOBAL.baseUri + 'admin/freenom'"
+              @listen-paginate="paginate"
+            ></paginate>
           </div>
         </div>
       </div>
@@ -361,37 +367,6 @@ export default {
           });
         });
     },
-    pageChange(page_number) {
-      this.loading = true;
-      var self = this;
-      let limit = this.meta.limit;
-      let offset = this.meta.limit * (page_number - 1);
-
-      return axios
-        .get(
-          this.GLOBAL.baseUri +
-            "admin/freenom?limit=" +
-            limit +
-            "&offset=" +
-            offset
-        )
-        .then(function(response) {
-          self.loading = false;
-          let data = response.data;
-          if (data.code === 200) {
-            self.loading = false;
-            self.domains = data.data;
-            self.meta = data.meta;
-          }
-        })
-        .catch(function(error) {
-          self.$message({
-            showClose: true,
-            message: "操作失败",
-            type: "error"
-          });
-        });
-    },
     expired(selection) {
       var select = [];
 
@@ -416,16 +391,11 @@ export default {
       });
 
       return select;
+    },
+    paginate(parse) {
+      this.domains = parse.data;
+      this.meta = parse.meta;
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.pagination-flex-end {
-  margin-top: 20px;
-  padding: 0px;
-  display: flex;
-  justify-content: flex-end;
-}
-</style>

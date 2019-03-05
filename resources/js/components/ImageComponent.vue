@@ -18,72 +18,12 @@
     <div class="container-fluid">
       <div class="row">
         <div class="masonry">
-          <div class="col-md-3 col-lg-3 col-xlg-3">
+          <div class="col-md-12 col-lg-12 col-xlg-12 masonry-item">
             <div class="card card-body">
               <div class="row align-items-center">
                 <div class="col-md-12 col-lg-12 text-center">
                   <img
                     src="https://img.pc841.com/2018/0326/20180326051740414.jpg"
-                    class="img-circle img-fluid"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-lg-3 col-xlg-3">
-            <div class="card card-body">
-              <div class="row align-items-center">
-                <div class="col-md-12 col-lg-12 text-center">
-                  <img
-                    src="http://pic.shiliyoupin.com/tupian/HTTP3d3dy5iaWFvYmFpanUuY29tL3VwbG9hZHMvMjAxODAxMTEvMDMvMTUxNTYxMTQxNi1yeXdUQm1Sa3pGLmpwZwloglog.jpg"
-                    class="img-circle img-fluid"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-lg-3 col-xlg-3">
-            <div class="card card-body">
-              <div class="row align-items-center">
-                <div class="col-md-12 col-lg-12 text-center">
-                  <img
-                    src="https://pic2.zhimg.com/v2-3be05963f5f3753a8cb75b6692154d4a_1200x500.jpg"
-                    class="img-circle img-fluid"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-lg-3 col-xlg-3">
-            <div class="card card-body">
-              <div class="row align-items-center">
-                <div class="col-md-12 col-lg-12 text-center">
-                  <img
-                    src="https://img.pc841.com/2018/0326/20180326051740414.jpg"
-                    class="img-circle img-fluid"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-lg-3 col-xlg-3">
-            <div class="card card-body">
-              <div class="row align-items-center">
-                <div class="col-md-12 col-lg-12 text-center">
-                  <img
-                    src="http://pic.shiliyoupin.com/tupian/HTTP3d3dy5iaWFvYmFpanUuY29tL3VwbG9hZHMvMjAxODAxMTEvMDMvMTUxNTYxMTQxNi1yeXdUQm1Sa3pGLmpwZwloglog.jpg"
-                    class="img-circle img-fluid"
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-lg-3 col-xlg-3">
-            <div class="card card-body">
-              <div class="row align-items-center">
-                <div class="col-md-12 col-lg-12 text-center">
-                  <img
-                    src="https://pic2.zhimg.com/v2-3be05963f5f3753a8cb75b6692154d4a_1200x500.jpg"
                     class="img-circle img-fluid"
                   >
                 </div>
@@ -92,6 +32,7 @@
           </div>
         </div>
       </div>
+      <paginate :data="images" :meta="meta" :url="this.GLOBAL.baseUri + 'admin/image'" @listen-paginate="getPaginate"></paginate>
     </div>
   </div>
 </template>
@@ -100,7 +41,14 @@
 export default {
   data() {
     return {
-      images: []
+      images: [],
+      meta: {
+        count: 0,
+        limit: 0,
+        offset: 0,
+        total: 0
+      },
+      loading: true,
     };
   },
   created() {
@@ -127,7 +75,15 @@ export default {
             type: "error"
           });
         });
+    },
+    getPaginate(parse) {
+      this.images = parse.data;
+      this.meta = parse.meta;
     }
   }
 };
 </script>
+
+<style scoped lang="scss">
+@import "~@/admin/image";
+</style>

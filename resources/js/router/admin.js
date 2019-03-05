@@ -1,6 +1,8 @@
 
 import Vue from 'vue';
 
+Vue.component('paginate', require('.././components/units/PaginateComponent.vue').default)
+
 const routes = [
     {
         path: '/',

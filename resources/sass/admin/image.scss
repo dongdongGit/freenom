@@ -1,0 +1,9 @@
+.masonry { 
+    column-count: 4; 
+    column-gap: 0; 
+    .masonry-item {
+        break-inside: avoid;
+        box-sizing: border-box;
+        padding: 10px;
+    }
+}
