@@ -50,5 +50,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '~@/units/paginate';
+@import "~@/units/paginate";
 </style>

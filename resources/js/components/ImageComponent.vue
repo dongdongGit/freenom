@@ -32,7 +32,12 @@
           </div>
         </div>
       </div>
-      <paginate :data="images" :meta="meta" :url="this.GLOBAL.baseUri + 'admin/image'" @listen-paginate="getPaginate"></paginate>
+      <paginate
+        :data="images"
+        :meta="meta"
+        :url="this.GLOBAL.baseUri + 'admin/image'"
+        @listen-paginate="getPaginate"
+      ></paginate>
     </div>
   </div>
 </template>
@@ -48,7 +53,7 @@ export default {
         offset: 0,
         total: 0
       },
-      loading: true,
+      loading: true
     };
   },
   created() {
