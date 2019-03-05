@@ -64,15 +64,13 @@ class CrawlPhoto extends Command
         );
 
         $body = $response->getBody();
-
         $doc = new DOMDocument();
         $page = mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8');
         @$doc->loadHTML($page);
         $xpath = new DOMXPath($doc);
         $dom = $xpath->query('//*/td/a');
-        $imgs = [];
 
-        foreach ($dom as $key => $item) {
+        foreach ($dom as $item) {
             $href = $item->attributes->getNamedItem('href')->nodeValue;
 
             if (preg_match('/\d+(\.jpg|\.png|\.jpeg)/', $href)) {
@@ -80,6 +78,7 @@ class CrawlPhoto extends Command
                     $image_service = new ImageService($url . $href);
                     $image_service->save();
                 } catch (Exception $e) {
+                    echo $e;
                 }
             }
         }

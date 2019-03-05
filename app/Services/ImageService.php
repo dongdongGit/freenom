@@ -22,7 +22,7 @@ class ImageService
             $this->max_height = $max_height;
         }
 
-        $this->disk = app('filesystem')->disk('uploads');
+        $this->disk = app('filesystem')->disk('upload');
         $this->object = $object;
         $this->savedToModel = $savedToModel;
     }
@@ -30,11 +30,11 @@ class ImageService
     public function save($saveAs = '')
     {
         if (is_object($this->object)) {
-            $path = $this->object->store('uploads/' . date('Ym') . '/' . date('d'), 'cosv5');
+            $path = $this->object->store(date('Ym') . '/' . date('d'), 'upload');
             $filePath = $this->disk->get($path);
             $img = app('image')->make($filePath);
         } elseif (is_string($this->object)) {
-            $path = 'uploads/' . date('Ym') . '/' . date('d') . '/' . time() . Str::random(8) . '.jpg' ;
+            $path = date('Ym') . '/' . date('d') . '/' . time() . Str::random(8) . '.jpg' ;
             $img = app('image')->make($this->object);
 
             // Storage::put($path, $img->encode());
