@@ -54,7 +54,7 @@ class Webhooks extends Job
             $npm_run_flag = true;
 
             foreach ($data['commits'] as $commit) {
-                $search_data = array_merge($commit['added'], $commit['modified']);
+                $search_data = array_merge($commit['added'], $commit['modified'], $commit['remove']);
 
                 if ($composer_update_flag && in_array('composer.json', $search_data)) {
                     $composer_update_flag = false;
@@ -64,7 +64,7 @@ class Webhooks extends Job
                     $npm_update_flag = false;
                 }
 
-                if ($npm_run_flag && preg_grep('/^resources\/.+$/', $search_data)) {
+                if ($npm_run_flag && preg_grep('/^resources\/(js|lang|sass)\/.+$/', $search_data)) {
                     $npm_run_flag = false;
                 }
             }
