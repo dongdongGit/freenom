@@ -82,9 +82,11 @@ export default {
   methods: {
     init() {
       var self = this;
+      this.loading = true;
       return axios
         .get(this.GLOBAL.baseUri + "admin/image")
         .then(function(response) {
+          self.loading = false;
           var data = response.data;
           if (data.code === 200) {
             self.images = data.data;
