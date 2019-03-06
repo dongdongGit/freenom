@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content">
+  <div class="main-content" v-loading="loading">
     <div class="container-fluid">
       <div class="breadcrumb-wrapper row">
         <div class="col-12 col-lg-3 col-md-6">
