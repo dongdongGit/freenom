@@ -10,7 +10,7 @@ class DomainObserver
     /**
      * Handle the domain "created" event.
      *
-     * @param  \App\Domain  $domain
+     * @param  \App\Models\Domain  $domain
      * @return void
      */
     public function created(Domain $domain)
@@ -21,7 +21,7 @@ class DomainObserver
     /**
      * Handle the domain "updated" event.
      *
-     * @param  \App\Domain  $domain
+     * @param  \App\Models\Domain  $domain
      * @return void
      */
     public function updated(Domain $domain)
@@ -40,14 +40,14 @@ class DomainObserver
                     'attributes' => $only_new_data,
                     'old'        => Arr::only($oldData, array_keys($only_new_data))
                 ])
-                ->log(':causer.name 修改 :subject.domain');
+                ->log(':causer.name 更新 :subject.domain');
         }
     }
 
     /**
      * Handle the domain "deleted" event.
      *
-     * @param  \App\Domain  $domain
+     * @param  \App\Models\Domain  $domain
      * @return void
      */
     public function deleted(Domain $domain)
@@ -58,7 +58,7 @@ class DomainObserver
     /**
      * Handle the domain "restored" event.
      *
-     * @param  \App\Domain  $domain
+     * @param  \App\Models\Domain  $domain
      * @return void
      */
     public function restored(Domain $domain)
@@ -69,7 +69,7 @@ class DomainObserver
     /**
      * Handle the domain "force deleted" event.
      *
-     * @param  \App\Domain  $domain
+     * @param  \App\Models\Domain  $domain
      * @return void
      */
     public function forceDeleted(Domain $domain)

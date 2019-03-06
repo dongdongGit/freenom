@@ -24,7 +24,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:web'], 'namespace' => 
     Route::get('token', 'UtilController@generateCsrfToken');
     Route::get('home', 'HomeController@index')->name('home');
     Route::get('index', 'UtilController@index');
-    Route::post('freenom/action', 'FreenomController@action');
+    Route::post('freenom/batch', 'FreenomController@batch');
     Route::resource('freenom', 'FreenomController', ['except' => ['store', 'edit', 'show']]);
     Route::resource('image', 'ImageController', ['except' => ['store', 'edit', 'show']]);
 });

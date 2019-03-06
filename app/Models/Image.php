@@ -8,4 +8,9 @@ class Image extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getPathAttribute($path)
+    {
+        return asset($path);
+    }
 }

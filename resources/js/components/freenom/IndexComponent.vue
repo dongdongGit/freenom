@@ -81,30 +81,13 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="148">
+              <el-table-column label="操作" width="190">
                 <template slot-scope="scope">
-                  <el-button size="mini" @click="handleRenew(scope.$index, scope.row)">续费</el-button>
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)"
-                  >删除</el-button>
+                  <el-button @click="handleRenew(scope.$index, scope.row)">续费</el-button>
+                  <el-button type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <!-- <div class="row">
-              <div class="col-sm-12 col-md-5"></div>
-              <div class="col-sm-12 col-md-7">
-                <el-pagination
-                  @current-change="pageChange"
-                  layout="prev, pager, next"
-                  :total="meta.total"
-                  :page-size="meta.limit"
-                  background
-                  class="pagination-flex-end"
-                ></el-pagination>
-              </div>
-            </div> -->
             <paginate
               :data="domains"
               :meta="meta"
@@ -189,7 +172,7 @@ export default {
       this.loading = true;
 
       return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/action", {
+        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
           action: "renew",
           domains: [
             {
@@ -244,7 +227,7 @@ export default {
       var self = this;
       this.loading = true;
       return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/action", {
+        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
           action: "sync"
         })
         .then(function(response) {
@@ -347,7 +330,7 @@ export default {
       var self = this;
 
       return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/action", {
+        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
           action: "renew",
           domains: domains
         })

@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Image;
 use App\Models\Domain;
+use App\Observers\ImageObserver;
 use App\Observers\DomainObserver;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Image::observe(ImageObserver::class);
         Domain::observe(DomainObserver::class);
     }
 

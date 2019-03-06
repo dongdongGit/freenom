@@ -185,20 +185,13 @@ class FreenomService
 
             $domain->expires_date = Carbon::parse($domain->expires_date)->addMonths($domain->renew);
             $domain->save();
-            activity('freenom_renew')
-                ->causedBy($domain->user)
-                ->performedOn($domain)
-                ->withProperties([
-                    'attributes' => $domain->getDirty(),
-                    'old'        => $domain->getOriginal()
-                ])
-                ->log(':causer.name 续费 :subject.domain');
         }
     }
 
     public function sync(User $user)
     {
         $data = $this->list();
+        // TODO: 同步域名
         $user->domains()->delete();
         $user->domains()->createMany($data);
         activity('freenom_sync')->causedBy($user)->log(':causer.name 同步freenom域名');
