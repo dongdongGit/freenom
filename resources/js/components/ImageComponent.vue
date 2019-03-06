@@ -118,10 +118,10 @@ export default {
             .delete(self.GLOBAL.baseUri + "admin/image/" + self.select_image.id)
             .then(function(response) {
               var data = response.data;
-              
+
               if (data.code === 200) {
                 self.images.splice(self.images.indexOf(self.select_image), 1);
-                self.dialog_visible = false
+                self.dialog_visible = false;
               }
             })
             .catch(function(error) {
