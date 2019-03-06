@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <el-dialog title="图片" :visible.sync="dialog_visible" width="50%">
+    <el-dialog title="图片" :visible.sync="dialog_visible" width="35%">
       <div class="row">
         <div class="col-md-12 col-xl-12">
           <div class="card the-card">
