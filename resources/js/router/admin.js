@@ -1,5 +1,6 @@
-
 import Vue from 'vue';
+
+Vue.component('paginate', require('.././components/units/PaginateComponent.vue').default)
 
 const routes = [
     {
@@ -9,6 +10,10 @@ const routes = [
     {
         path: '/freenom',
         component: Vue.component('freenom-index', require('.././components/freenom/IndexComponent.vue').default)
+    },
+    {
+        path: '/image',
+        component: Vue.component('freenom-image', require('.././components/ImageComponent.vue').default)
     }
 ];
 

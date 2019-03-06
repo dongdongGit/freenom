@@ -2,6 +2,9 @@
 
 namespace App\Console\Commands;
 
+use DOMXPath;
+use DOMDocument;
+use Exception;
 use Illuminate\Console\Command;
 use GuzzleHttp\Client;
 use App\Services\ImageService;
@@ -61,22 +64,21 @@ class CrawlPhoto extends Command
         );
 
         $body = $response->getBody();
-
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $page = mb_convert_encoding($body, 'HTML-ENTITIES', 'UTF-8');
         @$doc->loadHTML($page);
-        $xpath = new \DOMXPath($doc);
+        $xpath = new DOMXPath($doc);
         $dom = $xpath->query('//*/td/a');
-        $imgs = [];
 
-        foreach ($dom as $key => $item) {
+        foreach ($dom as $item) {
             $href = $item->attributes->getNamedItem('href')->nodeValue;
 
             if (preg_match('/\d+(\.jpg|\.png|\.jpeg)/', $href)) {
                 try {
                     $image_service = new ImageService($url . $href);
                     $image_service->save();
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
+                    echo $e;
                 }
             }
         }

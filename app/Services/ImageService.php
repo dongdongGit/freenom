@@ -2,17 +2,18 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class ImageService
 {
     private $max_width = 1280;
     private $max_height = 0;
-    private $file_path = null;
+    private $object = null;
     private $disk = null;
+    private $savedToModel = false;
 
-    public function __construct($file_path, $max_width = 1280, $max_height = 0)
+    public function __construct($object, $savedToModel = true, $max_width = 1280, $max_height = 0)
     {
         if (is_integer($max_width) && $max_width > 0) {
             $this->max_width = $max_width;
@@ -21,20 +22,22 @@ class ImageService
             $this->max_height = $max_height;
         }
 
-        $this->file_path = $file_path;
+        $this->disk = app('filesystem')->disk('upload');
+        $this->object = $object;
+        $this->savedToModel = $savedToModel;
     }
 
     public function save($saveAs = '')
     {
-        if (is_object($this->file_path)) {
-            $path = $this->file_path->store('uploads/' . date('Ym') . '/' . date('d'), 'cosv5');
+        if (is_object($this->object)) {
+            $path = $this->object->store(date('Ym') . '/' . date('d'), 'upload');
             $filePath = $this->disk->get($path);
             $img = app('image')->make($filePath);
-        } elseif (is_string($this->file_path)) {
-            $path = 'uploads/' . date('Ym') . '/' . date('d') . '/' . time() . Str::random(8) . '.jpg' ;
-            $img = app('image')->make($this->file_path);
+        } elseif (is_string($this->object)) {
+            $path = date('Ym') . '/' . date('d') . '/' . time() . Str::random(8) . '.jpg' ;
+            $img = app('image')->make($this->object);
 
-            Storage::put($path, $img->encode());
+            // Storage::put($path, $img->encode());
         }
 
         if ($this->max_width > 0 && $this->max_height == 0) {
@@ -50,6 +53,27 @@ class ImageService
             file_put_contents($saveAs, $img->encode());
         }
 
+        try {
+            if ($this->disk->put($path, $img->encode())) {
+                return $path;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+
         return $path;
+    }
+
+    public function delete()
+    {
+        try {
+            if (!empty($this->object) && $this->disk->exists($this->object)) {
+                $this->disk->delete($this->object);
+                return true;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+        return false;
     }
 }

@@ -17,7 +17,7 @@ class CreateDomainsTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index()->default(0)->comment('用户id');
             $table->integer('domain_id')->unsigned()->unique()->comment('域名id');
-            $table->string('domain')->comment('域名');
+            $table->string('domain')->index()->comment('域名');
             $table->enum('status', ['active', 'expired'])->default('active')->comment('状态, active-活动,expired-过期');
             $table->enum('type', ['free', 'paid'])->default('free')->comment('类型, free-免费,paid-收费');
             $table->date('register_date')->index()->comment('注册时间');

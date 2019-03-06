@@ -33,7 +33,7 @@ export default {
     return {
       count: {
         domain: 0,
-        user: 0,
+        user: 0
       }
     };
   },

@@ -80,7 +80,7 @@ class FreenomController extends Controller
         return $this->success();
     }
 
-    public function action(Request $request)
+    public function batch(Request $request)
     {
         $data = $request->validate([
             'action'              => 'required|in:sync,renew',

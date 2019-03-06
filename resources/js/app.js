@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -25,13 +24,9 @@ Vue.use(VueRouter);
 Vue.use(ElementUI, { locale });
 Vue.prototype.GLOBAL = global;
 
-// Vue.filter('dateFormat', function (value) {
-//     return moment(value).format()    
-// })
-
-if(!Array.isArray){
-    Array.isArray = function(arg){
-        return Object.prototype.toString.call(arg)==='[object Array]'
+if (!Array.isArray) {
+    Array.isArray = function (arg) {
+        return Object.prototype.toString.call(arg) === '[object Array]'
     }
 }
 
@@ -61,4 +56,3 @@ const app = new Vue({
     router,
     render: h => h(App)
 }).$mount('#app');
-

@@ -81,30 +81,19 @@
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" width="148">
+              <el-table-column label="操作" width="190">
                 <template slot-scope="scope">
-                  <el-button size="mini" @click="handleRenew(scope.$index, scope.row)">续费</el-button>
-                  <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)"
-                  >删除</el-button>
+                  <el-button @click="handleRenew(scope.$index, scope.row)">续费</el-button>
+                  <el-button type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
-            <div class="row">
-              <div class="col-sm-12 col-md-5"></div>
-              <div class="col-sm-12 col-md-7">
-                <el-pagination
-                  @current-change="pageChange"
-                  layout="prev, pager, next"
-                  :total="meta.total"
-                  :page-size="meta.limit"
-                  background
-                  class="pagination-flex-end"
-                ></el-pagination>
-              </div>
-            </div>
+            <paginate
+              :data="domains"
+              :meta="meta"
+              :url="this.GLOBAL.baseUri + 'admin/freenom'"
+              @listen-paginate="paginate"
+            ></paginate>
           </div>
         </div>
       </div>
@@ -183,7 +172,7 @@ export default {
       this.loading = true;
 
       return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/action", {
+        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
           action: "renew",
           domains: [
             {
@@ -238,7 +227,7 @@ export default {
       var self = this;
       this.loading = true;
       return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/action", {
+        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
           action: "sync"
         })
         .then(function(response) {
@@ -341,7 +330,7 @@ export default {
       var self = this;
 
       return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/action", {
+        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
           action: "renew",
           domains: domains
         })
@@ -357,37 +346,6 @@ export default {
           self.$message({
             showClose: true,
             message: "同步失败",
-            type: "error"
-          });
-        });
-    },
-    pageChange(page_number) {
-      this.loading = true;
-      var self = this;
-      let limit = this.meta.limit;
-      let offset = this.meta.limit * (page_number - 1);
-
-      return axios
-        .get(
-          this.GLOBAL.baseUri +
-            "admin/freenom?limit=" +
-            limit +
-            "&offset=" +
-            offset
-        )
-        .then(function(response) {
-          self.loading = false;
-          let data = response.data;
-          if (data.code === 200) {
-            self.loading = false;
-            self.domains = data.data;
-            self.meta = data.meta;
-          }
-        })
-        .catch(function(error) {
-          self.$message({
-            showClose: true,
-            message: "操作失败",
             type: "error"
           });
         });
@@ -416,16 +374,11 @@ export default {
       });
 
       return select;
+    },
+    paginate(parse) {
+      this.domains = parse.data;
+      this.meta = parse.meta;
     }
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.pagination-flex-end {
-  margin-top: 20px;
-  padding: 0px;
-  display: flex;
-  justify-content: flex-end;
-}
-</style>
