@@ -94,9 +94,11 @@ class FreenomController extends Controller
         if ($data['action'] === 'sync') {
             dispatch(new FreenomSync($user));
         } elseif ($data['action'] === 'renew' && !empty(Arr::get($data, 'domains', []))) {
-            $domains = $user->domains()->whereIn('domain_id', collect($data['domains'])->pluck('domain_id'))->get();
+            $collect = collect($data['domains']);
+            $unique = $collect->unique('domain_id');
+            $domains = $user->domains()->whereIn('domain_id', $unique->pluck('domain_id'))->get();
 
-            if ($domains->count() != count($data['domains'])) {
+            if ($domains->count() != $unique->count()) {
                 return $this->abort(403, '权限不足, 无法操作'); // error
             }
 
