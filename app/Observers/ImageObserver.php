@@ -3,9 +3,16 @@
 namespace App\Observers;
 
 use App\Models\Image;
+use App\Services\ImageService;
 
 class ImageObserver
 {
+    public function deleting(Image $image)
+    {
+        $imageService = new ImageService($image);
+        $imageService->delete();
+    }
+
     /**
      * Handle the image "deleted" event.
      *

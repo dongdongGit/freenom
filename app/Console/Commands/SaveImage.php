@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use Carbon\Carbon;
 use App\Models\Image;
 use Illuminate\Support\Arr;
 use Illuminate\Console\Command;
@@ -58,9 +57,9 @@ class SaveImage extends Command
                 continue;
             } elseif (is_file($folder . '/' . $file)) {
                 $complete_filepath = $folder . '/' . $file;
-                if (preg_match('/uploads\/\d+\/\d+\/\S+/', $complete_filepath, $filepath)) {
+                if (preg_match('/(?!uploads\/)\d+\/\d+\/\S+/', $complete_filepath, $filepath)) {
                     $img = app('image')->make($complete_filepath);
-                    $time = Carbon::now()->format('Y-m-d H:i:s');
+                    $time = now()->format('Y-m-d H:i:s');
 
                     $data[] = [
                         'user_id'    => 1,

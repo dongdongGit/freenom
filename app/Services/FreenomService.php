@@ -273,7 +273,7 @@ class FreenomService
     public function filterRenewDomain($domains)
     {
         return $domains->filter(function ($domain, $index) {
-            if (Carbon::parse($domain->expires_date)->lt(Carbon::now()->addDay(14))) {
+            if (Carbon::parse($domain->expires_date)->lt(now()->addDay(14))) {
                 return $domain;
             }
         });

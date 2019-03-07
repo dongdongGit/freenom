@@ -67,13 +67,14 @@ class ImageService
     public function delete()
     {
         try {
-            if (!empty($this->object) && $this->disk->exists($this->object)) {
-                $this->disk->delete($this->object);
+            if (!empty($this->object) && $this->disk->exists($this->object->getOriginal('path'))) {
+                $this->disk->delete($this->object->getOriginal('path'));
                 return true;
             }
         } catch (Exception $e) {
             return false;
         }
+
         return false;
     }
 }

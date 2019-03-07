@@ -43,7 +43,7 @@ class AutoRenewDomains extends Command
         $domains = Domain::where('enabled_auto_renew', 1)->get();
 
         $filtered = $domains->filter(function ($domain, $index) {
-            if (Carbon::parse($domain->expires_date)->lt(Carbon::now()->addDay(14))) {
+            if (Carbon::parse($domain->expires_date)->lt(now()->addDay(14))) {
                 return $domain;
             }
         });
