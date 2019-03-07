@@ -11,3 +11,4 @@ freenom auto renew
         - [ ] level
     - [x] 同步域名优化
     - [ ] composer package
+ - Test
