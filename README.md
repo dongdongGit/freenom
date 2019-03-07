@@ -9,5 +9,5 @@ freenom auto renew
     - [ ] 日志
         - [ ] 记录
         - [ ] level
-    - [ ] 同步域名优化
+    - [x] 同步域名优化
     - [ ] composer package
