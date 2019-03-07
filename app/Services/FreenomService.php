@@ -17,6 +17,7 @@ class FreenomService
     private $freenomAuth = null;
     private $client = null;
     private $params = [];
+    private $originalDomain;
     private $config = [];
     private $gateway = [
         'login'  => 'https://my.freenom.com/dologin.php',
@@ -191,12 +192,27 @@ class FreenomService
     public function sync(User $user)
     {
         $data = $this->list();
-        // TODO: 同步域名
-        $user->domains()->delete();
-        $user->domains()->createMany($data);
+        $data = $this->processSyncDomain($data, $user);
+
+        if (!empty($data['update'])) {
+            $old_domains = $this->getOriginalDomains()->keyBy('domain_id');
+
+            foreach ($data['update'] as $domain) {
+                $old_domains[$domain['domain_id']]->update($domain);
+            }
+        }
+
+        if (!empty($data['delete'])) {
+            $user->domains()->whereIn('id', $data['delete'])->delete();
+        }
+
+        if (!empty($data['create'])) {
+            $user->domains()->createMany($data['create']);
+        }
+
         activity('freenom_sync')->causedBy($user)->log(':causer.name 同步freenom域名');
 
-        Cache::forget('user_' . $user->id);
+        Cache::forget('user_index_' . $user->id);
     }
 
     public function getDomainData(String $body = '')
@@ -270,6 +286,42 @@ class FreenomService
         return Arr::last($matchesInput);
     }
 
+    /**
+     * 处理返回的域名数据，本地不存在则添加、存在则更新、本地存在，返回的数据不存在则删除
+     *
+     * @param [type] $data
+     * @param [type] $user
+     * @return void
+     */
+    public function processSyncDomain($data, $user)
+    {
+        $domain_list = [
+            'create' => [],
+            'update' => [],
+            'delete' => []
+        ];
+
+        $originalDomains = $this->setOriginalDomains($user);
+
+        if (!empty($data)) {
+            $domain_list['create'] = $data;
+
+            if ($originalDomains->isNotEmpty()) {
+                $originalDomainsKey = $originalDomains->keyBy('domain_id');
+                $collect_data = collect($data)->keyBy('domain_id');
+                $intersect_data = $collect_data->intersectByKeys($originalDomainsKey);
+
+                $domain_list = [
+                    'create' => array_values($collect_data->diffKeys($intersect_data)->all()),
+                    'update' => array_values($intersect_data->all()),
+                    'delete' => $originalDomainsKey->diffKeys($intersect_data)->pluck('id')->all()
+                ];
+            }
+        }
+
+        return $domain_list;
+    }
+
     public function filterRenewDomain($domains)
     {
         return $domains->filter(function ($domain, $index) {
@@ -277,5 +329,15 @@ class FreenomService
                 return $domain;
             }
         });
+    }
+
+    public function setOriginalDomains($user)
+    {
+        return $this->originalDomain = $user->domains()->get();
+    }
+
+    public function getOriginalDomains()
+    {
+        return $this->originalDomain;
     }
 }
