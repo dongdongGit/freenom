@@ -11,6 +11,6 @@ class Image extends Model
 
     public function getPathAttribute($path)
     {
-        return asset('uploads/' . $path);
+        return app('filesystem')->disk('upload')->url($path);
     }
 }
