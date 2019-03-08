@@ -33,7 +33,7 @@
               </a>
 
               <form id="logout-form" :action="this.GLOBAL.baseUri + 'logout'" method="POST" style="display: none;">
-                  <input type="hidden" name="_token" :value="this.GLOBAL.csrfToken" autocomplete="off">
+                  <input type="hidden" name="_token" :value="csrfToken" autocomplete="off">
               </form>
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -81,7 +81,8 @@ export default {
   data() {
     return {
       user: null,
-      isCollapse: false
+      isCollapse: false,
+      csrfToken: ''
     };
   },
   created() {
@@ -89,7 +90,17 @@ export default {
   },
   methods: {
     init () {
-      console.log('init');
+      var self = this;
+      return axios
+        .get(this.GLOBAL.baseUri + "admin/token")
+        .then(function(response) {
+          var data = response.data;
+          if (data.code === 200) {
+            self.csrfToken = data.data;
+          }
+        })
+        .catch(function(error) {
+        });
     },
     toggle() {
       this.isCollapse = !this.isCollapse;

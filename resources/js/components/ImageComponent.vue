@@ -70,6 +70,9 @@
         class="upload-demo"
         name="image"
         :action="this.GLOBAL.baseUri + 'admin/image'"
+        :data="data"
+        :on-success="handleUploadSuccess"
+        :on-error="handleUploadError"
         :on-preview="handlePreview"
         :on-remove="handleRemove"
         :before-remove="beforeRemove"
@@ -97,7 +100,10 @@ export default {
       dialog_visible: false,
       dialog_upload_visible: false,
       select_image: {},
-      file_list: []
+      file_list: [],
+      data: {
+        _token: ""
+      }
     };
   },
   created() {
@@ -110,6 +116,8 @@ export default {
     init() {
       var self = this;
       this.loading = true;
+      this.getToken();
+
       return axios
         .get(this.GLOBAL.baseUri + "admin/image")
         .then(function(response) {
@@ -164,15 +172,15 @@ export default {
         .catch(_ => {});
     },
     handleCommand(command) {
-      switch(command) {
-        case 'upload':
+      switch (command) {
+        case "upload":
           this.dialog_upload_visible = true;
           break;
-        case 'select_all':
-          console.log('select_all');
+        case "select_all":
+          console.log("select_all");
           break;
-        case 'edit':
-          console.log('edit');
+        case "edit":
+          console.log("edit");
           break;
         default:
           break;
@@ -193,6 +201,25 @@ export default {
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    handleUploadSuccess(response, file, fileList) {
+      this.getToken();
+    },
+    handleUploadError(response, file, fileList) {
+      this.getToken();
+    },
+    getToken() {
+      var self = this;
+      axios
+        .get(this.GLOBAL.baseUri + "admin/token")
+        .then(function(response) {
+          self.loading = false;
+          var data = response.data;
+          if (data.code === 200) {
+            self.data._token = data.data;
+          }
+        })
+        .catch();
     }
   }
 };

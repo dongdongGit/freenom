@@ -23,16 +23,6 @@ Vue.use(Vuelidate);
 Vue.use(VueRouter);
 Vue.use(ElementUI, { locale });
 
-axios.get(global.baseUri + 'admin/token')
-    .then(function (response) {
-        let data = response.data;
-        if (data.code == 200) {
-            global.csrfToken = data.data;
-        }
-    })
-    .catch(function (error) {
-    });
-
 Vue.prototype.GLOBAL = global;
 
 if (!Array.isArray) {

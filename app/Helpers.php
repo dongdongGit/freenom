@@ -52,3 +52,15 @@ if (!function_exists('fetch')) {
         return $isJson ? [] : '';
     }
 }
+
+if (!function_exists('auth_user')) {
+    /**
+     * return current logged-in user
+     *
+     * @return \App\Essential\Models\User|null
+     */
+    function auth_user()
+    {
+        return \Auth::user();
+    }
+}

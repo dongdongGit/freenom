@@ -41,7 +41,7 @@ class UtilController extends Controller
      */
     public function storeImage(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'image' => 'required|image'
         ]);
 
