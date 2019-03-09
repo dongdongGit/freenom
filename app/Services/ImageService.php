@@ -56,7 +56,7 @@ class ImageService
 
         try {
             if ($this->disk->put($path, $img->encode())) {
-                return $path;
+                // return $path;
             }
         } catch (Exception $e) {
             return false;
