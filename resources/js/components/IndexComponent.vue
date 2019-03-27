@@ -77,8 +77,10 @@ export default {
             });
           });
       } else {
+
         this.count = count;
         this.$unit.setCache('count', this.count, 900);
+        console.log(this.$unit.getCache('count'))
       }
     }
   }
