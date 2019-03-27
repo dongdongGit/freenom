@@ -16,8 +16,9 @@ class UtilController extends Controller
         $user = $this->user();
         $cached_stats = Cache::remember('user_index_' . $this->user()->id, 900, function () use ($user) {
             $data = [
-                'domain' => $user->domains()->count(),
-                'user'   => User::count()
+                'domains' => $user->domains()->count(),
+                'users'   => User::count(),
+                'images'  => $user->images()->count()
             ];
 
             return $data;
@@ -41,7 +42,7 @@ class UtilController extends Controller
      */
     public function storeImage(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'image' => 'required|image'
         ]);
 

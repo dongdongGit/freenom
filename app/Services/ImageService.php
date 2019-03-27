@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use App\Models\Image;
 use Illuminate\Support\Str;
 
 class ImageService
@@ -54,11 +55,22 @@ class ImageService
         }
 
         try {
-            if ($this->disk->put($path, $img->encode())) {
-                return $path;
-            }
+            // if ($this->disk->put($path, $img->encode())) {
+            //     return $path;
+            // }
+            $this->disk->put($path, $img->encode());
         } catch (Exception $e) {
             return false;
+        }
+
+        $authUser = auth_user();
+        if ($this->savedToModel) {
+            return Image::create([
+                'path'    => $path,
+                'width'   => $img->width(),
+                'height'  => $img->height(),
+                'user_id' => auth_user() ? $authUser->id : 0
+            ]);
         }
 
         return $path;

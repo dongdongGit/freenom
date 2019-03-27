@@ -19,7 +19,16 @@
       <div class="row">
         <div class="card">
           <div class="card-header border-bottom">
-            <el-button icon="el-icon-setting" type="primary" plain @click="action()">操作</el-button>
+            <el-dropdown split-button type="primary" @command="handleCommand">
+              <span class="el-dropdown-link">
+                <i class="el-icon-setting"></i> 操作
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="upload">上传</el-dropdown-item>
+                <el-dropdown-item command="edit">编辑</el-dropdown-item>
+                <el-dropdown-item command="select_all">全选</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
           <div class="card-body">
             <div class="masonry">
@@ -41,6 +50,7 @@
         </div>
       </div>
     </div>
+    <!-- image -->
     <el-dialog title="图片" :visible.sync="dialog_visible" width="35%">
       <div class="row">
         <div class="col-md-12 col-xl-12">
@@ -53,6 +63,24 @@
         <el-button @click="dialog_visible = false">取 消</el-button>
         <el-button type="primary" @click="deleteImg()">删 除</el-button>
       </span>
+    </el-dialog>
+    <!-- upload -->
+    <el-dialog title="上传图片" :visible.sync="dialog_upload_visible">
+      <el-upload
+        class="upload-demo"
+        name="image"
+        :action="this.GLOBAL.baseUri + 'admin/image'"
+        :data="data"
+        :on-success="handleUploadSuccess"
+        :on-error="handleUploadError"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        multiple
+        :limit="10"
+        :on-exceed="handleExceed"
+        :file-list="file_list"
+      >上传</el-upload>
     </el-dialog>
   </div>
 </template>
@@ -70,7 +98,12 @@ export default {
       },
       loading: true,
       dialog_visible: false,
-      select_image: {}
+      dialog_upload_visible: false,
+      select_image: {},
+      file_list: [],
+      data: {
+        _token: ""
+      }
     };
   },
   created() {
@@ -83,6 +116,8 @@ export default {
     init() {
       var self = this;
       this.loading = true;
+      this.getToken();
+
       return axios
         .get(this.GLOBAL.baseUri + "admin/image")
         .then(function(response) {
@@ -135,6 +170,56 @@ export default {
             });
         })
         .catch(_ => {});
+    },
+    handleCommand(command) {
+      switch (command) {
+        case "upload":
+          this.dialog_upload_visible = true;
+          break;
+        case "select_all":
+          console.log("select_all");
+          break;
+        case "edit":
+          console.log("edit");
+          break;
+        default:
+          break;
+      }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      );
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    handleUploadSuccess(response, file, fileList) {
+      this.getToken();
+    },
+    handleUploadError(response, file, fileList) {
+      this.getToken();
+    },
+    getToken() {
+      var self = this;
+      axios
+        .get(this.GLOBAL.baseUri + "admin/token")
+        .then(function(response) {
+          self.loading = false;
+          var data = response.data;
+          if (data.code === 200) {
+            self.data._token = data.data;
+          }
+        })
+        .catch();
     }
   }
 };

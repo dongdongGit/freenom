@@ -4,7 +4,9 @@ freenom auto renew
 ## Todo
  - [ ] lang
  - [ ] jwt token
- - [ ] 图片批量删除
+ - image
+    - [ ] upload
+    - [ ] batch delete
  - freenom auto service 
     - [ ] 捕获异常
     - [ ] 日志
@@ -12,4 +14,5 @@ freenom auto renew
         - [ ] level
     - [x] 同步域名优化
     - [ ] composer package
+    - [ ] 邮箱通知
  - Test

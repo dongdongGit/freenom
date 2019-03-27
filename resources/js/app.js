@@ -10,6 +10,7 @@ window.Vue = require('vue');
 
 import App from './App.vue';
 import global from './config/global.js';
+import unit from './unit/helpers.js';
 import routes from './router/admin.js';
 import VueRouter from 'vue-router';
 import Vuelidate from 'vuelidate';
@@ -22,7 +23,9 @@ Vue.use(VueMoment);
 Vue.use(Vuelidate);
 Vue.use(VueRouter);
 Vue.use(ElementUI, { locale });
+
 Vue.prototype.GLOBAL = global;
+Vue.prototype.$unit = unit;
 
 if (!Array.isArray) {
     Array.isArray = function (arg) {

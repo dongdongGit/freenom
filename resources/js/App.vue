@@ -5,10 +5,10 @@
         <div class="nav-logo">
           <router-link to="/">
             <b>
-              <img :src="path + 'assets/img/logo.png'" alt>
+              <img :src="this.GLOBAL.baseUri + 'assets/img/logo.png'" alt>
             </b>
             <span class="logo">
-              <img :src="path + 'assets/img/logo-text.png'" alt>
+              <img :src="this.GLOBAL.baseUri + 'assets/img/logo-text.png'" alt>
             </span>
           </router-link>
         </div>
@@ -27,12 +27,12 @@
           <span>{{user}}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
-              <a class="dropdown-item" :href="path + 'logout'"
+              <a class="dropdown-item" :href="this.GLOBAL.baseUri + 'logout'"
                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                   登出
               </a>
 
-              <form id="logout-form" :action="path + 'logout'" method="POST" style="display: none;">
+              <form id="logout-form" :action="this.GLOBAL.baseUri + 'logout'" method="POST" style="display: none;">
                   <input type="hidden" name="_token" :value="csrfToken" autocomplete="off">
               </form>
             </el-dropdown-item>
@@ -82,7 +82,6 @@ export default {
     return {
       user: null,
       isCollapse: false,
-      path: this.GLOBAL.baseUri,
       csrfToken: ''
     };
   },
@@ -92,9 +91,8 @@ export default {
   methods: {
     init () {
       var self = this;
-
       return axios
-        .get(this.path + "admin/token")
+        .get(this.GLOBAL.baseUri + "admin/token")
         .then(function(response) {
           var data = response.data;
           if (data.code === 200) {
@@ -111,7 +109,7 @@ export default {
       console.log('open');
     },
     logout() {
-      console.log('logout');
+      console.log('todo: token logout');
     }
   }
 };
