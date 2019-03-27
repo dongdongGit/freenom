@@ -4,14 +4,14 @@ export default {
         var val = localStorage.getItem(key);//获取存储的元素
         console.log(val);
 
-        if (this.storageAvailable('localStorage')) {
-            console.log("Yippee! We can use localStorage awesomeness")
-        } else {
-            console.log("Too bad, no localStorage for us")
+        if (!this.storageAvailable('localStorage')) {
+            return null;
         }
 
+        console.log(val != null);
         if (val != null) {
-            var data = JSON.parse(val);//解析出json对象
+            var parse = JSON.parse(val);
+            var data = typeof parse == "object" ? parse : val;//解析出json对象
 
             if (data.expired_time <= new Date().getTime()) {
                 localStorage.removeItem(key)
@@ -23,6 +23,10 @@ export default {
         return null;
     },
     setCache(key, value, seconds) {
+        if (!this.storageAvailable('localStorage')) {
+            return null;
+        }
+        
         var expired = new Date().getTime() + seconds * 1000;
         localStorage.setItem(key, JSON.stringify({ "val": value, "expired_time": expired }));
     },

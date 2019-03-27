@@ -106,7 +106,7 @@ export default {
       this.isCollapse = !this.isCollapse;
     },
     open() {
-      console.log('open');
+      this.isCollapse = !this.isCollapse;
     },
     logout() {
       console.log('todo: token logout');
