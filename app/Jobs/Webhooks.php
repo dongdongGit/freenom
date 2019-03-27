@@ -54,7 +54,7 @@ class Webhooks extends Job
             $npm_run_flag = true;
 
             foreach ($data['commits'] as $commit) {
-                $search_data = array_merge($commit['added'], $commit['modified'], $commit['remove']);
+                $search_data = array_merge($commit['added'], $commit['modified'], $commit['removed']);
 
                 if ($composer_update_flag && in_array('composer.json', $search_data)) {
                     $composer_update_flag = false;
