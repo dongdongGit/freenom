@@ -67,6 +67,7 @@ class ImageService
         if ($this->savedToModel) {
             return Image::create([
                 'path'    => $path,
+                'mine'    => $img->mime(),
                 'width'   => $img->width(),
                 'height'  => $img->height(),
                 'user_id' => auth_user() ? $authUser->id : 0
