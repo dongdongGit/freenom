@@ -59,7 +59,6 @@ export default {
     init() {
       var self = this;
       var countCache = this.$unit.getCache('count');
-      console.log(countCache);
       if (countCache == null) {
         return axios
           .get(this.GLOBAL.baseUri + "admin/index")
@@ -67,6 +66,7 @@ export default {
             var data = response.data;
             if (data.code === 200) {
               self.count = data.data;
+              self.$unit.setCache('count', self.count, 900);
             }
           })
           .catch(function(error) {
@@ -77,10 +77,7 @@ export default {
             });
           });
       } else {
-
-        this.count = count;
-        this.$unit.setCache('count', this.count, 900);
-        console.log(this.$unit.getCache('count'))
+        this.count = countCache;
       }
     }
   }
