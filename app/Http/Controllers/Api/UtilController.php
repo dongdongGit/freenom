@@ -15,7 +15,7 @@ class UtilController extends Controller
 
         if (!hash_equals($signature, $request->header('X-Hub-Signature'))) {
             Log::info('[error]验签失败');
-            return $this->error('验签失败');
+            return $this->error('403', [], '验签失败');
         }
 
         dispatch(new Webhooks($request->all()));
