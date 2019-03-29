@@ -2,17 +2,18 @@
 freenom auto renew
 
 ## Todo
- - [ ] lang
- - [ ] jwt token
- - image
-    - [ ] upload
-    - [ ] batch delete
- - freenom auto service 
-    - [ ] 捕获异常
-    - [ ] 日志
-        - [ ] 记录
-        - [ ] level
-    - [x] 同步域名优化
-    - [ ] composer package
-    - [ ] 邮箱通知
- - Test
+ - 前端
+   - [ ] image upload
+   - [ ] Test
+ - 后端
+   - image
+       - [ ] batch operations
+   - freenom auto service 
+      - [ ] capture exception
+      - [ ] log
+         - [ ] generate
+         - [ ] level
+      - [x] 同步域名优化
+      - [ ] create composer package
+      - [ ] Mail notifications
+   - [ ] Test
