@@ -13,7 +13,7 @@ class ImageController extends Controller
      */
     public function index()
     {
-        $images = $this->user()->images()->apiPaginate(10);
+        $images = $this->user()->images()->latest('id')->apiPaginate(10);
 
         return $this->success($images);
     }
