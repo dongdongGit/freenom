@@ -27,6 +27,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('freenom:auto_renew_domain')->dailyAt('01:00');
+
+        if ($this->app->isLocal()) {
+            $schedule->command('telescope:prune')->daily();
+        }
     }
 
     /**

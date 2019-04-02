@@ -7,6 +7,8 @@ use App\Models\Domain;
 use App\Observers\ImageObserver;
 use App\Observers\DomainObserver;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Telescope\TelescopeServiceProvider;
+use Illuminate\Support\Facades\Redis;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if ($this->app->isLocal()) {
+            Redis::enableEvents();
+        }
+
         Image::observe(ImageObserver::class);
         Domain::observe(DomainObserver::class);
     }
@@ -28,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        if ($this->app->isLocal()) {
+            $this->app->register(TelescopeServiceProvider::class);
+        }
     }
 }
