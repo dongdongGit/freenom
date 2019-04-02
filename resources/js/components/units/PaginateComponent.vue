@@ -23,7 +23,7 @@ export default {
   methods: {
     pageChange(page_number) {
       this.$parent.loading = true;
-      var self = this;
+      let self = this;
       let limit = this.meta.limit;
       let offset = this.meta.limit * (page_number - 1);
 

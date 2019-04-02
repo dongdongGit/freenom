@@ -134,7 +134,7 @@ export default {
   },
   methods: {
     init() {
-      var self = this;
+      let self = this;
       this.loading = true;
 
       return axios
@@ -156,7 +156,7 @@ export default {
         });
     },
     handleRenew(index, row) {
-      var self = this;
+      let self = this;
 
       if (
         new Date(row.expires_date).getTime() >
@@ -205,7 +205,7 @@ export default {
         });
     },
     handleDelete(index, row) {
-      var self = this;
+      let self = this;
       return axios
         .delete(this.GLOBAL.baseUri + "admin/freenom/" + row.id)
         .then(function() {
@@ -224,7 +224,7 @@ export default {
         });
     },
     sync() {
-      var self = this;
+      let self = this;
       this.loading = true;
       return axios
         .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
@@ -247,7 +247,7 @@ export default {
         });
     },
     handleSwitchChange(index, row) {
-      var self = this;
+      let self = this;
       this.loading = true;
       return axios
         .put(this.GLOBAL.baseUri + "admin/freenom/" + row.id, {
@@ -273,15 +273,15 @@ export default {
         });
     },
     handleSelect(selection, row) {
-      var self = this;
+      let self = this;
       self.expired(row);
     },
     handleSetectAll(selection) {
-      var self = this;
+      let self = this;
       self.expired(selection);
     },
     handleSelectionChange(val) {
-      var self = this;
+      let self = this;
 
       if (val.length > 0) {
         this.allow = false;
@@ -292,7 +292,7 @@ export default {
       this.multipleSelection = val;
     },
     selectChangeRenew(index, row) {
-      var self = this;
+      let self = this;
       this.loading = true;
       return axios
         .put(this.GLOBAL.baseUri + "admin/freenom/" + row.id, {
@@ -318,7 +318,7 @@ export default {
         });
     },
     renews() {
-      var domains = [];
+      let domains = [];
       for (var row of this.multipleSelection) {
         domains.push({
           domain_id: row["domain_id"],
@@ -327,7 +327,7 @@ export default {
       }
 
       this.loading = true;
-      var self = this;
+      let self = this;
 
       return axios
         .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
@@ -351,7 +351,7 @@ export default {
         });
     },
     expired(selection) {
-      var select = [];
+      let select = [];
 
       if (!Array.isArray(selection)) {
         let new_selection = [];

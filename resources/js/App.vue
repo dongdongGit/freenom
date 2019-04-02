@@ -90,11 +90,11 @@ export default {
   },
   methods: {
     init () {
-      var self = this;
+      let self = this;
       return axios
         .get(this.GLOBAL.baseUri + "admin/token")
         .then(function(response) {
-          var data = response.data;
+          let data = response.data;
           if (data.code === 200) {
             self.csrfToken = data.data;
           }

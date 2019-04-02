@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     init() {
-      var self = this;
+      let self = this;
       this.loading = true;
       this.getToken();
 
@@ -122,7 +122,7 @@ export default {
         .get(this.GLOBAL.baseUri + "admin/image")
         .then(function(response) {
           self.loading = false;
-          var data = response.data;
+          let data = response.data;
           if (data.code === 200) {
             self.images = data.data;
             self.meta = data.meta;
@@ -148,13 +148,13 @@ export default {
       this.select_image = image;
     },
     deleteImg() {
-      var self = this;
+      let self = this;
       this.$confirm("确认删除？")
         .then(_ => {
           return axios
             .delete(self.GLOBAL.baseUri + "admin/image/" + self.select_image.id)
             .then(function(response) {
-              var data = response.data;
+              let data = response.data;
 
               if (data.code === 200) {
                 self.images.splice(self.images.indexOf(self.select_image), 1);
@@ -209,12 +209,12 @@ export default {
       this.getToken();
     },
     getToken() {
-      var self = this;
+      let self = this;
       axios
         .get(this.GLOBAL.baseUri + "admin/token")
         .then(function(response) {
           self.loading = false;
-          var data = response.data;
+          let data = response.data;
           if (data.code === 200) {
             self.data._token = data.data;
           }
