@@ -57,13 +57,13 @@ export default {
   },
   methods: {
     init() {
-      var self = this;
-      var countCache = this.$unit.getCache('count');
+      let self = this;
+      let countCache = this.$unit.getCache('count');
       if (countCache == null) {
         return axios
           .get(this.GLOBAL.baseUri + "admin/index")
           .then(function(response) {
-            var data = response.data;
+            let data = response.data;
             if (data.code === 200) {
               self.count = data.data;
               self.$unit.setCache('count', self.count, 900);
