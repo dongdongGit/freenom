@@ -42,7 +42,7 @@ class Webhooks extends Job
     public function handle()
     {
         $data = $this->data;
-
+        \Log::info($data);
         if (Str::endsWith($data['ref'], 'master')) {
             $process = Process::fromShellCommandline('chmod +x deploy.sh && ./deploy.sh');
             $process->run(function ($type, $buffer) {
