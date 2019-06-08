@@ -15,19 +15,21 @@
         "browser-sync-webpack-plugin": "^2.2.2",
         "cross-env": "^5.1",
         "jquery": "^3.4.1",
-        "laravel-mix": "^4.0.15",
+        "laravel-mix": "^4.0.16",
         "lodash": "^4.17.5",
         "popper.js": "^1.15.0",
         "resolve-url-loader": "^2.3.2",
         "sass": "^1.20.1",
         "sass-loader": "^7.1.0",
-        "vue": "^2.6.10",
-        "vue-template-compiler": "^2.6.10",
-        "webpack": "^4.30.0"
+        "vue": "^2.5.17",
+        "vue-template-compiler": "^2.5.22",
+        "webpack": "^4.29.5",
+        "webpack-cli": "^3.2.3"
     },
     "dependencies": {
-        "browser-sync": "^2.26.5",
-        "element-ui": "^2.8.2",
+        "browser-sync": "^2.26.7",
+        "element-ui": "^2.4.11",
+        "querystringify": "^2.1.1",
         "vue-moment": "^4.0.0",
         "vue-router": "^3.0.6",
         "vuelidate": "^0.7.4"
