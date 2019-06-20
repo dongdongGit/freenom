@@ -49,7 +49,7 @@ class UtilController extends Controller
         $file = request()->file('image');
 
         if (empty($file) || !$file->isValid()) {
-            return $this->error(40402);
+            return $this->error(40401);
         }
 
         $image = (new ImageService($file->path()))->save();
