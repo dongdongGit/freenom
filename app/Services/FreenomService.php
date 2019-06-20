@@ -11,6 +11,7 @@ use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Crypt;
 
 class FreenomService
 {
@@ -51,6 +52,8 @@ class FreenomService
             // TODO: exception
             abort(403, '随便写的');
         }
+
+        $this->config['password'] = Crypt::decryptString($this->config['password']);
 
         if (empty($this->client)) {
             $this->client = $this->getClient();
