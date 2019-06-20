@@ -69,6 +69,7 @@
       <el-upload
         class="upload-demo"
         name="image"
+        list-type="picture-card"
         :action="this.GLOBAL.baseUri + 'admin/image'"
         :data="data"
         :on-success="handleUploadSuccess"
@@ -80,7 +81,9 @@
         :limit="10"
         :on-exceed="handleExceed"
         :file-list="file_list"
-      >上传</el-upload>
+      >
+        <i class="el-icon-plus"></i>
+      </el-upload>
     </el-dialog>
   </div>
 </template>
@@ -144,6 +147,7 @@ export default {
       console.log("action");
     },
     popImage(index, image) {
+      console.log(image);
       this.dialog_visible = true;
       this.select_image = image;
     },
@@ -187,7 +191,30 @@ export default {
       }
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+      this.select_image = file.response.data;
+      let self = this;
+      return axios
+        .delete(self.GLOBAL.baseUri + "admin/image/" + self.select_image.id)
+        .then(function(response) {
+          let data = response.data;
+
+          if (data.code !== 200) {
+            self.$message({
+              showClose: true,
+              message: data.message,
+              type: "error"
+            });
+          } else {
+            self.images.splice(self.images.indexOf(self.select_image), 1);
+          }
+        })
+        .catch(function(error) {
+          self.$message({
+            showClose: true,
+            message: "删除失败",
+            type: "error"
+          });
+        });
     },
     handlePreview(file) {
       console.log(file);
@@ -203,6 +230,7 @@ export default {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
     handleUploadSuccess(response, file, fileList) {
+      this.images.push(file.response.data);
       this.getToken();
     },
     handleUploadError(response, file, fileList) {
