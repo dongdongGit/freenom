@@ -52,7 +52,7 @@ class FreenomService
             // TODO: exception
             abort(403, '随便写的');
         }
-        dd(Crypt::encrypt)
+
         $this->config['password'] = Crypt::decryptString($this->config['password']);
 
         if (empty($this->client)) {
