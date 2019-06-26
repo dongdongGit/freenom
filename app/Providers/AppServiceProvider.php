@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
     {
         if ($this->app->isLocal()) {
             $this->app->register(TelescopeServiceProvider::class);
+            $this->app->register(DuskServiceProvider::class);
         }
-        $this->app->register(DuskServiceProvider::class);
     }
 }
