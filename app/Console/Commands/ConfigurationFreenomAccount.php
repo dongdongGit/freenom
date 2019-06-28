@@ -54,7 +54,7 @@ class ConfigurationFreenomAccount extends Command
         }
     }
 
-        /**
+    /**
      * @return string
      */
     private function getPathToEnvFile()
@@ -67,7 +67,7 @@ class ConfigurationFreenomAccount extends Command
         if (empty($name)) {
             return false;
         }
-        
+
         if (file_exists($path)) {
 
             $oldContent = file_get_contents($path);
