@@ -20,7 +20,7 @@ class ChronoSign extends Command
      *
      * @var string
      */
-    protected $description = '爬取图片';
+    protected $description = '自动签到领金币';
 
     /**
      * Create a new command instance.
