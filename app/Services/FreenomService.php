@@ -196,7 +196,7 @@ class FreenomService
     {
         $data = $this->list();
         $data = $this->processSyncDomain($data, $user);
-        \Log::info($data);
+
         if (!empty($data['update'])) {
             $old_domains = $this->getOriginalDomains()->keyBy('domain_id');
 
