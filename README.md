@@ -2,10 +2,11 @@
 freenom auto renew
    
       cp .env.example .env // 配置数据库信息
-      composer update --no-interaction --no-dev --prefer-dist
+      composer install --no-interaction --no-dev --prefer-dist
       php artisan migrate
       php artisan config:freenom
-      npm install npm run prod
+      npm install 
+      npm run prod
 ## Todo
  - 前端
    - [ ] image upload
