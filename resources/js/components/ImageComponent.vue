@@ -147,7 +147,6 @@ export default {
       console.log("action");
     },
     popImage(index, image) {
-      console.log(image);
       this.dialog_visible = true;
       this.select_image = image;
     },
