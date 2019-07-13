@@ -13,7 +13,7 @@ class ConfigurationFreenomAccount extends Command
      *
      * @var string
      */
-    protected $signature = 'config:freenom';
+    protected $signature = 'freenom:config';
 
     /**
      * The console command description.
