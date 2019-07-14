@@ -54,16 +54,8 @@ class FreenomService
             abort(403, '随便写的');
         }
 
-        info([
-            'message' => 'decrypt before',
-            'data' => $this->config['password'],
-        ]);
         $this->config['password'] = Crypt::decryptString($this->config['password']);
 
-        info([
-            'message' => 'decrypt after',
-            'data' => $this->config['password'],
-        ]);
         if (empty($this->client)) {
             $this->client = $this->getClient();
         }
