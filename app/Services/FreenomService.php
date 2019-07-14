@@ -55,6 +55,7 @@ class FreenomService
         }
 
         $this->config['password'] = Crypt::decryptString($this->config['password']);
+        info($this->config['password']);
 
         if (empty($this->client)) {
             $this->client = $this->getClient();
