@@ -70,6 +70,7 @@ class FreenomService
 
     public function login()
     {
+        info($this->isLogin());
         if ($this->isLogin()) {
             return $this;
         }
@@ -137,8 +138,6 @@ class FreenomService
                 ])
             );
         }
-
-        info($response->getBody());
 
         return $this->getDomainData($response->getBody());
     }
