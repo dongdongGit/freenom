@@ -46,8 +46,9 @@ class FreenomService
 
     public function isLogin()
     {
-        if (!Arr::get($this->config, 'username')
-             || !Arr::get($this->config, 'password')
+        if (
+            !Arr::get($this->config, 'username')
+            || !Arr::get($this->config, 'password')
         ) {
             // TODO: exception
             abort(403, '随便写的');
@@ -135,6 +136,8 @@ class FreenomService
                 ])
             );
         }
+
+        info($response->getBody());
 
         return $this->getDomainData($response->getBody());
     }
