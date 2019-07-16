@@ -85,6 +85,14 @@ class FreenomService
             ]
         );
 
+        if (!$this->isLoginSuccessful($response)) {
+            info('登录失败', [
+                $this->config
+            ]);
+
+            abort(403, '登录失败');
+        }
+
         $responseCookie = Arr::get($response->getHeaders(), 'Set-Cookie', []);
 
         foreach ($responseCookie as $key => &$value) {
@@ -288,6 +296,22 @@ class FreenomService
         preg_match('/<input[A-Za-z "=]+value=\"([\dA-Fa-f]+)\"[^>]+>/', $body, $matchesInput);
 
         return Arr::last($matchesInput);
+    }
+
+    protected function isLoginSuccessful($response)
+    {
+
+        $doc = new DOMDocument();
+        $page = mb_convert_encoding($response->getBody(), 'HTML-ENTITIES', 'UTF-8');
+        @$doc->loadHTML($page);
+        $xpath = new DOMXPath($doc);
+        $dom = $xpath->query('/html/body/div[1]/section[1]/div/div/ul/li[7]/a[2]');
+
+        if (count($dom) > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
