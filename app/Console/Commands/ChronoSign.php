@@ -58,6 +58,13 @@ class ChronoSign extends Command
                     'allow_redirects' => true,
                 ]
             );
+
+            app('sentry')->captureMessage('fetch %s done', ['chrono sign'], [
+                'level' => 'info',
+                'extra' => [
+                    $response
+                ]
+            ]);
         } catch (Exception $e) {
             if (!in_array($e->response->statusCode, [200, 420]) && env('APP_ENV') == 'production' && app()->bound('sentry')) {
                 app('sentry')->captureException($e);
