@@ -62,7 +62,9 @@ class ChronoSign extends Command
             app('sentry')->captureMessage('fetch %s done', ['chrono sign'], [
                 'level' => 'info',
                 'extra' => [
-                    $response
+                    'status_code' => $response->getStatusCode(),
+                    'header'      => $response->getHeaders(),
+                    'body'        => $response->getBody(),
                 ]
             ]);
         } catch (Exception $e) {
