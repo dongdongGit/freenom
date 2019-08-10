@@ -59,6 +59,7 @@ class ChronoSign extends Command
                 ]
             );
 
+            info($response);
             app('sentry')->captureMessage('fetch %s done', ['chrono sign'], [
                 'level' => 'info',
                 'extra' => [
