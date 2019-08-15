@@ -7,6 +7,7 @@ use App\Services\FreenomService;
 class FreenomSync extends Job
 {
     public $user;
+
     /**
      * The number of times the job may be attempted.
      *
@@ -39,15 +40,5 @@ class FreenomSync extends Job
     public function handle()
     {
         (new FreenomService())->sync($this->user);
-    }
-
-    /**
-     * Determine the time at which the job should timeout.
-     *
-     * @return \DateTime
-     */
-    public function retryUntil()
-    {
-        return now()->addSeconds(3);
     }
 }

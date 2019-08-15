@@ -35,14 +35,4 @@ class FreenomRenew extends Job
         $freenomService = new FreenomService();
         $freenomService->renew($this->domains);
     }
-
-    /**
-     * Determine the time at which the job should timeout.
-     *
-     * @return \DateTime
-     */
-    public function retryUntil()
-    {
-        return now()->addSeconds(3);
-    }
 }
