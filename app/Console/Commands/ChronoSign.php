@@ -44,7 +44,7 @@ class ChronoSign extends Command
 
         try {
             $result = fetch($url, [], [
-                'Authorization' => 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdhYXJhMTc1OUBnbWFpbC5jb20iLCJpZCI6ImRvbmdkb25nIiwidWlkIjoiNWQxOTdmOWQzZmMxYzkwMDEyMTc5MWMxIiwiaWF0IjoxNTYxOTUyMTg1LCJleHAiOjE1NjcxMzYxODUsImF1ZCI6Imh0dHBzOi8vd3d3LmNocm9uby5nZyIsImlzcyI6Imh0dHBzOi8vYXBpLmNocm9uby5nZyIsImp0aSI6IjUyOTA1NDE5MjNkYjQzNWViNzY1ZWRkZWNlZDc0NTAxIn0.jGDuLiUy_qoEbtHQmpBZ82_-yUTeTO6aMYzLzo_ZmEQ',
+                'Authorization' => 'JWT eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImdhYXJhMTc1OUBnbWFpbC5jb20iLCJpZCI6ImRvbmdkb25nIiwidWlkIjoiNWQxOTdmOWQzZmMxYzkwMDEyMTc5MWMxIiwiaWF0IjoxNTY3MjE1MzA3LCJleHAiOjE1NzIzOTkzMDcsImF1ZCI6Imh0dHBzOi8vd3d3LmNocm9uby5nZyIsImlzcyI6Imh0dHBzOi8vYXBpLmNocm9uby5nZyIsImp0aSI6IjUyOTA1NDE5MjNkYjQzNWViNzY1ZWRkZWNlZDc0NTAxIn0.7XuKvisct0hMKY6Ps_vgHHG0odIFpCdmROxXjq0VGqY',
                 'Accept'        => 'application/json',
                 'User-Agent'    => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100',
             ]);
