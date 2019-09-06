@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\Freenom\InvalidConfigException;
 use Log;
 use Cache;
 use DOMXPath;
@@ -50,8 +51,7 @@ class FreenomService
             !Arr::get($this->config, 'username')
             || !Arr::get($this->config, 'password')
         ) {
-            // TODO: exception
-            abort(403, '随便写的');
+            throw new InvalidConfigException('Failed to get config. username or password not found.', 500);
         }
 
         $this->config['password'] = Crypt::decryptString($this->config['password']);

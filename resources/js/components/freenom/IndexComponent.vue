@@ -239,9 +239,10 @@ export default {
           self.init();
         })
         .catch(function(error) {
+          self.loading = false;
           self.$message({
             showClose: true,
-            message: "同步失败",
+            message: JSON.parse(error.request.response).message || "同步失败",
             type: "error"
           });
         });
