@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Freenom\InvalidConfigException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
@@ -50,6 +51,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof InvalidConfigException) {
+            $result = [
+                'code'        => $exception->getCode(),
+                'message'     => $exception->getMessage(),
+                'server_time' => time(),
+                'data'        => []
+            ];
+
+            return response()->json($result, $exception->getCode());
+        }
+
         return parent::render($request, $exception);
     }
 }
