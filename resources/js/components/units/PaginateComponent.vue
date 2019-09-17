@@ -28,7 +28,12 @@ export default {
       let offset = this.meta.limit * (page_number - 1);
 
       return axios
-        .get(this.url + "?limit=" + limit + "&offset=" + offset)
+        .get(this.url, {
+          params: {
+            limit: limit,
+            offset: offset
+          }
+        })
         .then(function(response) {
           self.$parent.loading = false;
           let data = response.data;
