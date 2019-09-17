@@ -64,7 +64,7 @@ class Webhooks extends Job
                     $npm_update_flag = false;
                 }
 
-                if ($npm_run_flag && preg_grep('/^resources\/(js|lang|sass)\/.+$/', $search_data)) {
+                if ($npm_run_flag && preg_grep('/^resources\/(js|sass)\/.+$/', $search_data)) {
                     $npm_run_flag = false;
                 }
             }
