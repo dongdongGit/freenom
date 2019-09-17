@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 // github webhoobs
-Route::group(['namespace' => 'Api'], function () {
+Route::group(['namespace' => 'Api', 'middleware' => 'webhook'], function () {
     Route::post('/webhooks', 'UtilController@webhooks');
 });
 
