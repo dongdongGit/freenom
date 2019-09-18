@@ -37,6 +37,13 @@ export default {
 
         localStorage.setItem(key, JSON.stringify(data));
     },
+    removeCache(key) {
+        var val = localStorage.getItem(key);//获取存储的元素
+
+        if (val != null) {
+            localStorage.removeItem(key);
+        }
+    },
     storageAvailable(type) {
         try {
             var storage = window[type],

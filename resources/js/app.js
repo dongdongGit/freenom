@@ -25,6 +25,9 @@ Vue.use(VueRouter);
 Vue.use(ElementUI, { locale });
 
 Vue.prototype.GLOBAL = global;
+Vue.prototype.axiosInstance = axios.create();
+Vue.prototype.axiosInstance.defaults.timeout = 6000;
+Vue.prototype.axiosInstance.defaults.baseURL = global.baseUri;
 Vue.prototype.$unit = unit;
 
 if (!Array.isArray) {

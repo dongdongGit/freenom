@@ -91,11 +91,18 @@ export default {
   methods: {
     init () {
       let self = this;
-      return axios
-        .get(this.GLOBAL.baseUri + "admin/token")
+      let token = this.$unit.getCache('token');
+      if (token != null) {
+        this.csrfToken = token;
+        return;
+      }
+      
+      return this.axiosInstance
+        .get("admin/token")
         .then(function(response) {
           let data = response.data;
           if (data.code === 200) {
+            self.$unit.setCache('token', data.data, 0);
             self.csrfToken = data.data;
           }
         })

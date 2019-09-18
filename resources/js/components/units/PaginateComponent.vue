@@ -27,7 +27,7 @@ export default {
       let limit = this.meta.limit;
       let offset = this.meta.limit * (page_number - 1);
 
-      return axios
+      return this.axiosInstance
         .get(this.url, {
           params: {
             limit: limit,

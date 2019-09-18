@@ -91,7 +91,7 @@
             <paginate
               :data="domains"
               :meta="meta"
-              :url="this.GLOBAL.baseUri + 'admin/freenom'"
+              :url="'/admin/freenom'"
               @listen-paginate="paginate"
             ></paginate>
           </div>
@@ -137,8 +137,8 @@ export default {
       let self = this;
       this.loading = true;
 
-      return axios
-        .get(this.GLOBAL.baseUri + "admin/freenom")
+      return this.axiosInstance
+        .get("/admin/freenom")
         .then(function(response) {
           self.loading = false;
           var data = response.data;
@@ -171,8 +171,8 @@ export default {
 
       this.loading = true;
 
-      return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
+      return this.axiosInstance
+        .post("/admin/freenom/batch", {
           action: "renew",
           domains: [
             {
@@ -206,8 +206,8 @@ export default {
     },
     handleDelete(index, row) {
       let self = this;
-      return axios
-        .delete(this.GLOBAL.baseUri + "admin/freenom/" + row.id)
+      return this.axiosInstance
+        .delete("/admin/freenom/" + row.id)
         .then(function() {
           self.$message({
             message: "删除成功",
@@ -226,8 +226,8 @@ export default {
     sync() {
       let self = this;
       this.loading = true;
-      return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
+      return this.axiosInstance
+        .post("/admin/freenom/batch", {
           action: "sync"
         })
         .then(function(response) {
@@ -250,8 +250,8 @@ export default {
     handleSwitchChange(index, row) {
       let self = this;
       this.loading = true;
-      return axios
-        .put(this.GLOBAL.baseUri + "admin/freenom/" + row.id, {
+      return this.axiosInstance
+        .put("/admin/freenom/" + row.id, {
           enabled_auto_renew: row.enabled_auto_renew
         })
         .then(function(response) {
@@ -295,8 +295,8 @@ export default {
     selectChangeRenew(index, row) {
       let self = this;
       this.loading = true;
-      return axios
-        .put(this.GLOBAL.baseUri + "admin/freenom/" + row.id, {
+      return this.axiosInstance
+        .put("/admin/freenom/" + row.id, {
           renew: row.renew
         })
         .then(function(response) {
@@ -330,8 +330,8 @@ export default {
       this.loading = true;
       let self = this;
 
-      return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
+      return this.axiosInstance
+        .post("/admin/freenom/batch", {
           action: "renew",
           domains: domains
         })

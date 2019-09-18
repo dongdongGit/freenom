@@ -60,8 +60,8 @@ export default {
       let self = this;
       let countCache = this.$unit.getCache('count');
       if (countCache == null) {
-        return axios
-          .get(this.GLOBAL.baseUri + "admin/index")
+        return this.axiosInstance
+          .get("/admin/index")
           .then(function(response) {
             let data = response.data;
             if (data.code === 200) {

@@ -43,7 +43,7 @@
             <paginate
               :data="images"
               :meta="meta"
-              :url="this.GLOBAL.baseUri + 'admin/image'"
+              :url="'/admin/image'"
               @listen-paginate="getPaginate"
             ></paginate>
           </div>
@@ -70,7 +70,7 @@
         class="upload-demo"
         name="image"
         list-type="picture-card"
-        :action="this.GLOBAL.baseUri + 'admin/image'"
+        :action="'/admin/image'"
         :data="data"
         :on-success="handleUploadSuccess"
         :on-error="handleUploadError"
@@ -119,10 +119,11 @@ export default {
     init() {
       let self = this;
       this.loading = true;
-      this.getToken();
+      console.log(this.$unit.getCache('token'));
+      // this.getToken();
 
-      return axios
-        .get(this.GLOBAL.baseUri + "admin/image")
+      return this.axiosInstance
+        .get("/admin/image")
         .then(function(response) {
           self.loading = false;
           let data = response.data;
@@ -154,8 +155,8 @@ export default {
       let self = this;
       this.$confirm("确认删除？")
         .then(_ => {
-          return axios
-            .delete(self.GLOBAL.baseUri + "admin/image/" + self.select_image.id)
+          return this.axiosInstance
+            .delete("/admin/image/" + self.select_image.id)
             .then(function(response) {
               let data = response.data;
 
@@ -192,8 +193,8 @@ export default {
     handleRemove(file, fileList) {
       this.select_image = file.response.data;
       let self = this;
-      return axios
-        .delete(self.GLOBAL.baseUri + "admin/image/" + self.select_image.id)
+      return this.axiosInstance
+        .delete("/admin/image/" + self.select_image.id)
         .then(function(response) {
           let data = response.data;
 
@@ -230,6 +231,8 @@ export default {
     },
     handleUploadSuccess(response, file, fileList) {
       this.images.push(file.response.data);
+      this.data._token = "";
+      this.$unit.removeCache('token');
       this.getToken();
     },
     handleUploadError(response, file, fileList) {
@@ -237,12 +240,23 @@ export default {
     },
     getToken() {
       let self = this;
-      axios
-        .get(this.GLOBAL.baseUri + "admin/token")
+      let token = this.$unit.getCache('token');
+
+      if (token != null) {
+        this.data._token = token;
+      }
+
+      if (this.data._token != "") {
+        return;
+      }
+
+      this.axiosInstance
+        .get("/admin/token")
         .then(function(response) {
           self.loading = false;
           let data = response.data;
           if (data.code === 200) {
+            self.$unit.setCache('token', data.data, 0);
             self.data._token = data.data;
           }
         })
