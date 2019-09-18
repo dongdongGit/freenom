@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use App\Exceptions\Freenom\InvalidConfigException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -51,15 +52,30 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        $status_code = config('exception_code.' . get_class($exception), method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500);
+
         if ($exception instanceof InvalidConfigException) {
             $result = [
-                'code'        => $exception->getCode(),
+                'code'        => $status_code,
                 'message'     => $exception->getMessage(),
                 'server_time' => time(),
                 'data'        => []
             ];
 
-            return response()->json($result, $exception->getCode());
+            return response()->json($result, $status_code);
+        } elseif ($exception instanceof ValidationException) {
+            $result['code'] = $status_code;
+            $result['data'] = [];
+            foreach ($exception->validator->errors()->toArray() as $field => $errors) {
+                foreach ($errors as $error) {
+                    $result['data'][] = [
+                        'field'   => $field,
+                        'content' => $error,
+                    ];
+                }
+            }
+
+            return response()->json($result, $status_code);
         }
 
         return parent::render($request, $exception);

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid loading">
     <div class="row">
       <div class="col-lg-4 col-md-4 col-xs-12">
         <div class="info-box bg-primary">
@@ -60,8 +60,8 @@ export default {
       let self = this;
       let countCache = this.$unit.getCache('count');
       if (countCache == null) {
-        return axios
-          .get(this.GLOBAL.baseUri + "admin/index")
+        return this.axiosInstance
+          .get("/admin/index")
           .then(function(response) {
             let data = response.data;
             if (data.code === 200) {

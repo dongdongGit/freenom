@@ -144,34 +144,106 @@ return [
     */
 
     'attributes' => [
-        'name'                  => '名称',
-        'username'              => '用户名',
-        'email'                 => '邮箱',
-        'first_name'            => '名',
-        'last_name'             => '姓',
+        // A
+        'action'    => '操作',
+        'address'   => '地址',
+        'age'       => '年龄',
+        'audio'     => '音频',
+        'available' => '可用的',
+
+        // B
+        'by' => '方式',
+
+        // C
+        'city'      => '城市',
+        'code'      => '代码',
+        'content'   => '内容',
+        'country'   => '国家',
+        'copyright' => '版权',
+        'cover_id'  => '封面',
+
+        // D
+        'date'                => '日期',
+        'day'                 => '天',
+        'description'         => '描述',
+        'domains'             => '域名',
+        'domains.*.domain_id' => '域名ID',
+        'domains.*.renew'     => '续期时长',
+        'doc'                 => '文档',
+
+        // E
+        'email'              => '邮箱',
+        'enabled_auto_renew' => '自动续期',
+
+        // F
+        'first_name' => '名',
+
+        // G
+        'gender' => '性别',
+
+        // H
+        'hour' => '时',
+
+        // I
+        'image'         => '图片',
+        'image_view'    => '看图模式',
+        'is_image_home' => '图床首页',
+        'image_ids'     => '图片',
+        'image_ids.*'   => '图片ID',
+
+        // J
+
+        // K
+
+        // L
+        'last_name' => '姓',
+        'limit'     => '限制',
+
+        // M
+        'mobile' => '手机',
+        'month'  => '月',
+        'minute' => '分',
+
+        // N
+        'name' => '名称',
+
+        // O
+        'old_password' => '旧密码',
+
+        // P
         'password'              => '密码',
         'password_confirmation' => '确认密码',
-        'city'                  => '城市',
-        'country'               => '国家',
-        'address'               => '地址',
         'phone'                 => '电话',
-        'mobile'                => '手机',
-        'age'                   => '年龄',
-        'sex'                   => '性别',
-        'gender'                => '性别',
-        'day'                   => '天',
-        'month'                 => '月',
-        'year'                  => '年',
-        'hour'                  => '时',
-        'minute'                => '分',
-        'second'                => '秒',
-        'title'                 => '标题',
-        'content'               => '内容',
-        'description'           => '描述',
-        'excerpt'               => '摘要',
-        'date'                  => '日期',
-        'time'                  => '时间',
-        'available'             => '可用的',
-        'size'                  => '大小',
+
+        // R
+        'renew' => '续期时长',
+
+        // S
+        'second'   => '秒',
+        'sex'      => '性别',
+        'size'     => '大小',
+        'sort'     => '排序',
+        'stream'   => '文件流',
+        'settings' => '设置项',
+
+        // T
+        'theme' => '主题',
+        'time'  => '时间',
+        'title' => '标题',
+
+        // U
+        'username' => '用户名',
+
+        // V
+        'video' => '视频',
+
+        // W
+
+        // X
+
+        // Y
+        'year' => '年',
+
+        // Z
     ],
 ];

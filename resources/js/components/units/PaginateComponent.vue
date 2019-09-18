@@ -22,15 +22,18 @@ export default {
   props: ["data", "meta", "url"],
   methods: {
     pageChange(page_number) {
-      this.$parent.loading = true;
       let self = this;
       let limit = this.meta.limit;
       let offset = this.meta.limit * (page_number - 1);
 
-      return axios
-        .get(this.url + "?limit=" + limit + "&offset=" + offset)
+      return this.axiosInstance
+        .get(this.url, {
+          params: {
+            limit: limit,
+            offset: offset
+          }
+        })
         .then(function(response) {
-          self.$parent.loading = false;
           let data = response.data;
           if (data.code === 200) {
             self.$parent.loading = false;

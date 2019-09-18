@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div class="loading">
     <div class="container-fluid">
       <div class="breadcrumb-wrapper row">
         <div class="col-12 col-lg-3 col-md-6">
@@ -91,7 +91,7 @@
             <paginate
               :data="domains"
               :meta="meta"
-              :url="this.GLOBAL.baseUri + 'admin/freenom'"
+              :url="'/admin/freenom'"
               @listen-paginate="paginate"
             ></paginate>
           </div>
@@ -135,12 +135,10 @@ export default {
   methods: {
     init() {
       let self = this;
-      this.loading = true;
 
-      return axios
-        .get(this.GLOBAL.baseUri + "admin/freenom")
+      return this.axiosInstance
+        .get("/admin/freenom")
         .then(function(response) {
-          self.loading = false;
           var data = response.data;
           if (data.code === 200) {
             self.domains = data.data;
@@ -171,8 +169,8 @@ export default {
 
       this.loading = true;
 
-      return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
+      return this.axiosInstance
+        .post("/admin/freenom/batch", {
           action: "renew",
           domains: [
             {
@@ -183,7 +181,6 @@ export default {
           ]
         })
         .then(function(response) {
-          self.loading = false;
           self.$message({
             message: "续费成功",
             type: "success"
@@ -196,7 +193,6 @@ export default {
             .format("YYYY-MM-DD");
         })
         .catch(function(error) {
-          self.loading = false;
           self.$message({
             showClose: true,
             message: "续费失败",
@@ -206,8 +202,8 @@ export default {
     },
     handleDelete(index, row) {
       let self = this;
-      return axios
-        .delete(this.GLOBAL.baseUri + "admin/freenom/" + row.id)
+      return this.axiosInstance
+        .delete("/admin/freenom/" + row.id)
         .then(function() {
           self.$message({
             message: "删除成功",
@@ -226,36 +222,26 @@ export default {
     sync() {
       let self = this;
       this.loading = true;
-      return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
+      return this.axiosInstance
+        .post("/admin/freenom/batch", {
           action: "sync"
         })
         .then(function(response) {
-          self.loading = false;
           self.$message({
             message: "同步成功",
             type: "success"
           });
           self.init();
         })
-        .catch(function(error) {
-          self.loading = false;
-          self.$message({
-            showClose: true,
-            message: JSON.parse(error.request.response).message || "同步失败",
-            type: "error"
-          });
-        });
     },
     handleSwitchChange(index, row) {
       let self = this;
       this.loading = true;
-      return axios
-        .put(this.GLOBAL.baseUri + "admin/freenom/" + row.id, {
+      return this.axiosInstance
+        .put("/admin/freenom/" + row.id, {
           enabled_auto_renew: row.enabled_auto_renew
         })
         .then(function(response) {
-          self.loading = false;
           let data = response.data;
           if (data.code === 200) {
             self.$message({
@@ -295,12 +281,11 @@ export default {
     selectChangeRenew(index, row) {
       let self = this;
       this.loading = true;
-      return axios
-        .put(this.GLOBAL.baseUri + "admin/freenom/" + row.id, {
+      return this.axiosInstance
+        .put("/admin/freenom/" + row.id, {
           renew: row.renew
         })
         .then(function(response) {
-          self.loading = false;
           let data = response.data;
           if (data.code === 200) {
             self.$message({
@@ -330,13 +315,12 @@ export default {
       this.loading = true;
       let self = this;
 
-      return axios
-        .post(this.GLOBAL.baseUri + "admin/freenom/batch", {
+      return this.axiosInstance
+        .post("/admin/freenom/batch", {
           action: "renew",
           domains: domains
         })
         .then(function(response) {
-          self.loading = false;
           self.$message({
             message: "同步成功",
             type: "success"
