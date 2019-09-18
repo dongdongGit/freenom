@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid loading">
     <div class="row">
       <div class="col-lg-4 col-md-4 col-xs-12">
         <div class="info-box bg-primary">

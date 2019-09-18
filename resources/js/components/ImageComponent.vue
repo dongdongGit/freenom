@@ -1,5 +1,5 @@
 <template>
-  <div class="main-content" v-loading="loading">
+  <div class="main-content loading">
     <div class="container-fluid">
       <div class="breadcrumb-wrapper row">
         <div class="col-12 col-lg-3 col-md-6">
@@ -119,13 +119,11 @@ export default {
     init() {
       let self = this;
       this.loading = true;
-      console.log(this.$unit.getCache('token'));
-      // this.getToken();
+      this.getToken();
 
       return this.axiosInstance
         .get("/admin/image")
         .then(function(response) {
-          self.loading = false;
           let data = response.data;
           if (data.code === 200) {
             self.images = data.data;
@@ -253,14 +251,12 @@ export default {
       this.axiosInstance
         .get("/admin/token")
         .then(function(response) {
-          self.loading = false;
           let data = response.data;
           if (data.code === 200) {
             self.$unit.setCache('token', data.data, 0);
             self.data._token = data.data;
           }
         })
-        .catch();
     }
   }
 };

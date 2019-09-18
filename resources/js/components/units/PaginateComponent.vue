@@ -22,7 +22,6 @@ export default {
   props: ["data", "meta", "url"],
   methods: {
     pageChange(page_number) {
-      this.$parent.loading = true;
       let self = this;
       let limit = this.meta.limit;
       let offset = this.meta.limit * (page_number - 1);
@@ -35,7 +34,6 @@ export default {
           }
         })
         .then(function(response) {
-          self.$parent.loading = false;
           let data = response.data;
           if (data.code === 200) {
             self.$parent.loading = false;

@@ -28,6 +28,63 @@ Vue.prototype.GLOBAL = global;
 Vue.prototype.axiosInstance = axios.create();
 Vue.prototype.axiosInstance.defaults.timeout = 6000;
 Vue.prototype.axiosInstance.defaults.baseURL = global.baseUri;
+
+var loading;
+
+function startLoading() {
+    loading = Vue.prototype.$loading({
+        lock: true,
+        text: "Loading...",
+        target: document.querySelector('.loading')//设置加载动画区域
+    });
+}
+
+function endLoading() {
+    loading.close();
+}
+  
+Vue.prototype.axiosInstance.interceptors.request.use(function (config) {
+    startLoading();
+    return config;
+}, function (error) {
+    endLoading();
+    return Promise.reject(error);
+});
+Vue.prototype.axiosInstance.interceptors.response.use(function (res) {
+    endLoading();
+    return res;
+}, function (error) {
+    endLoading();
+    var result = JSON.parse(error.request.response);
+    switch (error.request.status) {
+        case 422:
+            let message = '';
+            result.data.forEach(element => {
+                message = message + '<p>' + element['content'] + "</p>";
+            });
+
+            Vue.prototype.$message({
+                showClose: true,
+                dangerouslyUseHTMLString: true,
+                message: message,
+                type: "error",
+                duration: 10000
+            });
+
+            break;
+        case 500:
+            self.$message({
+                showClose: true,
+                message: result.message || "请求错误",
+                type: "error"
+            });
+            break;
+        default:
+            break;
+    }
+
+    return Promise.reject(error);
+});
 Vue.prototype.$unit = unit;
 
 if (!Array.isArray) {

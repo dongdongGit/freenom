@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div class="loading">
     <div class="container-fluid">
       <div class="breadcrumb-wrapper row">
         <div class="col-12 col-lg-3 col-md-6">
@@ -135,12 +135,10 @@ export default {
   methods: {
     init() {
       let self = this;
-      this.loading = true;
 
       return this.axiosInstance
         .get("/admin/freenom")
         .then(function(response) {
-          self.loading = false;
           var data = response.data;
           if (data.code === 200) {
             self.domains = data.data;
@@ -183,7 +181,6 @@ export default {
           ]
         })
         .then(function(response) {
-          self.loading = false;
           self.$message({
             message: "续费成功",
             type: "success"
@@ -196,7 +193,6 @@ export default {
             .format("YYYY-MM-DD");
         })
         .catch(function(error) {
-          self.loading = false;
           self.$message({
             showClose: true,
             message: "续费失败",
@@ -231,21 +227,12 @@ export default {
           action: "sync"
         })
         .then(function(response) {
-          self.loading = false;
           self.$message({
             message: "同步成功",
             type: "success"
           });
           self.init();
         })
-        .catch(function(error) {
-          self.loading = false;
-          self.$message({
-            showClose: true,
-            message: JSON.parse(error.request.response).message || "同步失败",
-            type: "error"
-          });
-        });
     },
     handleSwitchChange(index, row) {
       let self = this;
@@ -255,7 +242,6 @@ export default {
           enabled_auto_renew: row.enabled_auto_renew
         })
         .then(function(response) {
-          self.loading = false;
           let data = response.data;
           if (data.code === 200) {
             self.$message({
@@ -300,7 +286,6 @@ export default {
           renew: row.renew
         })
         .then(function(response) {
-          self.loading = false;
           let data = response.data;
           if (data.code === 200) {
             self.$message({
@@ -336,7 +321,6 @@ export default {
           domains: domains
         })
         .then(function(response) {
-          self.loading = false;
           self.$message({
             message: "同步成功",
             type: "success"
