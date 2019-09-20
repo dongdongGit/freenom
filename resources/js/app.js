@@ -42,19 +42,34 @@ function startLoading() {
 function endLoading() {
     loading.close();
 }
-  
+
+let needLoadingRequestCount = 0;
+function showFullScreenLoading() {
+    if (needLoadingRequestCount === 0) {
+        startLoading();
+    }
+    needLoadingRequestCount++;
+};
+function tryHideFullScreenLoading() {
+    if (needLoadingRequestCount <= 0) return;
+    needLoadingRequestCount--;
+    if (needLoadingRequestCount === 0) {
+      endLoading();
+    }
+};
+
 Vue.prototype.axiosInstance.interceptors.request.use(function (config) {
-    startLoading();
+    showFullScreenLoading();
     return config;
 }, function (error) {
-    endLoading();
+    tryHideFullScreenLoading();
     return Promise.reject(error);
 });
 Vue.prototype.axiosInstance.interceptors.response.use(function (res) {
-    endLoading();
+    tryHideFullScreenLoading();
     return res;
 }, function (error) {
-    endLoading();
+    tryHideFullScreenLoading();
     var result = JSON.parse(error.request.response);
     switch (error.request.status) {
         case 422:
@@ -73,7 +88,7 @@ Vue.prototype.axiosInstance.interceptors.response.use(function (res) {
 
             break;
         case 500:
-            self.$message({
+            Vue.prototype.$message({
                 showClose: true,
                 message: result.message || "请求错误",
                 type: "error"
