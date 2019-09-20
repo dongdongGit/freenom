@@ -26,7 +26,7 @@ export default {
       let limit = this.meta.limit;
       let offset = this.meta.limit * (page_number - 1);
 
-      return this.axiosInstance
+      return this.$http
         .get(this.url, {
           params: {
             limit: limit,
@@ -34,7 +34,7 @@ export default {
           }
         })
         .then(function(response) {
-          let data = response.data;
+          let data = response;
           if (data.code === 200) {
             self.$parent.loading = false;
             self.$emit("listen-paginate", data);

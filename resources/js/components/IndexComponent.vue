@@ -60,10 +60,10 @@ export default {
       let self = this;
       let countCache = this.$unit.getCache('count');
       if (countCache == null) {
-        return this.axiosInstance
+        return this.$http
           .get("/admin/index")
           .then(function(response) {
-            let data = response.data;
+            let data = response;
             if (data.code === 200) {
               self.count = data.data;
               self.$unit.setCache('count', self.count, 900);

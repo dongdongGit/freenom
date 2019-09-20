@@ -118,13 +118,12 @@ export default {
   methods: {
     init() {
       let self = this;
-      this.loading = true;
       this.getToken();
 
-      return this.axiosInstance
+      return this.$http
         .get("/admin/image")
         .then(function(response) {
-          let data = response.data;
+          let data = response;
           if (data.code === 200) {
             self.images = data.data;
             self.meta = data.meta;
@@ -153,10 +152,10 @@ export default {
       let self = this;
       this.$confirm("确认删除？")
         .then(_ => {
-          return this.axiosInstance
+          return this.$http
             .delete("/admin/image/" + self.select_image.id)
             .then(function(response) {
-              let data = response.data;
+              let data = response;
 
               if (data.code === 200) {
                 self.images.splice(self.images.indexOf(self.select_image), 1);
@@ -191,10 +190,11 @@ export default {
     handleRemove(file, fileList) {
       this.select_image = file.response.data;
       let self = this;
-      return this.axiosInstance
+
+      return this.$http
         .delete("/admin/image/" + self.select_image.id)
         .then(function(response) {
-          let data = response.data;
+          let data = response;
 
           if (data.code !== 200) {
             self.$message({
@@ -248,10 +248,11 @@ export default {
         return;
       }
 
-      this.axiosInstance
+      this.$http
         .get("/admin/token")
         .then(function(response) {
-          let data = response.data;
+          let data = response;
+
           if (data.code === 200) {
             self.$unit.setCache('token', data.data, 0);
             self.data._token = data.data;

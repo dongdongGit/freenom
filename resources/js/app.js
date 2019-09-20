@@ -10,7 +10,7 @@ window.Vue = require('vue');
 
 import App from './App.vue';
 import global from './config/global.js';
-import unit from './unit/helpers.js';
+import unit from './units/helpers.js';
 import routes from './router/admin.js';
 import VueRouter from 'vue-router';
 import Vuelidate from 'vuelidate';
@@ -25,9 +25,9 @@ Vue.use(VueRouter);
 Vue.use(ElementUI, { locale });
 
 Vue.prototype.GLOBAL = global;
-Vue.prototype.axiosInstance = axios.create();
-Vue.prototype.axiosInstance.defaults.timeout = 6000;
-Vue.prototype.axiosInstance.defaults.baseURL = global.baseUri;
+Vue.prototype.$http = axios.create();
+Vue.prototype.$http.defaults.timeout = 6000;
+Vue.prototype.$http.defaults.baseURL = global.baseUri;
 
 var loading;
 
@@ -58,16 +58,16 @@ function tryHideFullScreenLoading() {
     }
 };
 
-Vue.prototype.axiosInstance.interceptors.request.use(function (config) {
+Vue.prototype.$http.interceptors.request.use(function (config) {
     showFullScreenLoading();
     return config;
 }, function (error) {
     tryHideFullScreenLoading();
     return Promise.reject(error);
 });
-Vue.prototype.axiosInstance.interceptors.response.use(function (res) {
+Vue.prototype.$http.interceptors.response.use(function (res) {
     tryHideFullScreenLoading();
-    return res;
+    return res.data;
 }, function (error) {
     tryHideFullScreenLoading();
     var result = JSON.parse(error.request.response);
