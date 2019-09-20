@@ -112,7 +112,6 @@ export default {
         offset: 0,
         total: 0
       },
-      loading: true,
       allow: true,
       multipleSelection: [],
       options: []
@@ -136,10 +135,11 @@ export default {
     init() {
       let self = this;
 
-      return this.axiosInstance
+      return this.$http
         .get("/admin/freenom")
         .then(function(response) {
-          var data = response.data;
+          var data = response;
+          console.log(data);
           if (data.code === 200) {
             self.domains = data.data;
             self.meta = data.meta;
@@ -167,9 +167,7 @@ export default {
         });
       }
 
-      this.loading = true;
-
-      return this.axiosInstance
+      return this.$http
         .post("/admin/freenom/batch", {
           action: "renew",
           domains: [
@@ -202,7 +200,7 @@ export default {
     },
     handleDelete(index, row) {
       let self = this;
-      return this.axiosInstance
+      return this.$http
         .delete("/admin/freenom/" + row.id)
         .then(function() {
           self.$message({
@@ -221,8 +219,8 @@ export default {
     },
     sync() {
       let self = this;
-      this.loading = true;
-      return this.axiosInstance
+
+      return this.$http
         .post("/admin/freenom/batch", {
           action: "sync"
         })
@@ -236,13 +234,13 @@ export default {
     },
     handleSwitchChange(index, row) {
       let self = this;
-      this.loading = true;
-      return this.axiosInstance
+
+      return this.$http
         .put("/admin/freenom/" + row.id, {
           enabled_auto_renew: row.enabled_auto_renew
         })
         .then(function(response) {
-          let data = response.data;
+          let data = response;
           if (data.code === 200) {
             self.$message({
               message: "操作成功",
@@ -280,13 +278,13 @@ export default {
     },
     selectChangeRenew(index, row) {
       let self = this;
-      this.loading = true;
-      return this.axiosInstance
+
+      return this.$http
         .put("/admin/freenom/" + row.id, {
           renew: row.renew
         })
         .then(function(response) {
-          let data = response.data;
+          let data = response;
           if (data.code === 200) {
             self.$message({
               message: "操作成功",
@@ -312,10 +310,9 @@ export default {
         });
       }
 
-      this.loading = true;
       let self = this;
 
-      return this.axiosInstance
+      return this.$http
         .post("/admin/freenom/batch", {
           action: "renew",
           domains: domains
