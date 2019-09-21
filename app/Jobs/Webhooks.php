@@ -78,13 +78,13 @@ class Webhooks extends Job
             }
 
             if (!$npm_update_flag) {
-                $process = Process::fromShellCommandline('npm i && npm run prod');
+                $process = Process::fromShellCommandline('npm i && npm run production');
                 $process->setTimeout(300);
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
                 });
             } elseif (!$npm_run_flag) {
-                $process = Process::fromShellCommandline('npm run prod');
+                $process = Process::fromShellCommandline('npm run production');
                 $process->setTimeout(300);
                 $process->run(function ($type, $buffer) {
                     Log::info($buffer);
