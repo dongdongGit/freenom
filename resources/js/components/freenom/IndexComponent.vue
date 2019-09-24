@@ -134,7 +134,11 @@ export default {
   methods: {
     init() {
       let self = this;
-
+      // console.log(this.$apiUrl.request('/admin/freenom'));
+      let result = this.$apiUrl.request('/admin/freenom');
+      this.domains = result.data;
+      console.log(result);
+      this.meta = result.meta;
       return this.$http
         .get("/admin/freenom")
         .then(function(response) {
