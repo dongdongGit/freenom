@@ -300,7 +300,6 @@ class FreenomService
 
     protected function isLoginSuccessful($response)
     {
-
         $doc = new DOMDocument();
         $page = mb_convert_encoding($response->getBody(), 'HTML-ENTITIES', 'UTF-8');
         @$doc->loadHTML($page);
@@ -367,5 +366,10 @@ class FreenomService
     public function getOriginalDomains()
     {
         return $this->originalDomain;
+    }
+
+    private function req()
+    {
+        // TODO:
     }
 }

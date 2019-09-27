@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import { async } from 'q';
 export default {
   data() {
     return {
@@ -134,16 +135,12 @@ export default {
   methods: {
     init() {
       let self = this;
-      // console.log(this.$apiUrl.request('/admin/freenom'));
-      let result = this.$apiUrl.request('/admin/freenom');
-      this.domains = result.data;
-      console.log(result);
-      this.meta = result.meta;
+
       return this.$http
         .get("/admin/freenom")
         .then(function(response) {
           var data = response;
-          console.log(data);
+
           if (data.code === 200) {
             self.domains = data.data;
             self.meta = data.meta;
@@ -166,7 +163,7 @@ export default {
       ) {
         return self.$message({
           showClose: true,
-          message: "为满足续费时间",
+          message: "未满足续费时间",
           type: "error"
         });
       }

@@ -14,6 +14,10 @@ const routes = [
     {
         path: '/image',
         component: Vue.component('freenom-image', require('.././components/ImageComponent.vue').default)
+    },
+    {
+        path: '/login',
+        component: Vue.component('login', require('.././components/LoginComponent.vue').default)
     }
 ];
 

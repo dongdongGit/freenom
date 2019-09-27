@@ -130,7 +130,6 @@ export default {
             self.logout();
           }
         });
-      console.log('todo: token logout');
     }
   }
 };
