@@ -107,17 +107,15 @@ export default {
           for (const [key, value] of Object.entries(self.ruleForm)) {
             formData.append(key, value);
           }
-          console.log(formData);
-          // return;
-          // return;
+
           self.$http
             .post("api/admin/login", formData)
             .then(function(response) {
               let data = response;
               if (data.code === 200) {
-                router.push('freenom-index')
-                // self.images = data.data;
-                // self.meta = data.meta;
+                data.data.forEach(key, value => {
+                  self.ruleErrors.key = value;
+                });
               }
             })
           // self.$refs.ruleForm.fields[0].error = 'test';
