@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,11 +11,15 @@ use Illuminate\Http\Request;
 |
 */
 
-// github webhoobs
-Route::group(['namespace' => 'Api', 'middleware' => 'webhook'], function () {
-    Route::post('/webhooks', 'UtilController@webhooks');
-});
+Route::group(['namespace' => 'Admin'], function () {
+    // github webhoobs
+    Route::post('/webhooks', 'UtilController@webhooks')->middleware('webhook');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    Route::group(['prefix' => 'admin'], function () {
+        Route::post('login', 'AuthController@login');
+
+        Route::group(['middleware' => 'auth:api'], function () {
+            Route::post('logout', 'AuthController@logout');
+        });
+    });
 });

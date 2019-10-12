@@ -47,6 +47,7 @@
                         v-model="ruleForm.email"
                         autocomplete="off"
                         placeholder="E-Mail Address..."
+                        error="ruleErrors.email"
                       ></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
@@ -55,6 +56,7 @@
                         v-model="ruleForm.password"
                         autocomplete="off"
                         placeholder="password..."
+                        error="ruleErrors.password"
                       ></el-input>
                     </el-form-item>
                     <el-form-item>
@@ -87,14 +89,34 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' }
         ],
+      },
+      ruleErrors: {
+        email: "",
+        password: ""
       }
     };
   },
   methods: {
     submitForm(formName) {
+      let self = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
+          // console.log(formName);
+          // console.log(self.$refs[formName].clearValidate());
           alert("submit!");
+          // console.log(self.$refs.ruleForm.fields);
+          console.log(formName);
+          return;
+          self.$http
+            .post("/admin/login", formName)
+            .then(function(response) {
+              let data = response;
+              if (data.code === 200) {
+                self.images = data.data;
+                self.meta = data.meta;
+              }
+            })
+          // self.$refs.ruleForm.fields[0].error = 'test';
         } else {
           console.log("error submit!!");
           return false;
