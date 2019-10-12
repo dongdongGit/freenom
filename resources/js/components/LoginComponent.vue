@@ -101,19 +101,23 @@ export default {
       let self = this;
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // console.log(formName);
-          // console.log(self.$refs[formName].clearValidate());
           alert("submit!");
-          // console.log(self.$refs.ruleForm.fields);
-          console.log(formName);
-          return;
+          let form = self.$refs[formName].$el;
+          let formData = new FormData(form);
+          for (const [key, value] of Object.entries(self.ruleForm)) {
+            formData.append(key, value);
+          }
+          console.log(formData);
+          // return;
+          // return;
           self.$http
-            .post("/admin/login", formName)
+            .post("api/admin/login", formData)
             .then(function(response) {
               let data = response;
               if (data.code === 200) {
-                self.images = data.data;
-                self.meta = data.meta;
+                router.push('freenom-index')
+                // self.images = data.data;
+                // self.meta = data.meta;
               }
             })
           // self.$refs.ruleForm.fields[0].error = 'test';
