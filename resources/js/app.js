@@ -73,18 +73,17 @@ Vue.prototype.$http.interceptors.response.use(function (res) {
     var result = JSON.parse(error.request.response);
     switch (error.request.status) {
         case 422:
-            let message = '';
-            result.data.forEach(element => {
-                message = message + '<p>' + element['content'] + "</p>";
-            });
-
-            Vue.prototype.$message({
-                showClose: true,
-                dangerouslyUseHTMLString: true,
-                message: message,
-                type: "error",
-                duration: 10000
-            });
+            let message = result.message || null;
+            
+            if (message != null) {
+                Vue.prototype.$message({
+                    showClose: true,
+                    dangerouslyUseHTMLString: true,
+                    message: message,
+                    type: "error",
+                    duration: 10000
+                });
+            }
 
             break;
         case 500:
