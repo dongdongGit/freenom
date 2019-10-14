@@ -41,22 +41,20 @@
                     ref="ruleForm"
                     class="demo-ruleForm"
                   >
-                    <el-form-item prop="email">
+                    <el-form-item prop="email" :error="ruleErrors.email">
                       <el-input
                         type="string"
                         v-model="ruleForm.email"
                         autocomplete="off"
                         placeholder="E-Mail Address..."
-                        error="ruleErrors.email"
                       ></el-input>
                     </el-form-item>
-                    <el-form-item prop="password">
+                    <el-form-item prop="password" :error="ruleErrors.password">
                       <el-input
                         type="password"
                         v-model="ruleForm.password"
                         autocomplete="off"
                         placeholder="password..."
-                        error="ruleErrors.password"
                       ></el-input>
                     </el-form-item>
                     <el-form-item>
@@ -99,31 +97,55 @@ export default {
   methods: {
     submitForm(formName) {
       let self = this;
+      this.clearErrorsForm();
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
           let form = self.$refs[formName].$el;
           let formData = new FormData(form);
           for (const [key, value] of Object.entries(self.ruleForm)) {
             formData.append(key, value);
           }
 
-          self.$http
+          return self.$http
             .post("api/admin/login", formData)
             .then(function(response) {
-              let data = response;
-              if (data.code === 200) {
-                data.data.forEach(key, value => {
+              if (response.code === 200) {
+                // token设置
+                response.data.forEach(key, value => {
                   self.ruleErrors.key = value;
                 });
               }
             })
-          // self.$refs.ruleForm.fields[0].error = 'test';
+            .catch(function(error) {
+              let result = JSON.parse(error.request.response);
+
+              if (error.request.status === 422) {
+                result.data.forEach(function (item, index) {
+                  let field = item.field;
+                  self.ruleErrors[field] = item.content;
+                });
+                console.log(self.ruleErrors);
+              }
+            });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    },
+
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+
+    clearValidateForm(formName) {
+      this.$refs[formName].clearValidate();
+    },
+
+    clearErrorsForm() {
+      for (const key in this.ruleErrors) {
+        this.ruleErrors[key] = "";
+      }
     }
   }
 };
