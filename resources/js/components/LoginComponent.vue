@@ -109,12 +109,10 @@ export default {
           return self.$http
             .post("api/admin/login", formData)
             .then(function(response) {
-              if (response.code === 200) {
-                // token设置
-                response.data.forEach(key, value => {
-                  self.ruleErrors.key = value;
-                });
-              }
+              let token = response.data.token
+              self.$http.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+              self.$unit.setCache('auth_token', self.count, response.data.expires_in);
+              self.$router.push('/');
             })
             .catch(function(error) {
               let result = JSON.parse(error.request.response);
