@@ -57,7 +57,7 @@ class ChronoSign extends Command
 
             app('sentry')->captureMessage(
                 'chrono sign done',
-                new Severity('info'),
+                new Severity('info')
             );
         } catch (Exception $e) {
             if (env('APP_ENV') == 'production' && app()->bound('sentry')) {
