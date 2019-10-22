@@ -102,6 +102,7 @@
 </template>
 
 <script>
+import { async } from 'q';
 export default {
   data() {
     return {
@@ -139,7 +140,7 @@ export default {
         .get("/admin/freenom")
         .then(function(response) {
           var data = response;
-          console.log(data);
+
           if (data.code === 200) {
             self.domains = data.data;
             self.meta = data.meta;
@@ -162,7 +163,7 @@ export default {
       ) {
         return self.$message({
           showClose: true,
-          message: "为满足续费时间",
+          message: "未满足续费时间",
           type: "error"
         });
       }

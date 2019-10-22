@@ -8,6 +8,7 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Services\ImageService;
 use App\Http\Controllers\Controller;
+use App\Jobs\Webhooks;
 
 class UtilController extends Controller
 {
@@ -79,6 +80,13 @@ class UtilController extends Controller
                 (new ImageService($image))->delete();
             }
         }
+
+        return $this->success();
+    }
+
+    public function webhooks(Request $request)
+    {
+        dispatch(new Webhooks($request->all()));
 
         return $this->success();
     }

@@ -27,14 +27,12 @@
           <span>{{user}}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item>
-              <a class="dropdown-item" :href="this.GLOBAL.baseUri + 'logout'"
-                  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              <!-- <a class="dropdown-item" :href="this.GLOBAL.baseUri + 'logout'"
+                  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> -->
+              <button class="dropdown-item" 
+                  @click="logout()">
                   登出
-              </a>
-
-              <form id="logout-form" :action="this.GLOBAL.baseUri + 'logout'" method="POST" style="display: none;">
-                  <input type="hidden" name="_token" :value="csrfToken" autocomplete="off">
-              </form>
+              </button>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -97,7 +95,7 @@ export default {
         return;
       }
       
-      return this.axiosInstance
+      return this.$http
         .get("admin/token")
         .then(function(response) {
           let data = response.data;
@@ -116,7 +114,22 @@ export default {
       this.isCollapse = !this.isCollapse;
     },
     logout() {
-      console.log('todo: token logout');
+      let self = this;
+      return this.$http
+        .post("/logout", {
+          _token: this.csrfToken
+        })
+        .then(function(response) {
+          let data = response.data;
+          window.location.href = self.GLOBAL.baseUri + '/login';
+        })
+        .catch(function(error) {
+          if (error.response.status === 419) {
+            self.$unit.removeCache('token');
+            self.init();
+            self.logout();
+          }
+        });
     }
   }
 };

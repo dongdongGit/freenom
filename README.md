@@ -11,9 +11,10 @@ freenom auto renew
  - 前端
    - [ ] image upload
    - [ ] Test
+   - [ ] vue middleware
  - 后端
    - image
-       - [ ] batch operations
+      - [ ] batch operations
    - freenom auto service 
       - [ ] capture exception
       - [ ] log

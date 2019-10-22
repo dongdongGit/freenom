@@ -16,16 +16,26 @@ use Illuminate\Support\Facades\Crypt;
 
 class FreenomService
 {
+    private $baseUrl = 'https://my.freenom.com/';
+
+    private $isLogin = false;
+
     private $freenomAuth = null;
+
     private $client = null;
+
     private $params = [];
+
     private $originalDomain;
+
     private $config = [];
+
     private $gateway = [
         'login'  => 'https://my.freenom.com/dologin.php',
         'list'   => 'https://my.freenom.com/clientarea.php?action=domains',
         'domain' => 'https://my.freenom.com/domains.php'
     ];
+
     private $baseHeaders = [
         'Content-Type' => 'application/x-www-form-urlencoded',
         'User-Agent'   => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36',
@@ -300,7 +310,6 @@ class FreenomService
 
     protected function isLoginSuccessful($response)
     {
-
         $doc = new DOMDocument();
         $page = mb_convert_encoding($response->getBody(), 'HTML-ENTITIES', 'UTF-8');
         @$doc->loadHTML($page);
@@ -367,5 +376,22 @@ class FreenomService
     public function getOriginalDomains()
     {
         return $this->originalDomain;
+    }
+
+    private function req(...$params)
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->gateway['login'],
+            [
+                'allow_redirects' => false,
+                'headers'         => array_merge($this->baseHeaders, [
+                    'Referer' => 'https://my.freenom.com/clientarea.php?incorrect=true'
+                ]),
+                'form_params' => Arr::only($this->config, ['username', 'password'])
+            ]
+        );
+
+        return $response;
     }
 }
