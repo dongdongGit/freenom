@@ -18,7 +18,7 @@ Route::group(['namespace' => 'Admin'], function () {
     Route::group(['prefix' => 'admin'], function () {
         Route::post('login', 'AuthController@login');
 
-        Route::group(['middleware' => 'auth:api'], function () {
+        Route::group(['middleware' => 'jwt'], function () {
             Route::post('logout', 'AuthController@logout');
         });
     });
