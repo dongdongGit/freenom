@@ -48,15 +48,16 @@ class ChronoSign extends Command
                 'Accept'        => 'application/json',
                 'User-Agent'    => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100',
             ]);
-            $scope = new Scope();
-            $scope->setLevel(new Severity())
-                ->setTag('chrono', 'sign')
-                ->setExtra('result', $result);
+
+            app('sentry')->configureScope(function ($scope) use ($result) {
+                $scope->setLevel(new Severity())
+                    ->setTag('chrono', 'sign')
+                    ->setExtra('result', $result);
+            });
 
             app('sentry')->captureMessage(
                 'chrono sign done',
                 new Severity('info'),
-                $scope
             );
         } catch (Exception $e) {
             if (env('APP_ENV') == 'production' && app()->bound('sentry')) {
