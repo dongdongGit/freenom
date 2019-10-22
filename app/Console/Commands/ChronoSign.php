@@ -5,7 +5,6 @@ namespace App\Console\Commands;
 use Exception;
 use Illuminate\Console\Command;
 use Sentry\Severity;
-use Sentry\State\Scope;
 
 class ChronoSign extends Command
 {
