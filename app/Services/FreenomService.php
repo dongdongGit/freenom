@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Exceptions\Freenom\InvalidConfigException;
-use Log;
-use Cache;
 use DOMXPath;
 use DOMDocument;
 use Carbon\Carbon;
@@ -70,7 +68,7 @@ class FreenomService
             $this->client = $this->getClient();
         }
 
-        if (empty($this->getFreenomAuth()) && empty(Cache::get('freenom_auth'))) {
+        if (empty($this->getFreenomAuth()) && empty(app('cache')->get('freenom_auth'))) {
             return false;
         }
 
@@ -112,7 +110,7 @@ class FreenomService
         }
 
         $auth = Arr::last(explode('=', Arr::first(explode(';', Arr::last($responseCookie)))));
-        Cache::put('freenom_auth', $auth, 600);
+        app('cache')->put('freenom_auth', $auth, 600);
         $this->freenomAuth = $auth;
 
         return $this;
@@ -234,7 +232,7 @@ class FreenomService
 
         activity('freenom_sync')->causedBy($user)->log(':causer.name 同步freenom域名');
 
-        Cache::forget('user_index_' . $user->id);
+        app('cache')->forget('user_index_' . $user->id);
     }
 
     public function getDomainData(String $body = '')
@@ -273,7 +271,7 @@ class FreenomService
             }
         }
 
-        Log::info([
+        info([
             'code'    => 200,
             'message' => 'sync success',
             'data'    => $domains
@@ -284,7 +282,7 @@ class FreenomService
 
     public function getFreenomAuth()
     {
-        return $this->freenomAuth = Cache::get('freenom_auth');
+        return $this->freenomAuth = app('cache')->get('freenom_auth');
     }
 
     public function getClient()
