@@ -58,6 +58,7 @@ class ChronoSign extends Command
                 'chrono sign done',
                 new Severity('info')
             );
+            // TODO: result 为null 鉴权失效 为420 已经签过
         } catch (Exception $e) {
             if (env('APP_ENV') == 'production' && app()->bound('sentry')) {
                 app('sentry')->captureException($e);
