@@ -153,7 +153,7 @@ class FreenomService
             );
         }
 
-        return $this->getDomainData($response->getBody());
+        return $this->getDomainData((string) $body);
     }
 
     public function renew($domains)
