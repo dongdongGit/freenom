@@ -52,11 +52,13 @@ class SaveImage extends Command
         }
 
         $hander = opendir($folder);
+
         while ($file = readdir($hander)) {
             if ($file == '.' || $file == '..') {
                 continue;
             } elseif (is_file($folder . '/' . $file)) {
                 $complete_filepath = $folder . '/' . $file;
+
                 if (preg_match('/(?!uploads\/)\d+\/\d+\/\S+/', $complete_filepath, $filepath)) {
                     $img = app('image')->make($complete_filepath);
                     $time = now()->format('Y-m-d H:i:s');
@@ -76,12 +78,8 @@ class SaveImage extends Command
             }
         }
 
-        if (!empty($data)) {
-            array_chunk($data, 1000);
-
-            foreach ($data as $item) {
-                Image::insert($item);
-            }
+        foreach (array_chunk($data, 1000) as $item) {
+            Image::insert($item);
         }
     }
 }
