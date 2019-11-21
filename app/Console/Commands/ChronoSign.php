@@ -13,7 +13,7 @@ class ChronoSign extends Command
      *
      * @var string
      */
-    protected $signature = 'chrono:sign';
+    protected $signature = 'sign:chrono';
 
     /**
      * The console command description.
@@ -50,7 +50,7 @@ class ChronoSign extends Command
 
             app('sentry')->configureScope(function ($scope) use ($result) {
                 $scope->setLevel(new Severity())
-                    ->setTag('chrono', 'sign')
+                    ->setTag('sign', 'chrono')
                     ->setExtra('result', $result);
             });
 
