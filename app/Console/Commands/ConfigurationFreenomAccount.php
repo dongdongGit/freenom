@@ -49,7 +49,7 @@ class ConfigurationFreenomAccount extends Command
         }
 
         $password = Crypt::encryptString($this->ask('请输入Freenom密码:'));
-        if ($this->updateEnvFile($envFilePath, 'FREENOM_PASSWORD', $password)) {
+        if ($this->updateEnvFile($envFilePath, 'FREENOM_PASSWORD', Crypt::encryptString($password))) {
             $this->info("File .env updated with FREENOM_PASSWORD: $password");
         }
     }

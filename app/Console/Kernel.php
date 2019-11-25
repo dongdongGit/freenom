@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('freenom:auto_renew_domain')->dailyAt('01:00');
         $schedule->command('sign:chrono')->dailyAt('08:30');
-        $schedule->command('sign:chrono')->dailyAt('08:45');
+        $schedule->command('sign:lootboy')->dailyAt('08:45');
     }
 
     /**
