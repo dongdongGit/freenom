@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Admin;
+use App\Notifications\Sign\Lootboy;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Notifications\Notification;
 use Sentry\Severity;
 
 class ChronoSign extends Command
@@ -58,6 +61,15 @@ class ChronoSign extends Command
                 'chrono sign done',
                 new Severity('info')
             );
+
+            $admin = Admin::findOrFail(1);
+            if (is_array($result)) {
+                $coins = $result['value'] + $result['bonus'];
+                $content = "chrono 签到获得 {$coins} 金币";
+            } else {
+                $content = 'chrono 已经签到';
+            }
+            Notification::send($admin, new Lootboy($content));
             // TODO: result 为null 鉴权失效 为420 已经签过
         } catch (Exception $e) {
             if (env('APP_ENV') == 'production' && app()->bound('sentry')) {

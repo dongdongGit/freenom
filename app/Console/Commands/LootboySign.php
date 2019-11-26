@@ -42,8 +42,6 @@ class LootboySign extends Command
      */
     public function handle()
     {
-        $admin = Admin::findOrFail(1);
-        
         try {
             $base_url = 'https://api.lootboy.de/v1/offers';
             $rand = mt_rand(3, 8);
@@ -66,7 +64,8 @@ class LootboySign extends Command
                     });
 
                     app('sentry')->captureMessage("lootboy sign offer: {$offer['id']}");
-                    Notification::send($admin, new Lootboy("lootboy 签到{$offer['id']}"));
+                    $admin = Admin::findOrFail(1);
+                    Notification::send($admin, new Lootboy("lootboy 签到 {$offer['description']} 获得 {$offer['diamondBonus']} 钻石"));
                 }
             }
         } catch (Exception $e) {
