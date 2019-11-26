@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Admin;
+use App\Notifications\Sign\Lootboy;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Notification;
 use Sentry\Severity;
 
 class LootboySign extends Command
@@ -39,6 +42,8 @@ class LootboySign extends Command
      */
     public function handle()
     {
+        $admin = Admin::findOrFail(1);
+        
         try {
             $base_url = 'https://api.lootboy.de/v1/offers';
             $rand = mt_rand(3, 8);
@@ -48,7 +53,7 @@ class LootboySign extends Command
                 'User-Agent'    => "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/7{$rand}.0.3770.100",
             ];
             $result = fetch($base_url . '?lang=en', [], $header);
-
+            
             if (is_array($result)) {
                 foreach ($result as $offer) {
                     $offer_result = fetch("{$base_url}/{$offer['id']}?lang=en", [], $header, 'PUT');
@@ -61,12 +66,15 @@ class LootboySign extends Command
                     });
 
                     app('sentry')->captureMessage("lootboy sign offer: {$offer['id']}");
+                    Notification::send($admin, new Lootboy("lootboy 签到{$offer['id']}"));
                 }
             }
         } catch (Exception $e) {
             if (env('APP_ENV') == 'production' && app()->bound('sentry')) {
                 app('sentry')->captureException($e);
             }
+
+            Notification::send($admin, new Lootboy('lootboy 签到失败'));
         }
     }
 }
