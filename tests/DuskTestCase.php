@@ -32,13 +32,14 @@ abstract class DuskTestCase extends BaseTestCase
         $ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1';
         $options = (new ChromeOptions)->addArguments([
             '--disable-gpu',
-            '--headless',
+            // '--headless',
             // '--window-size=414,736',
-            // '--proxy-server=socks5://127.0.0.1:2888'
-        ])->setExperimentalOption('mobileEmulation', [
-            // 'userAgent'  => $ua,
-            'deviceName' => 'iPhone 6/7/8'
+            '--proxy-server=socks5://127.0.0.1:2888'
         ]);
+        // ->setExperimentalOption('mobileEmulation', [
+        //     // 'userAgent'  => $ua,
+        //     'deviceName' => 'iPhone 6/7/8'
+        // ]);
 
         return RemoteWebDriver::create(
             'http://localhost:9515',
