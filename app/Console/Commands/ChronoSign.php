@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Admin;
-use App\Notifications\Sign\Lootboy;
+use App\Notifications\Sign;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Notifications\Notification;
@@ -69,7 +69,7 @@ class ChronoSign extends Command
             } else {
                 $content = 'chrono 已经签到';
             }
-            Notification::send($admin, new Lootboy($content));
+            Notification::send($admin, new Sign($content));
             // TODO: result 为null 鉴权失效 为420 已经签过
         } catch (Exception $e) {
             if (env('APP_ENV') == 'production' && app()->bound('sentry')) {
