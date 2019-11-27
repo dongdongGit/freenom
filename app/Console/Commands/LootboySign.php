@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Admin;
+use App\Models\User;
 use App\Notifications\Sign;
 use Exception;
 use Illuminate\Console\Command;
@@ -64,7 +64,7 @@ class LootboySign extends Command
                     });
 
                     app('sentry')->captureMessage("lootboy sign offer: {$offer['id']}");
-                    $admin = Admin::findOrFail(1);
+                    $admin = User::oldest('id')->firstOrFail();
                     Notification::send($admin, new Sign("lootboy 签到 {$offer['description']} 获得 {$offer['diamondBonus']} 钻石"));
                 }
             }

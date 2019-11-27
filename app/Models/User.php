@@ -30,6 +30,17 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * Route notifications for the Slack channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForSlack($notification)
+    {
+        return config('slack.webhook_url');
+    }
+
     public function domains()
     {
         return $this->hasMany(Domain::class)->latest();

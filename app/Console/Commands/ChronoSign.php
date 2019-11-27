@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Admin;
+use App\Models\User;
 use App\Notifications\Sign;
 use Exception;
 use Illuminate\Console\Command;
@@ -62,7 +62,7 @@ class ChronoSign extends Command
                 new Severity('info')
             );
 
-            $admin = Admin::findOrFail(1);
+            $admin = User::oldest('id')->firstOrFail();
             if (is_array($result)) {
                 $coins = $result['value'] + $result['bonus'];
                 $content = "chrono 签到获得 {$coins} 金币";
