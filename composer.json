@@ -32,7 +32,8 @@
         "laravel/telescope": "^2.0",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^7.0",
+        "staudenmeir/dusk-updater": "^1.1"
     },
     "config": {
         "optimize-autoloader": true,

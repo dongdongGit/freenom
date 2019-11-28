@@ -7,6 +7,7 @@ use App\Notifications\Sign;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Arr;
 use Sentry\Severity;
 
 class ChronoSign extends Command
@@ -64,7 +65,7 @@ class ChronoSign extends Command
 
             $admin = User::oldest('id')->firstOrFail();
             if (is_array($result)) {
-                $coins = $result['value'] + $result['bonus'];
+                $coins = Arr::get($result, 'quest.value', 0) + Arr::get($result, 'quest.bonus', 0);
                 $content = "chrono 签到获得 {$coins} 金币";
             } else {
                 $content = 'chrono 已经签到';
