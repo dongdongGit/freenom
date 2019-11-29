@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Notifications\Sign;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Arr;
 use Sentry\Severity;
 
