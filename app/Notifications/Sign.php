@@ -5,21 +5,22 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Support\Str;
 
 class Sign extends Notification
 {
     use Queueable;
 
-    private $content = '';
+    private $data = [];
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(String $content)
+    public function __construct($data)
     {
-        $this->content = $content;
+        $this->data = $data;
     }
 
     /**
@@ -30,7 +31,7 @@ class Sign extends Notification
      */
     public function via($notifiable)
     {
-        return ['slack'];
+        return ['database', 'slack'];
     }
 
     /**
@@ -41,8 +42,15 @@ class Sign extends Notification
      */
     public function toSlack($notifiable)
     {
+        if ($this->data['success']) {
+            $message = 'App\\Services\\Msg\\' . Str::studly($this->data['type']) . 'Message';
+            $content = (new $message($this->data))->content();
+        } else {
+            $content = $this->data['message'];
+        }
+
         return (new SlackMessage)
-            ->content($this->content);
+            ->content($content);
     }
 
     /**
@@ -56,5 +64,10 @@ class Sign extends Notification
         return [
             //
         ];
+    }
+
+    public function toDatabase()
+    {
+        return $this->data;
     }
 }
