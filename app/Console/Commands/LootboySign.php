@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Notifications\Sign;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
 use Sentry\Severity;
 
 class LootboySign extends Command
@@ -42,6 +41,13 @@ class LootboySign extends Command
      */
     public function handle()
     {
+        $admin = User::oldest('id')->firstOrFail();
+        $key = 'sign:lootboy_diamond';
+
+        if (app('cache')->has($key)) {
+            return;
+        }
+
         try {
             $base_url = 'https://api.lootboy.de/v1/offers';
             $rand = mt_rand(3, 8);
@@ -64,8 +70,13 @@ class LootboySign extends Command
                     });
 
                     app('sentry')->captureMessage("lootboy sign offer: {$offer['id']}");
-                    $admin = User::oldest('id')->firstOrFail();
-                    Notification::send($admin, new Sign("lootboy 签到 {$offer['description']} 获得 {$offer['diamondBonus']} 钻石"));
+
+                    $admin->notify(new Sign([
+                        'success' => true,
+                        'message' => 'success',
+                        'type'    => 'lootboy',
+                        'data'    => $offer_result
+                    ]));
                 }
             }
         } catch (Exception $e) {
@@ -73,7 +84,16 @@ class LootboySign extends Command
                 app('sentry')->captureException($e);
             }
 
-            Notification::send($admin, new Sign('lootboy 签到失败'));
+            $data = [
+                'success' => false,
+                'message' => 'lootboy 签到失败',
+                'type'    => 'lootboy',
+                'data'    => []
+            ];
+
+            $admin->notify(new Sign($data));
         }
+
+        app('cache')->put($key, 1, now()->endOfDay()->timestamp - now()->timestamp);
     }
 }

@@ -6,8 +6,6 @@ use App\Models\User;
 use App\Notifications\Sign;
 use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Arr;
 use Sentry\Severity;
 
 class ChronoSign extends Command
@@ -43,14 +41,23 @@ class ChronoSign extends Command
      */
     public function handle()
     {
-        $url = 'https://api.chrono.gg/quest/spin';
+        $key = 'sign:chrono_coins';
+
+        if (app('cache')->has($key)) {
+            return;
+        }
+
+        $base_url = 'https://api.chrono.gg/';
+        $admin = User::oldest('id')->firstOrFail();
 
         try {
-            $result = fetch($url, [], [
+            $header = [
                 'Authorization' => 'JWT ' . env('CHRONO_TOKEN'),
                 'Accept'        => 'application/json',
                 'User-Agent'    => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100',
-            ]);
+            ];
+
+            $result = fetch($base_url . 'quest/spin', [], $header);
 
             app('sentry')->configureScope(function ($scope) use ($result) {
                 $scope->setLevel(new Severity())
@@ -63,26 +70,36 @@ class ChronoSign extends Command
                 new Severity('info')
             );
 
-            $admin = User::oldest('id')->firstOrFail();
-            if (is_array($result)) {
-                $coins = Arr::get($result, 'quest.value', 0) + Arr::get($result, 'quest.bonus', 0);
-                $content = "chrono 签到获得 {$coins} 金币";
+            $coins_result = fetch($base_url . 'account/coins', [], $header);
+            $data = [
+                'balance' => $coins_result['balance']
+            ];
 
-                if (!empty($chest = Arr::get($result, 'chest'))) {
-                    $additional_coins = Arr::get($chest, 'base', 0) + Arr::get($chest, 'bonus');
-                    $kind = Arr::get($chest, 'kind');
-                    $sum_coins = $coins + $additional_coins;
-                    $content .= ", 连续 {$kind} 天签到额外获得 {$additional_coins} 金币, 总共获得 {$sum_coins} 金币";
-                }
-            } else {
-                $content = 'chrono 已经签到';
+            if (is_array($result)) {
+                $data = array_merge($data, $result);
             }
-            Notification::send($admin, new Sign($content));
+
+            $data = [
+                'success' => true,
+                'message' => 'success',
+                'type'    => 'chrono',
+                'data'    => $data
+            ];
             // TODO: result 为null 鉴权失效 为420 已经签过
         } catch (Exception $e) {
             if (env('APP_ENV') == 'production' && app()->bound('sentry')) {
                 app('sentry')->captureException($e);
             }
+
+            $data = [
+                'success' => false,
+                'message' => 'chrono 签到失败',
+                'type'    => 'chrono',
+                'data'    => []
+            ];
         }
+
+        app('cache')->put($key, 1, now()->endOfDay()->timestamp - now()->timestamp);
+        $admin->notity(new Sign($data));
     }
 }
