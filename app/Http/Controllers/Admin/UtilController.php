@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Cache;
 use App\Models\User;
 use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Services\ImageService;
 use App\Http\Controllers\Controller;
 use App\Jobs\Webhooks;
+use Illuminate\Support\Facades\Cache;
 
 class UtilController extends Controller
 {
