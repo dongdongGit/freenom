@@ -151,6 +151,8 @@ class FreenomService
                     ]
                 ])
             );
+
+            $body = $response->getBody();
         }
 
         return $this->getDomainData((string) $body);
