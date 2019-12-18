@@ -100,6 +100,6 @@ class ChronoSign extends Command
         }
 
         app('cache')->put($key, 1, now()->endOfDay()->timestamp - now()->timestamp);
-        $admin->notity(new Sign($data));
+        $admin->notify(new Sign($data));
     }
 }
