@@ -49,6 +49,7 @@ class ChronoSign extends Command
 
         $base_url = 'https://api.chrono.gg/';
         $admin = User::oldest('id')->firstOrFail();
+        $data = [];
 
         try {
             $header = [
@@ -57,7 +58,7 @@ class ChronoSign extends Command
                 'User-Agent'    => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100',
             ];
 
-            $result = fetch($base_url . 'quest/spin', [], $header);
+            $data['sign_result'] = $result = fetch($base_url . 'quest/spin', [], $header);
 
             app('sentry')->configureScope(function ($scope) use ($result) {
                 $scope->setLevel(new Severity())
@@ -71,13 +72,7 @@ class ChronoSign extends Command
             );
 
             $coins_result = fetch($base_url . 'account/coins', [], $header);
-            $data = [
-                'balance' => $coins_result['balance']
-            ];
-
-            if (is_array($result)) {
-                $data = array_merge($data, $result);
-            }
+            $data['balance'] = $coins_result['balance'];
 
             $data = [
                 'success' => true,
@@ -99,7 +94,7 @@ class ChronoSign extends Command
             ];
         }
 
-        app('cache')->put($key, 1, now()->endOfDay()->timestamp - now()->timestamp);
         $admin->notify(new Sign($data));
+        app('cache')->put($key, 1, now()->endOfDay()->timestamp - now()->timestamp);
     }
 }

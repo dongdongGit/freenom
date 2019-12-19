@@ -49,8 +49,7 @@ class Sign extends Notification
             $content = $this->data['message'];
         }
 
-        return (new SlackMessage)
-            ->content($content);
+        return (new SlackMessage)->content($content);
     }
 
     /**

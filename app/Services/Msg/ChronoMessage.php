@@ -10,11 +10,11 @@ class ChronoMessage extends Message
     {
         $data = $this->data['data'];
 
-        if (is_array($data)) {
-            $coins = Arr::get($data, 'quest.value', 0) + Arr::get($data, 'quest.bonus', 0);
+        if (is_array($result = $data['sign_result'])) {
+            $coins = Arr::get($result, 'quest.value', 0) + Arr::get($result, 'quest.bonus', 0);
             $content = "chrono 签到获得 {$coins} 金币";
 
-            if (!empty($chest = Arr::get($data, 'chest'))) {
+            if (!empty($chest = Arr::get($result, 'chest'))) {
                 $additional_coins = Arr::get($chest, 'base', 0) + Arr::get($chest, 'bonus');
                 $kind = Arr::get($chest, 'kind');
                 $sum_coins = $coins + $additional_coins;
@@ -24,8 +24,6 @@ class ChronoMessage extends Message
             $content = 'chrono 已经签到';
         }
 
-        $content . ", 金币余额: {$data['balance']}";
-
-        return $content;
+        return $content . ", 金币余额: {$data['balance']} 枚";
     }
 }
