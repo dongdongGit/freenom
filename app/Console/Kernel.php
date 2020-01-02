@@ -27,8 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('freenom:auto_renew_domain')->dailyAt('02:00');
-        $schedule->command('sign:chrono')->dailyAt('08:' . mt_rand(min(max(now()->minute, 30), 45), 45));
-        $schedule->command('sign:lootboy')->dailyAt('08:' . mt_rand(max(now()->minute, 46), 59));
+        $schedule->command('sign:chrono')->dailyAt('08:' . signTime('chrono_time'));
+        $schedule->command('sign:lootboy')->dailyAt('08:' . signTime('lootboy_time'));
     }
 
     /**
