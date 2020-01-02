@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Str;
+
 if (!function_exists('fetch')) {
     /**
      * Fetch Remote Data
@@ -66,5 +68,29 @@ if (!function_exists('auth_user')) {
     function auth_user()
     {
         return \Auth::user();
+    }
+}
+
+if (!function_exists('signTime')) {
+    /**
+     * return current logged-in user
+     *
+     * @return \App\Essential\Models\User|null
+     */
+    function signTime($cache_name = '', $expire = 3600)
+    {
+        $cache_instance = app('cache');
+
+        if (!$cache_instance->has($cache_name)) {
+            $random_number = mt_rand(30, 45);
+
+            if (Str::startsWith($cache_name, 'lootboy_')) {
+                $random_number = mt_rand(46, 59);
+            }
+
+            $cache_instance->set($cache_name, $random_number);
+        }
+
+        return $cache_instance->get($cache_name);
     }
 }
