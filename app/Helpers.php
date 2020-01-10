@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 if (!function_exists('fetch')) {
@@ -67,7 +68,7 @@ if (!function_exists('auth_user')) {
      */
     function auth_user()
     {
-        return \Auth::user();
+        return Auth::user();
     }
 }
 
