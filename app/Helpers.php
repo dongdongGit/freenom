@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 if (!function_exists('fetch')) {
@@ -67,7 +68,7 @@ if (!function_exists('auth_user')) {
      */
     function auth_user()
     {
-        return \Auth::user();
+        return Auth::user();
     }
 }
 
@@ -88,7 +89,7 @@ if (!function_exists('signTime')) {
                 $random_number = mt_rand(46, 59);
             }
 
-            $cache_instance->set($cache_name, $random_number);
+            $cache_instance->put($cache_name, now()->secondsUntilEndOfDay(), $random_number);
         }
 
         return $cache_instance->get($cache_name);
