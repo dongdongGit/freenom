@@ -89,7 +89,7 @@ if (!function_exists('signTime')) {
                 $random_number = mt_rand(46, 59);
             }
 
-            $cache_instance->put($cache_name, now()->secondsUntilEndOfDay(), $random_number);
+            $cache_instance->put($cache_name, $random_number, now()->secondsUntilEndOfDay());
         }
 
         return $cache_instance->get($cache_name);
