@@ -15,7 +15,7 @@ class DomainObserver
      */
     public function created(Domain $domain)
     {
-        app('cache')->forget('user_index_' . auth()->guard('web')->user()->id);
+        app('cache')->forget('user:index:' . auth()->guard('web')->user()->id);
     }
 
     /**
@@ -52,7 +52,7 @@ class DomainObserver
      */
     public function deleted(Domain $domain)
     {
-        app('cache')->forget('user_index_' . auth()->guard('web')->user()->id);
+        app('cache')->forget('user:index:' . auth()->guard('web')->user()->id);
     }
 
     /**

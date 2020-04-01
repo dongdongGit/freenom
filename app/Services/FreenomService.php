@@ -158,14 +158,10 @@ class FreenomService
         return $this->getDomainData((string) $body);
     }
 
-    public function renew($domains)
+    public function renew(Collection $domains)
     {
-        if (!($domains instanceof Collection)) {
-            abort('502', '数据错误');
-        } else {
-            if ($domains->isEmpty()) {
-                abort('501', 'domains 数据为空');
-            }
+        if ($domains->isEmpty()) {
+            abort('501', 'domains 数据为空');
         }
 
         $domains = $this->filterRenewDomain($domains);
@@ -234,7 +230,7 @@ class FreenomService
 
         activity('freenom_sync')->causedBy($user)->log(':causer.name 同步freenom域名');
 
-        app('cache')->forget('user_index_' . $user->id);
+        app('cache')->forget('user:index:' . $user->id);
     }
 
     public function getDomainData(String $body = '')
@@ -294,11 +290,16 @@ class FreenomService
         ]);
     }
 
-    public function formatDate(String $date, String $format = 'Y-m-d')
+    public function getConfig(): array
     {
-        $date = explode('/', $date);
+        return $this->config;
+    }
 
-        return Carbon::create($date[2], $date[1], $date[0])->format($format);
+    public function formatDate(String $date, String $format = 'Y-m-d'): String
+    {
+        [$day, $month, $year] = explode('/', $date);
+
+        return Carbon::create($year, $month, $day)->format($format);
     }
 
     public function getToken($body)

@@ -15,7 +15,7 @@ class UtilController extends Controller
     public function index()
     {
         $user = $this->user();
-        $cached_stats = Cache::remember('user_index_' . $this->user()->id, 900, function () use ($user) {
+        $cached_stats = Cache::remember('user:index:' . $this->user()->id, 900, function () use ($user) {
             $data = [
                 'domains' => $user->domains()->count(),
                 'users'   => User::count(),
