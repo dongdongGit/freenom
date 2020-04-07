@@ -21,6 +21,7 @@
         "kind-of": ">=6.0.3",
         "laravel-mix": "^4.1.2",
         "lodash": "^4.17.14",
+        "minimist": ">=1.2.3",
         "popper.js": "^1.15.0",
         "resolve-url-loader": "^2.3.2",
         "sass": "^1.22.4",
