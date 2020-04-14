@@ -32,7 +32,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     protected function gate()
     {
         Gate::define('viewHorizon', function ($user) {
-            return in_array($user->email, config('horizon.auth_white'));
+            return in_array($user->email, config('horizon.auth_whitelist'));
         });
     }
 
