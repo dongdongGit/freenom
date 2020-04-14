@@ -132,4 +132,6 @@ return [
             ],
         ],
     ],
+
+    'auth_whitelist' => explode(',', env('HORIZON_AUTH_WHITELIST'))
 ];
