@@ -55,8 +55,7 @@ class FreenomService
 
     public function isLogin()
     {
-        if (
-            !Arr::get($this->config, 'username')
+        if (!Arr::get($this->config, 'username')
             || !Arr::get($this->config, 'password')
         ) {
             throw new InvalidConfigException('Failed to get config. username or password not found.', 500);
@@ -304,9 +303,10 @@ class FreenomService
 
     public function getToken($body)
     {
-        preg_match('/<input[A-Za-z "=]+value=\"([\dA-Fa-f]+)\"[^>]+>/', $body, $matchesInput);
+        preg_match('/<input[A-Za-z "=]+value=\"(?<token>[\dA-Fa-f]+)\"[^>]+>/', $body, $matches);
+        info($matches);
 
-        return Arr::last($matchesInput);
+        return Arr::last($matches);
     }
 
     protected function isLoginSuccessful($response)
