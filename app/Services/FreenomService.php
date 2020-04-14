@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Crypt;
 
 class FreenomService
 {
-    private $baseUrl = 'https://my.freenom.com/';
+    const BASE_URL = 'https://my.freenom.com/';
 
     private $isLogin = false;
 
@@ -29,9 +29,9 @@ class FreenomService
     private $config = [];
 
     private $gateway = [
-        'login'  => 'https://my.freenom.com/dologin.php',
-        'list'   => 'https://my.freenom.com/clientarea.php?action=domains',
-        'domain' => 'https://my.freenom.com/domains.php'
+        'login'  => self::BASE_URL . 'dologin.php',
+        'list'   => self::BASE_URL . 'clientarea.php?action=domains',
+        'domain' => self::BASE_URL . 'domains.php'
     ];
 
     private $baseHeaders = [
@@ -67,7 +67,7 @@ class FreenomService
             $this->client = $this->getClient();
         }
 
-        if (empty($this->getFreenomAuth()) && empty(app('cache')->get('freenom_auth'))) {
+        if (empty($this->getFreenomAuth()) && !app('cache')->has('freenom:auth')) {
             return false;
         }
 
@@ -93,9 +93,7 @@ class FreenomService
         );
 
         if (!$this->isLoginSuccessful($response)) {
-            info('登录失败', [
-                $this->config
-            ]);
+            info('登录失败', [$this->config]);
 
             abort(403, '登录失败');
         }
@@ -109,8 +107,7 @@ class FreenomService
         }
 
         $auth = Arr::last(explode('=', Arr::first(explode(';', Arr::last($responseCookie)))));
-        app('cache')->put('freenom_auth', $auth, 600);
-        $this->freenomAuth = $auth;
+        $this->setFreenomAuth($auth);
 
         return $this;
     }
@@ -247,7 +244,7 @@ class FreenomService
         $domainIds = $xpath->query('//*/table[contains(@class, "table-striped")]/tbody/tr//a[contains(@class, "pullRight")]');
 
         foreach ($dom as $key => $item) {
-            preg_match('/id=(\d+)/', $domainIds[$key]->attributes->getNamedItem('href')->nodeValue, $matchDomainId);
+            preg_match('/id=(?<domainId>\d+)/', $domainIds[$key]->attributes->getNamedItem('href')->nodeValue, $matchDomainId);
 
             $domains[$key] = [
                 'domain_id' => Arr::last($matchDomainId)
@@ -279,7 +276,16 @@ class FreenomService
 
     public function getFreenomAuth()
     {
-        return $this->freenomAuth = app('cache')->get('freenom_auth');
+        return $this->freenomAuth = app('cache')->get('freenom:auth');
+    }
+
+    public function setFreenomAuth(String $auth): void
+    {
+        $this->freenomAuth = $auth;
+
+        if (!app('cache')->has('freenom:auth')) {
+            app('cache')->put('freenom:auth', $auth, now()->addMinutes(10));
+        }
     }
 
     public function getClient()
