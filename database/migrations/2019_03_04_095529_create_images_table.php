@@ -16,7 +16,7 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned()->index()->default(0)->comment('用户id');
-            $table->string('name')->nullable()->comment('原始名称');
+            $table->string('name')->nullable()->index()->comment('原始名称');
             $table->string('mime')->nullable()->comment('mimeType');
             $table->string('path')->comment('路径');
             $table->integer('width')->unsigned()->default(0)->comment('图片宽');
