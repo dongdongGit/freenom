@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Notifications\Sign;
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Sentry\Severity;
 
 class ChronoSign extends Command
@@ -72,7 +73,7 @@ class ChronoSign extends Command
             );
 
             $coins_result = fetch($base_url . 'account/coins', [], $header);
-            $data['balance'] = $coins_result['balance'];
+            $data['balance'] = Arr::get($coins_result, 'balance', 0);
 
             $data = [
                 'success' => true,
