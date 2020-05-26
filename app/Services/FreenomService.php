@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 
 class FreenomService
 {
@@ -94,7 +95,6 @@ class FreenomService
 
         if (!$this->isLoginSuccessful($response)) {
             info('登录失败', [$this->config]);
-
             abort(403, '登录失败');
         }
 
@@ -387,17 +387,17 @@ class FreenomService
 
     private function req(...$params)
     {
-        $response = $this->client->request(
-            'POST',
-            $this->gateway['login'],
-            [
-                'allow_redirects' => false,
-                'headers'         => array_merge($this->baseHeaders, [
-                    'Referer' => 'https://my.freenom.com/clientarea.php?incorrect=true'
-                ]),
-                'form_params' => Arr::only($this->config, ['username', 'password'])
-            ]
-        );
+        list($method, $uri, $options) = $params;
+
+        try {
+            $response = $this->client->request(
+                $method,
+                $uri,
+                $options
+            );
+        } catch (\Exception $e) {
+            Log::info($e);
+        }
 
         return $response;
     }
