@@ -245,22 +245,25 @@ class FreenomService
 
         foreach ($dom as $key => $item) {
             preg_match('/id=(?<domainId>\d+)/', $domainIds[$key]->attributes->getNamedItem('href')->nodeValue, $matchDomainId);
-
             $domains[$key] = [
                 'domain_id' => Arr::last($matchDomainId)
             ];
 
             foreach ($item->childNodes as $index => $childItem) {
-                if ($childItem->nodeType == 1 && $index <= 9) {
-                    $keyName = Arr::get($this->baseKey, strval(floor($index / 2)));
+                if ($childItem->nodeType != 1 || $index > 9) {
+                    continue;
+                }
 
-                    if (!empty($keyName)) {
-                        $domains[$key][$keyName] = strtolower(trim($childItem->nodeValue));
+                $keyName = Arr::get($this->baseKey, strval(floor($index / 2)));
 
-                        if (preg_match('/\d{2}\/\d{2}\/\d{4}/', $childItem->nodeValue)) {
-                            $domains[$key][$keyName] = $this->formatDate($domains[$key][$keyName]);
-                        }
-                    }
+                if (empty($keyName)) {
+                    continue;
+                }
+
+                Arr::set($domains, "$key.$keyName", strtolower(trim($childItem->nodeValue)));
+
+                if (preg_match('/\d{2}\/\d{2}\/\d{4}/', $childItem->nodeValue)) {
+                    Arr::set($domains, "$key.$keyName", $this->formatDate($domains[$key][$keyName]));
                 }
             }
         }
