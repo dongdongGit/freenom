@@ -5,7 +5,7 @@ freenom auto renew
       composer install --no-interaction --no-dev --prefer-dist
       php artisan migrate
       php artisan config:freenom
-      npm install 
+      npm install --production
       npm run prod
 ## Todo
  - 前端
