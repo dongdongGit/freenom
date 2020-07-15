@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use Log;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
@@ -41,55 +40,55 @@ class Webhooks extends Job
      */
     public function handle()
     {
-        $data = $this->data;
+        if (!Str::endsWith($this->data['ref'], 'master')) {
+            return;
+        }
 
-        if (Str::endsWith($data['ref'], 'master')) {
-            $process = Process::fromShellCommandline('chmod +x deploy.sh && ./deploy.sh');
+        $process = Process::fromShellCommandline('chmod u+x deploy.sh && sh ./deploy.sh');
+        $process->run(function ($type, $buffer) {
+            info($buffer);
+        });
+
+        $composer_update_flag = true;
+        $npm_update_flag = true;
+        $npm_run_flag = true;
+
+        foreach ($this->data['commits'] as $commit) {
+            $search_data = array_merge($commit['added'], $commit['modified'], $commit['removed']);
+
+            if ($composer_update_flag && in_array('composer.json', $search_data)) {
+                $composer_update_flag = false;
+            }
+
+            if ($npm_update_flag && in_array('package.json', $search_data)) {
+                $npm_update_flag = false;
+            }
+
+            if ($npm_run_flag && preg_grep('/^resources\/(js|sass)\/.+$/', $search_data)) {
+                $npm_run_flag = false;
+            }
+        }
+
+        if (!$composer_update_flag) {
+            $process = Process::fromShellCommandline('composer update --no-interaction --no-dev --prefer-dist');
+            $process->setTimeout(300);
             $process->run(function ($type, $buffer) {
-                Log::info($buffer);
+                info($buffer);
             });
+        }
 
-            $composer_update_flag = true;
-            $npm_update_flag = true;
-            $npm_run_flag = true;
-
-            foreach ($data['commits'] as $commit) {
-                $search_data = array_merge($commit['added'], $commit['modified'], $commit['removed']);
-
-                if ($composer_update_flag && in_array('composer.json', $search_data)) {
-                    $composer_update_flag = false;
-                }
-
-                if ($npm_update_flag && in_array('package.json', $search_data)) {
-                    $npm_update_flag = false;
-                }
-
-                if ($npm_run_flag && preg_grep('/^resources\/(js|sass)\/.+$/', $search_data)) {
-                    $npm_run_flag = false;
-                }
-            }
-
-            if (!$composer_update_flag) {
-                $process = Process::fromShellCommandline('composer update --no-interaction --no-dev --prefer-dist');
-                $process->setTimeout(300);
-                $process->run(function ($type, $buffer) {
-                    Log::info($buffer);
-                });
-            }
-
-            if (!$npm_update_flag) {
-                $process = Process::fromShellCommandline('npm i && npm run production');
-                $process->setTimeout(300);
-                $process->run(function ($type, $buffer) {
-                    Log::info($buffer);
-                });
-            } elseif (!$npm_run_flag) {
-                $process = Process::fromShellCommandline('npm run production');
-                $process->setTimeout(300);
-                $process->run(function ($type, $buffer) {
-                    Log::info($buffer);
-                });
-            }
+        if (!$npm_update_flag) {
+            $process = Process::fromShellCommandline('npm i && npm run production');
+            $process->setTimeout(300);
+            $process->run(function ($type, $buffer) {
+                info($buffer);
+            });
+        } elseif (!$npm_run_flag) {
+            $process = Process::fromShellCommandline('npm run production');
+            $process->setTimeout(300);
+            $process->run(function ($type, $buffer) {
+                info($buffer);
+            });
         }
     }
 }
