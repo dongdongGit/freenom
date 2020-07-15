@@ -44,7 +44,7 @@ class Webhooks extends Job
             return;
         }
 
-        $process = Process::fromShellCommandline('chmod u+x deploy.sh && sh ./deploy.sh');
+        $process = Process::fromShellCommandline('chmod u+x /home/wwwroot/freenom/deploy.sh && sh /home/wwwroot/freenom/deploy.sh');
         $process->run(function ($type, $buffer) {
             info($buffer);
         });
@@ -78,7 +78,7 @@ class Webhooks extends Job
         }
 
         if (!$npm_update_flag) {
-            $process = Process::fromShellCommandline('npm i && npm run production');
+            $process = Process::fromShellCommandline('npm install --production && npm run production');
             $process->setTimeout(300);
             $process->run(function ($type, $buffer) {
                 info($buffer);
