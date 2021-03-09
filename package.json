@@ -31,7 +31,7 @@
         "vue-template-compiler": "^2.5.22",
         "webpack": "^4.35.3",
         "webpack-cli": "^3.3.6",
-        "elliptic": ">=6.5.3",
+        "elliptic": ">=6.5.4",
         "dot-prop": ">=5.1.1"
     },
     "dependencies": {
