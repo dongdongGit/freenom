@@ -3,7 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\Freenom\InvalidConfigException;
-use Exception;
+use Throwable;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 
@@ -24,6 +24,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontFlash = [
+        'current_password',
         'password',
         'password_confirmation',
     ];
@@ -34,7 +35,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return void
      */
-    public function report(Exception $exception)
+    public function report(Throwable $exception)
     {
         if (app()->bound('sentry') && $this->shouldReport($exception) && app()->environment('production')) {
             app('sentry')->captureException($exception);
@@ -50,7 +51,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception  $exception
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Throwable $exception)
     {
         $status_code = config('exception_code.' . get_class($exception), method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500);
 

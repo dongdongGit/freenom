@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\ImageController;
+use App\Http\Controllers\Admin\UtilController;
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,3 +36,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:web'], 'namespace' => 
     Route::resource('freenom', 'FreenomController', ['except' => ['store', 'edit', 'show', 'create']]);
     Route::resource('image', 'ImageController', ['only' => ['index', 'destroy']]);
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
